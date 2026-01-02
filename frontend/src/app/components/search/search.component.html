@@ -1,0 +1,26 @@
+<div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="search-header">
+            <h2>Select a Movie</h2>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+
+        <div class="search-input-wrapper">
+            <input type="text" [(ngModel)]="query" (ngModelChange)="onSearch()" placeholder="Type movie title..."
+                autofocus>
+        </div>
+
+        <div class="results-list">
+            <div *ngFor="let movie of results" class="result-item" (click)="selectMovie(movie)">
+                <img [src]="movie.poster_path" [alt]="movie.title" class="result-poster">
+                <div class="result-info">
+                    <div class="result-title">{{ movie.title }}</div>
+                    <div class="result-year">{{ movie.release_date | date:'yyyy' }}</div>
+                </div>
+            </div>
+            <div *ngIf="results.length === 0 && query.length > 2" class="no-results">
+                No movies found
+            </div>
+        </div>
+    </div>
+</div>

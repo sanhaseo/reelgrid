@@ -1,0 +1,100 @@
+export const CRITERIA_POOLS = {
+    directors: [
+        { id: '138', label: 'Quentin Tarantino', value: 'Quentin Tarantino', tmdbId: 138, type: 'director' },
+        { id: '525', label: 'Christopher Nolan', value: 'Christopher Nolan', tmdbId: 525, type: 'director' },
+        { id: '240', label: 'Stanley Kubrick', value: 'Stanley Kubrick', tmdbId: 240, type: 'director' },
+        { id: '488', label: 'Steven Spielberg', value: 'Steven Spielberg', tmdbId: 488, type: 'director' },
+        { id: '1032', label: 'Martin Scorsese', value: 'Martin Scorsese', tmdbId: 1032, type: 'director' },
+        { id: '2710', label: 'James Cameron', value: 'James Cameron', tmdbId: 2710, type: 'director' },
+        { id: '17058', label: 'Greta Gerwig', value: 'Greta Gerwig', tmdbId: 17058, type: 'director' },
+        { id: '3223', label: 'Robert Zemeckis', value: 'Robert Zemeckis', tmdbId: 3223, type: 'director' },
+        { id: '7467', label: 'David Fincher', value: 'David Fincher', tmdbId: 7467, type: 'director' },
+        { id: '303', label: 'Ridley Scott', value: 'Ridley Scott', tmdbId: 303, type: 'director' },
+        { id: '1', label: 'George Lucas', value: 'George Lucas', tmdbId: 1, type: 'director' },
+        { id: '7238', label: 'Hayao Miyazaki', value: 'Hayao Miyazaki', tmdbId: 7238, type: 'director' },
+        { id: '1223', label: 'Joel Coen', value: 'Joel Coen', tmdbId: 1223, type: 'director' },
+        { id: '105', label: 'Francis Ford Coppola', value: 'Francis Ford Coppola', tmdbId: 105, type: 'director' },
+        { id: '21684', label: 'Bong Joon-ho', value: 'Bong Joon-ho', tmdbId: 21684, type: 'director' },
+        { id: '5602', label: 'David Lynch', value: 'David Lynch', tmdbId: 5602, type: 'director' },
+        { id: '289', label: 'Wes Anderson', value: 'Wes Anderson', tmdbId: 289, type: 'director' }
+    ],
+    actors: [
+        { id: '287', label: 'Brad Pitt', value: 'Brad Pitt', tmdbId: 287, type: 'actor' },
+        { id: '6193', label: 'Leonardo DiCaprio', value: 'Leonardo DiCaprio', tmdbId: 6193, type: 'actor' },
+        { id: '500', label: 'Tom Cruise', value: 'Tom Cruise', tmdbId: 500, type: 'actor' },
+        { id: '31', label: 'Tom Hanks', value: 'Tom Hanks', tmdbId: 31, type: 'actor' },
+        { id: '12835', label: 'Vin Diesel', value: 'Vin Diesel', tmdbId: 12835, type: 'actor' },
+        { id: '18897', label: 'Jackie Chan', value: 'Jackie Chan', tmdbId: 18897, type: 'actor' },
+        { id: '72129', label: 'Jennifer Lawrence', value: 'Jennifer Lawrence', tmdbId: 72129, type: 'actor' },
+        { id: '1245', label: 'Scarlett Johansson', value: 'Scarlett Johansson', tmdbId: 1245, type: 'actor' },
+        { id: '976', label: 'Jason Statham', value: 'Jason Statham', tmdbId: 976, type: 'actor' },
+        { id: '18918', label: 'Dwayne Johnson', value: 'Dwayne Johnson', tmdbId: 18918, type: 'actor' },
+        { id: '11701', label: 'Angelina Jolie', value: 'Angelina Jolie', tmdbId: 11701, type: 'actor' },
+        { id: '71580', label: 'Gal Gadot', value: 'Gal Gadot', tmdbId: 71580, type: 'actor' },
+        { id: '224513', label: 'Ana de Armas', value: 'Ana de Armas', tmdbId: 224513, type: 'actor' },
+        { id: '131', label: 'Jake Gyllenhaal', value: 'Jake Gyllenhaal', tmdbId: 131, type: 'actor' },
+        { id: '6968', label: 'Hugh Jackman', value: 'Hugh Jackman', tmdbId: 6968, type: 'actor' },
+        { id: '85', label: 'Johnny Depp', value: 'Johnny Depp', tmdbId: 85, type: 'actor' },
+        { id: '6384', label: 'Keanu Reeves', value: 'Keanu Reeves', tmdbId: 6384, type: 'actor' },
+        { id: '1269', label: 'Will Smith', value: 'Will Smith', tmdbId: 1269, type: 'actor' },
+        { id: '3485', label: 'Emma Watson', value: 'Emma Watson', tmdbId: 3485, type: 'actor' },
+        { id: '115440', label: 'Sydney Sweeney', value: 'Sydney Sweeney', tmdbId: 115440, type: 'actor' },
+        { id: '1136406', label: 'Tom Holland', value: 'Tom Holland', tmdbId: 1136406, type: 'actor' },
+        { id: '3223', label: 'Robert Downey Jr.', value: 'Robert Downey Jr.', tmdbId: 3223, type: 'actor' },
+        { id: '73968', label: 'Henry Cavill', value: 'Henry Cavill', tmdbId: 73968, type: 'actor' },
+        { id: '192', label: 'Morgan Freeman', value: 'Morgan Freeman', tmdbId: 192, type: 'actor' },
+        { id: '3896', label: 'Liam Neeson', value: 'Liam Neeson', tmdbId: 3896, type: 'actor' },
+        { id: '1892', label: 'Matt Damon', value: 'Matt Damon', tmdbId: 1892, type: 'actor' },
+        { id: '3894', label: 'Christian Bale', value: 'Christian Bale', tmdbId: 3894, type: 'actor' }
+    ],
+    genres: [
+        { id: '28', label: 'Action', value: 28 },
+        { id: '12', label: 'Adventure', value: 12 },
+        { id: '16', label: 'Animation', value: 16 },
+        { id: '35', label: 'Comedy', value: 35 },
+        { id: '80', label: 'Crime', value: 80 },
+        { id: '18', label: 'Drama', value: 18 },
+        { id: '14', label: 'Fantasy', value: 14 },
+        { id: '27', label: 'Horror', value: 27 },
+        { id: '10749', label: 'Romance', value: 10749 },
+        { id: '878', label: 'Sci-Fi', value: 878 },
+        { id: '53', label: 'Thriller', value: 53 }
+    ],
+    decades: [
+        { id: '1980s', label: '1980s', value: '1980-1989' },
+        { id: '1990s', label: '1990s', value: '1990-1999' },
+        { id: '2000s', label: '2000s', value: '2000-2009' },
+        { id: '2010s', label: '2010s', value: '2010-2019' },
+        { id: '2020s', label: '2020s', value: '2020-2029' }
+    ],
+    revenue: [
+        { id: 'rev_1b', label: 'Box Office > $1 Billion', value: { min: 1000000000 } },
+        { id: 'rev_500m', label: 'Box Office > $500 Million', value: { min: 500000000 } }
+    ],
+    rating: [
+        { id: 'pg_13', label: 'Rated PG-13', value: 'PG-13' },
+        { id: 'r', label: 'Rated R', value: 'R' },
+        { id: 'pg', label: 'Rated PG', value: 'PG' }
+    ],
+    companies: [
+        { id: '41077', label: 'A24', value: 'A24', tmdbId: 41077, type: 'company' },
+        { id: '420', label: 'Marvel Studios', value: 'Marvel Studios', tmdbId: 420, type: 'company' },
+        { id: '174', label: 'Warner Bros. Pictures', value: 'Warner Bros.', tmdbId: 174, type: 'company' },
+        { id: '33', label: 'Universal Pictures', value: 'Universal', tmdbId: 33, type: 'company' },
+        { id: '2', label: 'Walt Disney Pictures', value: 'Disney', tmdbId: 2, type: 'company' },
+        { id: '4', label: 'Paramount', value: 'Paramount', tmdbId: 4, type: 'company' },
+        { id: '25', label: '20th Century Fox', value: '20th Century Fox', tmdbId: 25, type: 'company' },
+        { id: '5', label: 'Columbia Pictures', value: 'Columbia Pictures', tmdbId: 5, type: 'company' },
+        { id: '12', label: 'New Line Cinema', value: 'New Line Cinema', tmdbId: 12, type: 'company' },
+        { id: '34', label: 'Sony Pictures', value: 'Sony', tmdbId: 34, type: 'company' },
+        { id: '3', label: 'Pixar', value: 'Pixar', tmdbId: 3, type: 'company' },
+        { id: '521', label: 'DreamWorks Animation', value: 'DreamWorks', tmdbId: 521, type: 'company' }
+    ],
+    keywords: [
+        { id: '818', label: 'Based on Novel', value: 818 },
+        { id: '9672', label: 'Based on True Story', value: 9672 },
+        { id: '5565', label: 'Biography', value: 5565 },
+        { id: '9717', label: 'Based on Comic', value: 9717 },
+        { id: '180547', label: 'Marvel Cinematic Universe', value: 180547 }
+    ]
+};

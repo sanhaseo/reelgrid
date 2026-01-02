@@ -1,0 +1,21 @@
+{
+    "name": "cine-grid-monorepo",
+    "version": "1.0.0",
+    "description": "Monorepo for CineGrid Game",
+    "scripts": {
+        "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+        "build:frontend": "cd frontend && npm run build",
+        "start": "cd backend && node index.js",
+        "postinstall": "cd frontend && npm install && npm run build && cd ../backend && npm install"
+    },
+    "keywords": [
+        "cine-grid",
+        "game",
+        "tmdb"
+    ],
+    "author": "",
+    "license": "ISC",
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

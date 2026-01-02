@@ -1,0 +1,42 @@
+:root {
+  --primary-color: #e50914; /* Netflix Red-ish */
+  --secondary-color: #221f1f;
+  --background-color: #141414;
+  --text-color: #ffffff;
+  --card-bg: #1f1f1f;
+  --grid-gap: 1rem;
+  --font-family: 'Inter', sans-serif;
+  --transition-speed: 0.3s;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color var(--transition-speed);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+

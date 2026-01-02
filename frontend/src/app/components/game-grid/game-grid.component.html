@@ -1,0 +1,46 @@
+<div class="game-container">
+  <div class="status-bar">
+    <div class="lives">Lives: {{ lives }}</div>
+    <div class="message" *ngIf="message">{{ message }}</div>
+  </div>
+
+  <div class="grid-wrapper">
+    <!-- Top Left Corner (Empty) -->
+    <div class="header-cell corner"></div>
+
+    <!-- Column Headers -->
+    <div class="header-cell col-header" *ngFor="let col of colCriteria">
+      <div class="criteria-label">{{ col.label }}</div>
+      <div class="criteria-type">{{ col.type }}</div>
+    </div>
+
+    <!-- Rows -->
+    <ng-container *ngFor="let row of rowCriteria; let i = index">
+      <!-- Row Header -->
+      <div class="header-cell row-header">
+        <div class="criteria-label">{{ row.label }}</div>
+        <div class="criteria-type">{{ row.type }}</div>
+      </div>
+
+      <!-- Grid Cells -->
+      <div class="grid-cell" 
+           *ngFor="let cell of grid[i]; let j = index"
+           (click)="onCellClick(i, j)"
+           [class.filled]="cell"
+           [class.correct]="cell">
+        <div *ngIf="cell" class="movie-content">
+          <img [src]="cell.poster_path" [alt]="cell.title" class="poster">
+        </div>
+        <div *ngIf="!cell" class="placeholder">
+          <span class="plus">+</span>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <app-search 
+    *ngIf="isSearchOpen" 
+    (movieSelected)="onMovieSelected($event)"
+    (close)="closeSearch()">
+  </app-search>
+</div>
