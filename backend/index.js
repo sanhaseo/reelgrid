@@ -176,6 +176,7 @@ app.get('/api/game/setup', async (req, res) => {
 });
 
 // Serve Static Files (Frontend)
+// This is only used in local development. In production, Vercel will handle this.
 const frontendPath = path.join(__dirname, '../frontend/dist/cine-grid-app/browser');
 app.use(express.static(frontendPath));
 
@@ -184,7 +185,11 @@ app.get('*splat', (req, res) => {
     res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
-// Start Server
-app.listen(PORT, async () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// Start Server (Conditional: If run directly, listen. If exported, do nothing.)
+if (require.main === module) {
+    app.listen(PORT, async () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
+
+module.exports = app;
