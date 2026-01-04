@@ -60,7 +60,8 @@
               "buildTarget": "cine-grid-app:build:production"
             },
             "development": {
-              "buildTarget": "cine-grid-app:build:development"
+              "buildTarget": "cine-grid-app:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

@@ -50,8 +50,6 @@ export interface GameState {
   providedIn: 'root'
 })
 export class MovieService {
-  // No headers needed for backend proxy
-
   constructor(private http: HttpClient) { }
 
   getGameSetup(): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
