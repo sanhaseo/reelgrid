@@ -56,6 +56,14 @@ export class MovieService {
     return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/setup');
   }
 
+  saveGame(gameData: any): Observable<any> {
+    return this.http.post('/api/game/save', gameData);
+  }
+
+  regenerateBoard(): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
+    return this.http.post<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {});
+  }
+
   searchMovies(query: string): Observable<Movie[]> {
     if (!query) return of([]);
     // Call backend proxy

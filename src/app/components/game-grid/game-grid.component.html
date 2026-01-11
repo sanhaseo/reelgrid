@@ -1,6 +1,7 @@
 <div class="game-container">
   <div class="status-bar">
     <div class="lives">Lives: {{ lives }}</div>
+    <button (click)="onRegenerate()" style="margin-left: 1rem; padding: 0.5rem; cursor: pointer;">Regenerate Daily Board</button>
     <div class="message" *ngIf="message">{{ message }}</div>
   </div>
 

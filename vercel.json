@@ -5,5 +5,11 @@
             "source": "/api/(.*)",
             "destination": "/api/index.js"
         }
+    ],
+    "crons": [
+        {
+            "path": "/api/game/regenerate",
+            "schedule": "0 0 * * *"
+        }
     ]
 }

@@ -4,7 +4,33 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
+const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3000;
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
+
+// Game Schema
+const GameSchema = new mongoose.Schema({
+    timestamp: { type: Date, default: Date.now },
+    result: String, // 'win' or 'loss'
+    score: Number,
+    gridState: mongoose.Schema.Types.Mixed, // flexible structure for now
+    rowCriteria: mongoose.Schema.Types.Mixed,
+    colCriteria: mongoose.Schema.Types.Mixed
+});
+const Game = mongoose.model('Game', GameSchema);
+
+// Daily Game Schema
+const DailyGameSchema = new mongoose.Schema({
+    date: { type: String, unique: true }, // YYYY-MM-DD
+    rowCriteria: mongoose.Schema.Types.Mixed,
+    colCriteria: mongoose.Schema.Types.Mixed,
+    createdAt: { type: Date, default: Date.now }
+});
+const DailyGame = mongoose.model('DailyGame', DailyGameSchema);
 
 app.use(cors());
 app.use(express.json());
@@ -117,7 +143,8 @@ app.get('/api/tmdb/movie/:id', async (req, res) => {
     }
 });
 
-app.get('/api/game/setup', async (req, res) => {
+// Helper: Generate a valid board
+async function generateBoard() {
     const flatPool = [
         ...CRITERIA_POOLS.directors.map(i => ({ ...i, type: 'director' })),
         ...CRITERIA_POOLS.actors.map(i => ({ ...i, type: 'actor' })),
@@ -129,17 +156,14 @@ app.get('/api/game/setup', async (req, res) => {
     ];
 
     let attempts = 0;
-    while (attempts < 20) { // Increased attempts to handle constraints + validation
+    while (attempts < 50) {
         attempts++;
-
-        // Select 6 criteria obeying constraints: Actor <= 3, Others <= 1
         let selected = [];
         let typeCounts = {};
         const shuffled = [...flatPool].sort(() => 0.5 - Math.random());
 
         for (const item of shuffled) {
             if (selected.length >= 6) break;
-
             const count = typeCounts[item.type] || 0;
             const limit = item.type === 'actor' ? 3 : 1;
 
@@ -168,11 +192,96 @@ app.get('/api/game/setup', async (req, res) => {
 
         if (validBoard) {
             console.log('Generated valid board in ' + attempts + ' attempts');
-            return res.json({ rowCriteria, colCriteria });
+            return { rowCriteria, colCriteria };
         }
     }
+    return null;
+}
 
-    res.status(500).json({ error: 'Failed to generate valid board' });
+// Get Daily Game Setup
+app.get('/api/game/setup', async (req, res) => {
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+    try {
+        // 1. Check if daily game exists
+        let dailyGame = await DailyGame.findOne({ date: today });
+
+        if (dailyGame) {
+            return res.json({
+                rowCriteria: dailyGame.rowCriteria,
+                colCriteria: dailyGame.colCriteria,
+                isNew: false
+            });
+        }
+
+        // 2. If not, generate new one
+        const board = await generateBoard();
+        if (!board) {
+            return res.status(500).json({ error: 'Failed to generate valid board' });
+        }
+
+        // 3. Save it
+        dailyGame = new DailyGame({
+            date: today,
+            rowCriteria: board.rowCriteria,
+            colCriteria: board.colCriteria
+        });
+        await dailyGame.save();
+
+        res.json({ ...board, isNew: true });
+
+    } catch (e) {
+        console.error('Setup Error', e);
+        res.status(500).json({ error: 'Server Error' });
+    }
+});
+
+// Force Regenerate Daily Game (Protected by CRON_SECRET)
+app.post('/api/game/regenerate', async (req, res) => {
+    // Check for authorization (Vercel Cron sends this header)
+    const authHeader = req.headers.authorization;
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const today = new Date().toISOString().split('T')[0];
+    try {
+        await DailyGame.deleteOne({ date: today });
+        const board = await generateBoard();
+        if (!board) return res.status(500).json({ error: 'Failed' });
+
+        const dailyGame = new DailyGame({
+            date: today,
+            rowCriteria: board.rowCriteria,
+            colCriteria: board.colCriteria
+        });
+        await dailyGame.save();
+        res.json(board);
+    } catch (e) {
+        res.status(500).json({ error: 'Regeneration Failed' });
+    }
+});
+
+// Save Game Result
+app.post('/api/game/save', async (req, res) => {
+    try {
+        const game = new Game(req.body);
+        await game.save();
+        res.json({ message: 'Game saved', id: game._id });
+    } catch (e) {
+        console.error('Save Error', e);
+        res.status(500).json({ error: 'Failed to save game' });
+    }
+});
+
+// Get Recent Games
+app.get('/api/game/history', async (req, res) => {
+    try {
+        const games = await Game.find().sort({ timestamp: -1 }).limit(10);
+        res.json(games);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch history' });
+    }
 });
 
 // Serve Static Files (Frontend)
