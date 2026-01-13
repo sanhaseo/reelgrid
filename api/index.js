@@ -28,6 +28,7 @@ const DailyGameSchema = new mongoose.Schema({
     date: { type: String, unique: true }, // YYYY-MM-DD
     rowCriteria: mongoose.Schema.Types.Mixed,
     colCriteria: mongoose.Schema.Types.Mixed,
+    possibleAnswers: mongoose.Schema.Types.Mixed, // 3x3 grid of movie arrays
     createdAt: { type: Date, default: Date.now }
 });
 const DailyGame = mongoose.model('DailyGame', DailyGameSchema);
@@ -98,10 +99,11 @@ async function checkIntersection(rowCrit, colCrit) {
     try {
         const res = await fetch(url, { headers });
         const data = await res.json();
-        return data.total_results > 0;
+        // Return results if there are any, otherwise null
+        return data.total_results > 0 ? data.results : null;
     } catch (e) {
         console.error('Validation Error', e);
-        return false;
+        return null;
     }
 }
 
@@ -179,20 +181,30 @@ async function generateBoard() {
         const colCriteria = selected.slice(3, 6);
 
         let validBoard = true;
+        let possibleAnswers = [[], [], []]; // 3x3 grid
+
         for (let r = 0; r < 3; r++) {
+            possibleAnswers[r] = [];
             for (let c = 0; c < 3; c++) {
-                const hasMatch = await checkIntersection(rowCriteria[r], colCriteria[c]);
-                if (!hasMatch) {
+                const matches = await checkIntersection(rowCriteria[r], colCriteria[c]);
+                if (!matches || matches.length === 0) {
                     validBoard = false;
                     break;
                 }
+                // Store minimal movie data to save space
+                possibleAnswers[r][c] = matches.map(m => ({
+                    id: m.id,
+                    title: m.title,
+                    poster_path: m.poster_path,
+                    release_date: m.release_date
+                }));
             }
             if (!validBoard) break;
         }
 
         if (validBoard) {
             console.log('Generated valid board in ' + attempts + ' attempts');
-            return { rowCriteria, colCriteria };
+            return { rowCriteria, colCriteria, possibleAnswers };
         }
     }
     return null;
@@ -224,11 +236,17 @@ app.get('/api/game/setup', async (req, res) => {
         dailyGame = new DailyGame({
             date: today,
             rowCriteria: board.rowCriteria,
-            colCriteria: board.colCriteria
+            colCriteria: board.colCriteria,
+            possibleAnswers: board.possibleAnswers
         });
         await dailyGame.save();
 
-        res.json({ ...board, isNew: true });
+        // Don't send possibleAnswers to frontend!
+        res.json({
+            rowCriteria: board.rowCriteria,
+            colCriteria: board.colCriteria,
+            isNew: true
+        });
 
     } catch (e) {
         console.error('Setup Error', e);
@@ -253,10 +271,17 @@ app.post('/api/game/regenerate', async (req, res) => {
         const dailyGame = new DailyGame({
             date: today,
             rowCriteria: board.rowCriteria,
-            colCriteria: board.colCriteria
+            colCriteria: board.colCriteria,
+            possibleAnswers: board.possibleAnswers
         });
         await dailyGame.save();
-        res.json(board);
+
+        // Return board without answers for the response (or with them if this is strictly admin)
+        // For debugging regen, we might want to see them, but let's effectively clean it for consistency
+        res.json({
+            rowCriteria: board.rowCriteria,
+            colCriteria: board.colCriteria
+        });
     } catch (e) {
         res.status(500).json({ error: 'Regeneration Failed' });
     }
