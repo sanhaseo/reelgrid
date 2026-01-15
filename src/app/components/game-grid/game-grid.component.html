@@ -1,47 +1,65 @@
-<div class="game-container">
-  <div class="status-bar">
-    <div class="lives">Lives: {{ lives }}</div>
-    <button (click)="onRegenerate()" style="margin-left: 1rem; padding: 0.5rem; cursor: pointer;">Regenerate Daily Board</button>
-    <div class="message" *ngIf="message">{{ message }}</div>
+<div class="status-bar">
+  <div class="lives">Lives: {{ lives }}</div>
+  <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">Give Up</button>
+  <button (click)="onRegenerate()" class="action-btn">Regenerate Daily Board</button>
+  <div class="message" *ngIf="message">{{ message }}</div>
+</div>
+
+<div class="grid-wrapper">
+  <!-- Top Left Corner (Empty) -->
+  <div class="header-cell corner"></div>
+
+  <!-- Column Headers -->
+  <div class="header-cell col-header" *ngFor="let col of colCriteria">
+    <div class="criteria-label">{{ col.label }}</div>
+    <div class="criteria-type">{{ col.type }}</div>
   </div>
 
-  <div class="grid-wrapper">
-    <!-- Top Left Corner (Empty) -->
-    <div class="header-cell corner"></div>
-
-    <!-- Column Headers -->
-    <div class="header-cell col-header" *ngFor="let col of colCriteria">
-      <div class="criteria-label">{{ col.label }}</div>
-      <div class="criteria-type">{{ col.type }}</div>
+  <!-- Rows -->
+  <ng-container *ngFor="let row of rowCriteria; let i = index">
+    <!-- Row Header -->
+    <div class="header-cell row-header">
+      <div class="criteria-label">{{ row.label }}</div>
+      <div class="criteria-type">{{ row.type }}</div>
     </div>
 
-    <!-- Rows -->
-    <ng-container *ngFor="let row of rowCriteria; let i = index">
-      <!-- Row Header -->
-      <div class="header-cell row-header">
-        <div class="criteria-label">{{ row.label }}</div>
-        <div class="criteria-type">{{ row.type }}</div>
+    <!-- Grid Cells -->
+    <div class="grid-cell" *ngFor="let cell of grid[i]; let j = index" (click)="onCellClick(i, j)" [class.filled]="cell"
+      [class.correct]="cell">
+      <div *ngIf="cell" class="movie-content">
+        <img [src]="cell.poster_path" [alt]="cell.title" class="poster">
       </div>
-
-      <!-- Grid Cells -->
-      <div class="grid-cell" 
-           *ngFor="let cell of grid[i]; let j = index"
-           (click)="onCellClick(i, j)"
-           [class.filled]="cell"
-           [class.correct]="cell">
-        <div *ngIf="cell" class="movie-content">
-          <img [src]="cell.poster_path" [alt]="cell.title" class="poster">
-        </div>
-        <div *ngIf="!cell" class="placeholder">
-          <span class="plus">+</span>
-        </div>
+      <div *ngIf="!cell" class="placeholder">
+        <span class="plus">+</span>
       </div>
-    </ng-container>
-  </div>
-
-  <app-search 
-    *ngIf="isSearchOpen" 
-    (movieSelected)="onMovieSelected($event)"
-    (close)="closeSearch()">
-  </app-search>
+    </div>
+  </ng-container>
 </div>
+
+<!-- Game Summary Section -->
+<div class="summary-section" *ngIf="summaryAnswers">
+  <h2>Game Summary</h2>
+  <div class="summary-grid">
+    <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
+      <div class="summary-cell" *ngFor="let movies of row; let j = index">
+        <!-- Show existing guess if correct, otherwise show top answer -->
+        <div *ngIf="grid[i][j]" class="user-answer">
+          <img [src]="grid[i][j]?.poster_path" class="mini-poster">
+          <span>You: {{ grid[i][j]?.title }}</span>
+        </div>
+
+        <div class="possible-answers">
+          <strong>Top Answers:</strong>
+          <ul>
+            <li *ngFor="let m of movies | slice:0:3">
+              {{ m.title }} <span class="year">({{ m.release_date | date:'yyyy' }})</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-search *ngIf="isSearchOpen" (movieSelected)="onMovieSelected($event)" (close)="closeSearch()">
+</app-search>

@@ -24,6 +24,7 @@ export class GameGridComponent implements OnInit {
   lives = 9;
   gameOver = false;
   message = '';
+  summaryAnswers: Movie[][][] | null = null;
 
   constructor(private movieService: MovieService) { }
 
@@ -47,8 +48,14 @@ export class GameGridComponent implements OnInit {
       this.lives = 9;
       this.gameOver = false;
       this.message = 'New board generated!';
+      this.summaryAnswers = null; // Clear summary
       setTimeout(() => this.message = '', 3000);
     });
+  }
+
+  onGiveUp(): void {
+    if (this.gameOver) return;
+    this.finishGame('give-up');
   }
 
   onCellClick(row: number, col: number): void {
@@ -109,22 +116,19 @@ export class GameGridComponent implements OnInit {
     }
   }
 
-  finishGame(result: 'win' | 'loss'): void {
+  finishGame(result: 'win' | 'loss' | 'give-up'): void {
     this.gameOver = true;
-    this.message = result === 'win' ? 'You Won!' : 'Game Over!';
+    if (result === 'win') this.message = 'You Won!';
+    else if (result === 'loss') this.message = 'Game Over!';
+    else this.message = 'You Gave Up!';
 
-    // Prepare game data
-    const gameData = {
-      result,
-      score: 9 - (9 - this.lives), // Simple score calculation
-      gridState: this.grid,
-      rowCriteria: this.rowCriteria,
-      colCriteria: this.colCriteria
-    };
-
-    this.movieService.saveGame(gameData).subscribe({
-      next: (res) => console.log('Game saved:', res),
-      error: (err) => console.error('Failed to save game:', err)
+    // Fetch answers for summary
+    this.movieService.getDailyAnswers().subscribe(data => {
+      this.summaryAnswers = data.possibleAnswers;
     });
+
+    // For now, we don't save individual game results
+    console.log('Game Over. Result:', result);
+    console.log('Score:', 9 - (9 - this.lives));
   }
 }

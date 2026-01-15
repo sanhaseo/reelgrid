@@ -12,16 +12,7 @@ mongoose.connect(process.env.MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// Game Schema
-const GameSchema = new mongoose.Schema({
-    timestamp: { type: Date, default: Date.now },
-    result: String, // 'win' or 'loss'
-    score: Number,
-    gridState: mongoose.Schema.Types.Mixed, // flexible structure for now
-    rowCriteria: mongoose.Schema.Types.Mixed,
-    colCriteria: mongoose.Schema.Types.Mixed
-});
-const Game = mongoose.model('Game', GameSchema);
+
 
 // Daily Game Schema
 const DailyGameSchema = new mongoose.Schema({
@@ -254,6 +245,20 @@ app.get('/api/game/setup', async (req, res) => {
     }
 });
 
+// Get Daily Game Answers (Reveal Solution)
+app.get('/api/game/answers', async (req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+    try {
+        const dailyGame = await DailyGame.findOne({ date: today });
+        if (!dailyGame) {
+            return res.status(404).json({ error: 'No game found for today' });
+        }
+        res.json({ possibleAnswers: dailyGame.possibleAnswers });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch answers' });
+    }
+});
+
 // Force Regenerate Daily Game (Protected by CRON_SECRET)
 app.post('/api/game/regenerate', async (req, res) => {
     // Check for authorization (Vercel Cron sends this header)
@@ -287,27 +292,7 @@ app.post('/api/game/regenerate', async (req, res) => {
     }
 });
 
-// Save Game Result
-app.post('/api/game/save', async (req, res) => {
-    try {
-        const game = new Game(req.body);
-        await game.save();
-        res.json({ message: 'Game saved', id: game._id });
-    } catch (e) {
-        console.error('Save Error', e);
-        res.status(500).json({ error: 'Failed to save game' });
-    }
-});
 
-// Get Recent Games
-app.get('/api/game/history', async (req, res) => {
-    try {
-        const games = await Game.find().sort({ timestamp: -1 }).limit(10);
-        res.json(games);
-    } catch (e) {
-        res.status(500).json({ error: 'Failed to fetch history' });
-    }
-});
 
 // Serve Static Files (Frontend)
 // This is only used in local development. In production, Vercel will handle this.

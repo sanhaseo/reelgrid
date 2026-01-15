@@ -3,78 +3,112 @@
     flex-direction: column;
     align-items: center;
     padding: 2rem;
-    width: 100%;
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .status-bar {
     display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 1rem;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
     font-size: 1.2rem;
     font-weight: bold;
 }
 
+.lives {
+    color: #e50914;
+}
+
+.action-btn {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: white;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover {
+    background-color: #444;
+}
+
+.action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .message {
-    color: var(--primary-color);
+    margin-left: auto;
+    color: #46d369;
 }
 
 .grid-wrapper {
     display: grid;
-    grid-template-columns: 100px repeat(3, 1fr);
-    grid-template-rows: 100px repeat(3, 1fr);
-    gap: var(--grid-gap);
-    width: 100%;
-    aspect-ratio: 1;
-    /* Keep it square-ish */
+    grid-template-columns: 120px repeat(3, 160px);
+    grid-template-rows: 80px repeat(3, 240px);
+    gap: 8px;
 }
 
 .header-cell {
-    background-color: var(--card-bg);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    padding: 0.5rem;
+    background-color: #1f1f1f;
     border-radius: 8px;
-    font-size: 0.9rem;
+    padding: 10px;
+    text-align: center;
+}
+
+.col-header {
+    font-weight: bold;
+}
+
+.row-header {
+    font-weight: bold;
+}
+
+.criteria-label {
+    font-size: 1rem;
+    color: #fff;
 }
 
 .criteria-type {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    opacity: 0.7;
+    font-size: 0.8rem;
+    color: #aaa;
     margin-top: 4px;
+    text-transform: uppercase;
 }
 
 .grid-cell {
     background-color: #2a2a2a;
     border-radius: 8px;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
     overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    transition: background-color 0.2s;
 }
 
 .grid-cell:hover {
-    transform: scale(1.02);
     background-color: #333;
 }
 
-.grid-cell.filled {
-    cursor: default;
-    transform: none;
+.grid-cell.correct {
+    border: 2px solid #46d369;
 }
 
 .placeholder {
-    font-size: 2rem;
-    opacity: 0.3;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.plus {
+    font-size: 3rem;
+    color: #444;
 }
 
 .movie-content {
@@ -88,4 +122,73 @@
     object-fit: cover;
 }
 
-/* Modal styles will be in search component or global, but component is standalone so search styles there */
+/* Summary Section */
+.summary-section {
+    margin-top: 4rem;
+    width: 100%;
+    max-width: 800px;
+}
+
+.summary-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #fff;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.summary-cell {
+    background-color: #1f1f1f;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.user-answer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #333;
+    color: #46d369;
+}
+
+.mini-poster {
+    width: 30px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.possible-answers strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+}
+
+.possible-answers ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.possible-answers li {
+    margin-bottom: 0.25rem;
+    color: #ddd;
+}
+
+.year {
+    color: #777;
+    font-size: 0.8rem;
+}
