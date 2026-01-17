@@ -306,7 +306,10 @@ app.post('/api/game/stats', async (req, res) => {
         stats.markModified('cellStats');
 
         await stats.save();
-        res.json({ success: true });
+        res.json({
+            success: true,
+            cellStat: stats.cellStats[row][col]
+        });
     } catch (e) {
         console.error('Stats Error', e);
         res.status(500).json({ error: 'Failed to update stats' });

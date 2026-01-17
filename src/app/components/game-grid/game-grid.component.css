@@ -122,6 +122,49 @@
     object-fit: cover;
 }
 
+.rarity-badge {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
+    /* Fallback */
+    color: white;
+    z-index: 2;
+}
+
+.rarity-badge.legendary {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    border: 1px solid #FFD700;
+}
+
+.rarity-badge.epic {
+    background: linear-gradient(135deg, #b026ff, #8000ff);
+    border: 1px solid #b026ff;
+}
+
+.rarity-badge.rare {
+    background: linear-gradient(135deg, #00bfff, #0073e6);
+    border: 1px solid #00bfff;
+}
+
+.rarity-badge.uncommon {
+    background: linear-gradient(135deg, #32cd32, #008000);
+    border: 1px solid #32cd32;
+}
+
+.rarity-badge.common {
+    background: #555;
+    border: 1px solid #777;
+    color: #ddd;
+}
+
 /* Summary Section */
 .summary-section {
     margin-top: 4rem;

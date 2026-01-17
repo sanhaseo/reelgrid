@@ -28,6 +28,13 @@ export class GameGridComponent implements OnInit {
   summaryStats: any[][] | null = null;
   activeSummaryTab: 'stats' | 'answers' = 'stats';
 
+  // Store rarity info for filled cells: "Common", "Rare", etc.
+  gridRarity: (RarityInfo | null)[][] = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null]
+  ];
+
   constructor(private movieService: MovieService) { }
 
   ngOnInit(): void {
@@ -52,6 +59,11 @@ export class GameGridComponent implements OnInit {
       this.message = 'New board generated!';
       this.summaryAnswers = null; // Clear summary
       this.summaryStats = null;
+      this.gridRarity = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null]
+      ];
       setTimeout(() => this.message = '', 3000);
     });
   }
@@ -96,6 +108,14 @@ export class GameGridComponent implements OnInit {
 
           // Submit stats asynchronously
           this.movieService.submitGuessStats(row, col, fullMovie.title).subscribe({
+            next: (res: any) => {
+              if (res.success && res.cellStat) {
+                const total = res.cellStat.total;
+                const count = res.cellStat.answers[fullMovie.title] || 0;
+                const percent = (count / total) * 100;
+                this.gridRarity[row][col] = this.calculateRarity(percent);
+              }
+            },
             error: (e) => console.error('Stats submit failed', e)
           });
 
@@ -209,4 +229,18 @@ export class GameGridComponent implements OnInit {
   setActiveTab(tab: 'stats' | 'answers'): void {
     this.activeSummaryTab = tab;
   }
+
+  calculateRarity(percent: number): RarityInfo {
+    if (percent < 5) return { label: 'Legendary', colorClass: 'legendary', percent: Math.round(percent) };
+    if (percent < 10) return { label: 'Epic', colorClass: 'epic', percent: Math.round(percent) };
+    if (percent < 25) return { label: 'Rare', colorClass: 'rare', percent: Math.round(percent) };
+    if (percent < 50) return { label: 'Uncommon', colorClass: 'uncommon', percent: Math.round(percent) };
+    return { label: 'Common', colorClass: 'common', percent: Math.round(percent) };
+  }
+}
+
+interface RarityInfo {
+  label: string;
+  colorClass: string;
+  percent: number;
 }

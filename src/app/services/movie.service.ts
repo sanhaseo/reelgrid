@@ -98,8 +98,6 @@ export class MovieService {
     const url = `/api/tmdb/movie/${id}`;
     return this.http.get<any>(url).pipe(
       map(data => {
-        console.log('getMovieDetails RAW DATA:', data); // DEBUG
-
         const director = data.credits.crew?.find((c: any) => c.job === 'Director')?.name || '';
         const cast = data.credits.cast?.map((c: any) => c.name) || [];
         // Map significant crew
@@ -135,37 +133,27 @@ export class MovieService {
           credits: data.credits
         } as Movie;
 
-        console.log('Constructed Movie Object:', movieObj); // DEBUG
         return movieObj;
       }),
       catchError((err) => {
-        console.error('getMovieDetails ERROR:', err); // DEBUG
+        console.error('getMovieDetails ERROR:', err);
         return of(null);
       })
     );
   }
 
   validateGuess(movie: Movie, rowCriterium: Criteria, colCriterium: Criteria): boolean {
-    console.log('Validating Guess:', movie.title);
-    console.log('Row Criteria:', rowCriterium);
-    console.log('Col Criteria:', colCriterium);
     const rowMatch = this.checkCriteria(movie, rowCriterium);
-    console.log('Row Match:', rowMatch);
     const colMatch = this.checkCriteria(movie, colCriterium);
-    console.log('Col Match:', colMatch);
     return rowMatch && colMatch;
   }
 
   private checkCriteria(movie: Movie, criteria: Criteria): boolean {
-    console.log(`Checking ${criteria.type} against value:`, criteria.value);
     switch (criteria.type) {
       case 'director':
-        console.log('Movie Director:', movie.director);
         return movie.director === criteria.value;
 
       case 'actor':
-        console.log('Movie Cast (first 5):', movie.cast?.slice(0, 5));
-        console.log('Cast includes actor?', movie.cast?.includes(criteria.value));
         return movie.cast?.includes(criteria.value) ?? false;
 
       case 'genre':

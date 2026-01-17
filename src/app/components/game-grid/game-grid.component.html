@@ -28,6 +28,9 @@
       [class.correct]="cell">
       <div *ngIf="cell" class="movie-content">
         <img [src]="cell.poster_path" [alt]="cell.title" class="poster">
+        <div class="rarity-badge" *ngIf="gridRarity[i][j]" [ngClass]="gridRarity[i][j]?.colorClass">
+          {{ gridRarity[i][j]?.label }} {{ gridRarity[i][j]?.percent }}%
+        </div>
       </div>
       <div *ngIf="!cell" class="placeholder">
         <span class="plus">+</span>
