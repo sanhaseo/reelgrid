@@ -25,6 +25,8 @@ export class GameGridComponent implements OnInit {
   gameOver = false;
   message = '';
   summaryAnswers: Movie[][][] | null = null;
+  summaryStats: any[][] | null = null;
+  activeSummaryTab: 'stats' | 'answers' = 'stats';
 
   constructor(private movieService: MovieService) { }
 
@@ -49,6 +51,7 @@ export class GameGridComponent implements OnInit {
       this.gameOver = false;
       this.message = 'New board generated!';
       this.summaryAnswers = null; // Clear summary
+      this.summaryStats = null;
       setTimeout(() => this.message = '', 3000);
     });
   }
@@ -90,6 +93,12 @@ export class GameGridComponent implements OnInit {
 
         if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
+
+          // Submit stats asynchronously
+          this.movieService.submitGuessStats(row, col, fullMovie.title).subscribe({
+            error: (e) => console.error('Stats submit failed', e)
+          });
+
           this.checkWinCondition();
         } else {
           this.lives--;
@@ -127,8 +136,77 @@ export class GameGridComponent implements OnInit {
       this.summaryAnswers = data.possibleAnswers;
     });
 
+    // Fetch stats
+    this.movieService.getDailyGameStats().subscribe(stats => {
+      this.summaryStats = stats;
+    });
+
     // For now, we don't save individual game results
     console.log('Game Over. Result:', result);
     console.log('Score:', 9 - (9 - this.lives));
+  }
+
+  getStatPercentage(row: number, col: number, movieTitle: string): number {
+    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return 0;
+
+    const cellStat = this.summaryStats[row][col];
+    if (!cellStat || cellStat.total === 0) return 0;
+
+    const count = cellStat.answers[movieTitle] || 0;
+    return Math.round((count / cellStat.total) * 100);
+  }
+
+  getTopAnswer(row: number, col: number): { title: string, percent: number } | null {
+    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
+
+    const cellStat = this.summaryStats[row][col];
+    if (!cellStat || cellStat.total === 0) return null;
+
+    let topTitle = '';
+    let maxCount = -1;
+
+    for (const [title, count] of Object.entries(cellStat.answers)) {
+      if ((count as number) > maxCount) {
+        maxCount = count as number;
+        topTitle = title;
+      }
+    }
+
+    if (!topTitle) return null;
+    return {
+      title: topTitle,
+      percent: Math.round((maxCount / cellStat.total) * 100)
+    };
+  }
+
+  getLeastPopular(row: number, col: number): { title: string, percent: number } | null {
+    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
+
+    const cellStat = this.summaryStats[row][col];
+    if (!cellStat || cellStat.total === 0) return null;
+
+    let minTitle = '';
+    let minCount = Infinity;
+    let hasEntries = false;
+
+    for (const [title, count] of Object.entries(cellStat.answers)) {
+      if ((count as number) > 0) {
+        hasEntries = true;
+        if ((count as number) < minCount) {
+          minCount = count as number;
+          minTitle = title;
+        }
+      }
+    }
+
+    if (!hasEntries || !minTitle) return null;
+    return {
+      title: minTitle,
+      percent: Math.round((minCount / cellStat.total) * 100)
+    };
+  }
+
+  setActiveTab(tab: 'stats' | 'answers'): void {
+    this.activeSummaryTab = tab;
   }
 }

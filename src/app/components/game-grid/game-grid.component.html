@@ -36,20 +36,70 @@
   </ng-container>
 </div>
 
-<!-- Game Summary Section -->
 <div class="summary-section" *ngIf="summaryAnswers">
   <h2>Game Summary</h2>
-  <div class="summary-grid">
+
+  <!-- Tabs -->
+  <div class="summary-tabs">
+    <button class="tab-btn" [class.active]="activeSummaryTab === 'stats'" (click)="setActiveTab('stats')">
+      Stats & Analysis
+    </button>
+    <button class="tab-btn" [class.active]="activeSummaryTab === 'answers'" (click)="setActiveTab('answers')">
+      Possible Answers
+    </button>
+  </div>
+
+  <!-- STATS VIEW -->
+  <div class="summary-grid" *ngIf="activeSummaryTab === 'stats'">
     <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
-      <div class="summary-cell" *ngFor="let movies of row; let j = index">
-        <!-- Show existing guess if correct, otherwise show top answer -->
-        <div *ngIf="grid[i][j]" class="user-answer">
-          <img [src]="grid[i][j]?.poster_path" class="mini-poster">
-          <span>You: {{ grid[i][j]?.title }}</span>
+      <div class="summary-cell center-align" *ngFor="let movies of row; let j = index">
+
+        <!-- User's Answer Stats -->
+        <div *ngIf="grid[i][j]" class="user-answer-stat">
+          <div class="stat-row">
+            <span class="label">You Picked:</span>
+            <span class="value">{{ grid[i][j]?.title }}</span>
+          </div>
+          <div class="stat-bar-container">
+            <div class="stat-bar" [style.width.%]="getStatPercentage(i, j, grid[i][j]?.title || '')"></div>
+            <span class="stat-pct">{{ getStatPercentage(i, j, grid[i][j]?.title || '') }}%</span>
+          </div>
         </div>
 
+        <!-- No Answer -->
+        <div *ngIf="!grid[i][j]" class="no-answer-stat">
+          <span>No correct answer given.</span>
+        </div>
+
+        <hr class="divider" *ngIf="summaryStats">
+
+        <!-- Community Stats -->
+        <div class="community-stats" *ngIf="summaryStats">
+          <!-- Most Popular -->
+          <div *ngIf="getTopAnswer(i, j) as top" class="stat-item">
+            <span class="stat-label popular">Most Popular 🏆</span>
+            <span class="stat-movie">{{ top.title }}</span>
+            <span class="stat-pct-pill">{{ top.percent }}%</span>
+          </div>
+
+          <!-- Least Popular (Rare) -->
+          <div *ngIf="getLeastPopular(i, j) as rare" class="stat-item"
+            [class.hidden]="rare.title === (getTopAnswer(i, j)?.title || '')">
+            <span class="stat-label rare">Rare Find 💎</span>
+            <span class="stat-movie">{{ rare.title }}</span>
+            <span class="stat-pct-pill">{{ rare.percent }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANSWERS VIEW (Existing List) -->
+  <div class="summary-grid" *ngIf="activeSummaryTab === 'answers'">
+    <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
+      <div class="summary-cell" *ngFor="let movies of row; let j = index">
         <div class="possible-answers">
-          <strong>Top Answers:</strong>
+          <strong>Top Possible Answers:</strong>
           <ul>
             <li *ngFor="let m of movies | slice:0:3">
               {{ m.title }} <span class="year">({{ m.release_date | date:'yyyy' }})</span>
@@ -59,6 +109,7 @@
       </div>
     </div>
   </div>
+
 </div>
 
 <app-search *ngIf="isSearchOpen" (movieSelected)="onMovieSelected($event)" (close)="closeSearch()">

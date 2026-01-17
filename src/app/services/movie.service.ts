@@ -66,6 +66,14 @@ export class MovieService {
     return this.http.get<{ possibleAnswers: Movie[][][] }>('/api/game/answers');
   }
 
+  submitGuessStats(row: number, col: number, movieTitle: string): Observable<any> {
+    return this.http.post('/api/game/stats', { row, col, movieTitle });
+  }
+
+  getDailyGameStats(): Observable<any[][]> {
+    return this.http.get<any[][]>('/api/game/stats');
+  }
+
   searchMovies(query: string): Observable<Movie[]> {
     if (!query) return of([]);
     // Call backend proxy

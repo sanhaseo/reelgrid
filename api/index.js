@@ -24,6 +24,14 @@ const DailyGameSchema = new mongoose.Schema({
 });
 const DailyGame = mongoose.model('DailyGame', DailyGameSchema);
 
+// Daily Game Stats Schema
+const DailyGameStatsSchema = new mongoose.Schema({
+    date: { type: String, unique: true }, // YYYY-MM-DD
+    // 3x3 grid. Each cell: { total: Number, answers: { "Movie Title": Number } }
+    cellStats: { type: mongoose.Schema.Types.Mixed, default: [] }
+});
+const DailyGameStats = mongoose.model('DailyGameStats', DailyGameStatsSchema);
+
 app.use(cors());
 app.use(express.json());
 
@@ -149,8 +157,9 @@ async function generateBoard() {
     ];
 
     let attempts = 0;
-    while (attempts < 50) {
+    while (attempts < 100) {
         attempts++;
+        console.log(`Attempt ${attempts}`);
         let selected = [];
         let typeCounts = {};
         const shuffled = [...flatPool].sort(() => 0.5 - Math.random());
@@ -256,6 +265,62 @@ app.get('/api/game/answers', async (req, res) => {
         res.json({ possibleAnswers: dailyGame.possibleAnswers });
     } catch (e) {
         res.status(500).json({ error: 'Failed to fetch answers' });
+    }
+});
+
+// Submit Game Stat (Increment count for a guess)
+app.post('/api/game/stats', async (req, res) => {
+    const { row, col, movieTitle } = req.body;
+    const today = new Date().toISOString().split('T')[0];
+
+    try {
+        let stats = await DailyGameStats.findOne({ date: today });
+
+        if (!stats) {
+            stats = new DailyGameStats({ date: today, cellStats: [] });
+        }
+
+        // Initialize grid if empty or partial
+        // We use a helper helper to ensure 3x3 structure
+        if (!Array.isArray(stats.cellStats)) stats.cellStats = [];
+        for (let r = 0; r < 3; r++) {
+            if (!stats.cellStats[r]) stats.cellStats[r] = [];
+            for (let c = 0; c < 3; c++) {
+                if (!stats.cellStats[r][c]) {
+                    stats.cellStats[r][c] = { total: 0, answers: {} };
+                }
+                // Double check answers object exists
+                if (!stats.cellStats[r][c].answers) {
+                    stats.cellStats[r][c].answers = {};
+                }
+            }
+        }
+
+        // Increment counts
+        stats.cellStats[row][col].total = (stats.cellStats[row][col].total || 0) + 1;
+
+        const currentCount = stats.cellStats[row][col].answers[movieTitle] || 0;
+        stats.cellStats[row][col].answers[movieTitle] = currentCount + 1;
+
+        // Mark as modified for Mixed type
+        stats.markModified('cellStats');
+
+        await stats.save();
+        res.json({ success: true });
+    } catch (e) {
+        console.error('Stats Error', e);
+        res.status(500).json({ error: 'Failed to update stats' });
+    }
+});
+
+// Get Daily Game Stats
+app.get('/api/game/stats', async (req, res) => {
+    const today = new Date().toISOString().split('T')[0];
+    try {
+        const stats = await DailyGameStats.findOne({ date: today });
+        res.json(stats ? stats.cellStats : []);
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch stats' });
     }
 });
 
