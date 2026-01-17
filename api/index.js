@@ -339,6 +339,7 @@ app.get('/api/game/regenerate', async (req, res) => {
     const today = new Date().toISOString().split('T')[0];
     try {
         await DailyGame.deleteOne({ date: today });
+        await DailyGameStats.deleteOne({ date: today }); // Reset stats for the new board
         const board = await generateBoard();
         if (!board) return res.status(500).json({ error: 'Failed' });
 

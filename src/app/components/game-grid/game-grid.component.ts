@@ -45,26 +45,39 @@ export class GameGridComponent implements OnInit {
   }
 
   onRegenerate(): void {
-    this.movieService.regenerateBoard().subscribe(setup => {
-      this.rowCriteria = setup.rowCriteria;
-      this.colCriteria = setup.colCriteria;
-      // Reset grid state
-      this.grid = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-      ];
-      this.lives = 9;
-      this.gameOver = false;
-      this.message = 'New board generated!';
-      this.summaryAnswers = null; // Clear summary
-      this.summaryStats = null;
-      this.gridRarity = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null]
-      ];
-      setTimeout(() => this.message = '', 3000);
+    const secret = prompt('Enter Admin Secret (CRON_SECRET) to force regeneration:');
+    if (!secret) return;
+
+    this.movieService.regenerateBoard(secret).subscribe({
+      next: (setup) => {
+        this.rowCriteria = setup.rowCriteria;
+        this.colCriteria = setup.colCriteria;
+        // Reset grid state
+        this.grid = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ];
+        this.lives = 9;
+        this.gameOver = false;
+        this.message = 'New board generated!';
+        this.summaryAnswers = null; // Clear summary
+        this.summaryStats = null;
+        this.gridRarity = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ];
+        setTimeout(() => this.message = '', 3000);
+      },
+      error: (err) => {
+        console.error('Regen Error', err);
+        if (err.status === 401) {
+          alert('Invalid Secret! Access Denied.');
+        } else {
+          alert('Failed to regenerate board.');
+        }
+      }
     });
   }
 

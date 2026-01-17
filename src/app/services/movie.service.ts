@@ -58,8 +58,10 @@ export class MovieService {
 
 
 
-  regenerateBoard(): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
-    return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate');
+  regenerateBoard(secret: string): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
+    return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {
+      headers: { 'Authorization': `Bearer ${secret}` }
+    });
   }
 
   getDailyAnswers(): Observable<{ possibleAnswers: Movie[][][] }> {
