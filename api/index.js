@@ -328,7 +328,8 @@ app.get('/api/game/stats', async (req, res) => {
 });
 
 // Force Regenerate Daily Game (Protected by CRON_SECRET)
-app.post('/api/game/regenerate', async (req, res) => {
+// Note: Vercel Cron jobs send a GET request
+app.get('/api/game/regenerate', async (req, res) => {
     // Check for authorization (Vercel Cron sends this header)
     const authHeader = req.headers.authorization;
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}` && process.env.NODE_ENV === 'production') {

@@ -59,7 +59,7 @@ export class MovieService {
 
 
   regenerateBoard(): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
-    return this.http.post<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {});
+    return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate');
   }
 
   getDailyAnswers(): Observable<{ possibleAnswers: Movie[][][] }> {
