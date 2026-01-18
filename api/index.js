@@ -157,7 +157,7 @@ async function generateBoard() {
     ];
 
     let attempts = 0;
-    while (attempts < 100) {
+    while (attempts < 500) {
         attempts++;
         console.log(`Attempt ${attempts}`);
         let selected = [];
@@ -167,7 +167,7 @@ async function generateBoard() {
         for (const item of shuffled) {
             if (selected.length >= 6) break;
             const count = typeCounts[item.type] || 0;
-            const limit = item.type === 'actor' ? 3 : 1;
+            const limit = item.type === 'actor' ? 2 : 1;
 
             if (count < limit) {
                 selected.push(item);
@@ -187,7 +187,7 @@ async function generateBoard() {
             possibleAnswers[r] = [];
             for (let c = 0; c < 3; c++) {
                 const matches = await checkIntersection(rowCriteria[r], colCriteria[c]);
-                if (!matches || matches.length === 0) {
+                if (!matches || matches.length <= 1) {
                     validBoard = false;
                     break;
                 }

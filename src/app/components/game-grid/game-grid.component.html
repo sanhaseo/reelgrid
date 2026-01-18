@@ -104,7 +104,7 @@
         <div class="possible-answers">
           <strong>Top Possible Answers:</strong>
           <ul>
-            <li *ngFor="let m of movies | slice:0:3">
+            <li *ngFor="let m of movies | slice:0:5">
               {{ m.title }} <span class="year">({{ m.release_date | date:'yyyy' }})</span>
             </li>
           </ul>
