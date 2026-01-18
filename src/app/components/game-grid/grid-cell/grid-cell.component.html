@@ -1,0 +1,11 @@
+<div class="grid-cell" [class.filled]="movie" [class.correct]="movie">
+    <div *ngIf="movie" class="movie-content">
+        <img [src]="movie.poster_path" [alt]="movie.title" class="poster">
+        <div class="rarity-badge" *ngIf="rarity" [ngClass]="rarity.colorClass">
+            {{ rarity.label }} {{ rarity.percent }}%
+        </div>
+    </div>
+    <div *ngIf="!movie" class="placeholder">
+        <span class="plus">+</span>
+    </div>
+</div>

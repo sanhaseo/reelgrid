@@ -2,13 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { SearchComponent } from '../search/search.component';
+import { GridCellComponent, RarityInfo } from './grid-cell/grid-cell.component';
+import { GameSummaryComponent } from './game-summary/game-summary.component';
 
 @Component({
   selector: 'app-game-grid',
   standalone: true,
-  imports: [CommonModule, SearchComponent],
+  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent],
   templateUrl: './game-grid.component.html',
-  styleUrl: './game-grid.component.css' // Angular 17+ uses styleUrl (singular)
+  styleUrl: './game-grid.component.css'
 })
 export class GameGridComponent implements OnInit {
   rowCriteria: Criteria[] = [];
@@ -26,7 +28,6 @@ export class GameGridComponent implements OnInit {
   message = '';
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
-  activeSummaryTab: 'stats' | 'answers' = 'stats';
 
   // Store rarity info for filled cells: "Common", "Rare", etc.
   gridRarity: (RarityInfo | null)[][] = [
@@ -173,74 +174,6 @@ export class GameGridComponent implements OnInit {
     this.movieService.getDailyGameStats().subscribe(stats => {
       this.summaryStats = stats;
     });
-
-    // For now, we don't save individual game results
-    console.log('Game Over. Result:', result);
-    console.log('Score:', 9 - (9 - this.lives));
-  }
-
-  getStatPercentage(row: number, col: number, movieTitle: string): number {
-    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return 0;
-
-    const cellStat = this.summaryStats[row][col];
-    if (!cellStat || cellStat.total === 0) return 0;
-
-    const count = cellStat.answers[movieTitle] || 0;
-    return Math.round((count / cellStat.total) * 100);
-  }
-
-  getTopAnswer(row: number, col: number): { title: string, percent: number } | null {
-    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
-
-    const cellStat = this.summaryStats[row][col];
-    if (!cellStat || cellStat.total === 0) return null;
-
-    let topTitle = '';
-    let maxCount = -1;
-
-    for (const [title, count] of Object.entries(cellStat.answers)) {
-      if ((count as number) > maxCount) {
-        maxCount = count as number;
-        topTitle = title;
-      }
-    }
-
-    if (!topTitle) return null;
-    return {
-      title: topTitle,
-      percent: Math.round((maxCount / cellStat.total) * 100)
-    };
-  }
-
-  getLeastPopular(row: number, col: number): { title: string, percent: number } | null {
-    if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
-
-    const cellStat = this.summaryStats[row][col];
-    if (!cellStat || cellStat.total === 0) return null;
-
-    let minTitle = '';
-    let minCount = Infinity;
-    let hasEntries = false;
-
-    for (const [title, count] of Object.entries(cellStat.answers)) {
-      if ((count as number) > 0) {
-        hasEntries = true;
-        if ((count as number) < minCount) {
-          minCount = count as number;
-          minTitle = title;
-        }
-      }
-    }
-
-    if (!hasEntries || !minTitle) return null;
-    return {
-      title: minTitle,
-      percent: Math.round((minCount / cellStat.total) * 100)
-    };
-  }
-
-  setActiveTab(tab: 'stats' | 'answers'): void {
-    this.activeSummaryTab = tab;
   }
 
   calculateRarity(percent: number): RarityInfo {
@@ -250,10 +183,4 @@ export class GameGridComponent implements OnInit {
     if (percent < 50) return { label: 'Uncommon', colorClass: 'uncommon', percent: Math.round(percent) };
     return { label: 'Common', colorClass: 'common', percent: Math.round(percent) };
   }
-}
-
-interface RarityInfo {
-  label: string;
-  colorClass: string;
-  percent: number;
 }

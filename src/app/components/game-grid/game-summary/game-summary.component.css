@@ -1,0 +1,176 @@
+/* Summary Section */
+.summary-section {
+    margin-top: 4rem;
+    width: 100%;
+}
+
+.summary-section h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+/* Tabs */
+.summary-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #444;
+    color: #aaa;
+    padding: 0.5rem 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.tab-btn:hover {
+    color: #fff;
+}
+
+.tab-btn.active {
+    border-bottom: 2px solid #e50914;
+    color: #fff;
+}
+
+.summary-grid {
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.summary-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.summary-cell {
+    background-color: #1f1f1f;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* Stats View Styles */
+.user-answer-stat {
+    margin-bottom: 1rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+}
+
+.stat-row .label {
+    opacity: 0.7;
+}
+
+.stat-row .value {
+    color: #46d369;
+    font-weight: bold;
+}
+
+.stat-bar-container {
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-bar {
+    background: #46d369;
+    height: 100%;
+}
+
+.stat-pct {
+    font-size: 0.7rem;
+    position: absolute;
+    right: 2px;
+    top: -10px;
+    display: none;
+}
+
+.no-answer-stat {
+    color: #555;
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.divider {
+    border: 0;
+    border-top: 1px solid #333;
+    margin: 1rem 0;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.8rem;
+}
+
+.stat-item.hidden {
+    display: none;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    margin-bottom: 2px;
+}
+
+.stat-label.popular {
+    color: #ffe234;
+}
+
+.stat-label.rare {
+    color: #7fdefe;
+}
+
+.stat-movie {
+    font-weight: bold;
+    color: #fff;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.stat-pct-pill {
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+/* Answers View Styles (Original) */
+.possible-answers strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #aaa;
+    font-size: 0.8rem;
+}
+
+.possible-answers ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.possible-answers li {
+    margin-bottom: 0.25rem;
+    color: #ddd;
+    font-size: 0.85rem;
+}
+
+.year {
+    color: #777;
+    font-size: 0.75rem;
+}
