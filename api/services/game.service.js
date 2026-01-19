@@ -8,6 +8,7 @@ async function generateBoard() {
         ...CRITERIA_POOLS.genres.map(i => ({ ...i, type: 'genre' })),
         ...CRITERIA_POOLS.decades.map(i => ({ ...i, type: 'year' })),
         ...CRITERIA_POOLS.rating.map(i => ({ ...i, type: 'rating' })),
+        ...CRITERIA_POOLS.runtime.map(i => ({ ...i, type: 'runtime' })),
         ...CRITERIA_POOLS.companies.map(i => ({ ...i, type: 'company' })),
         ...CRITERIA_POOLS.keywords.map(i => ({ ...i, type: 'keyword' }))
     ];
