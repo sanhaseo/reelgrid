@@ -4,7 +4,7 @@ const { checkIntersection } = require('./tmdb.service');
 // Helper to generate dynamic title criteria
 function generateDynamicTitleCriteria() {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const size = 3;
+    const size = 5;
     let chars = [];
     while (chars.length < size) {
         const char = alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -50,18 +50,20 @@ async function generateBoard() {
 
             // Handle Dynamic/Special types
             if (type === 'title') {
-                // 50% chance of Dynamic, 50% chance of Static (if available)
-                // Actually, let's mix dynamic and static.
-                const staticTitles = CRITERIA_POOLS.title; // e.g. One Word
-                const useDynamic = Math.random() > 0.5;
-
-                if (useDynamic) {
-                    candidate = generateDynamicTitleCriteria();
-                } else if (staticTitles.length > 0) {
-                    candidate = staticTitles[Math.floor(Math.random() * staticTitles.length)];
+                const r = Math.random();
+                if (r < 0.33) {
+                    // 1/3 chance: One Word (Static)
+                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
+                } else if (r < 0.66) {
+                    // 1/3 chance: Two Words (Static)
+                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_words');
                 } else {
-                    candidate = generateDynamicTitleCriteria(); // Fallback
+                    // 1/3 chance: Starts With (Dynamic)
+                    candidate = generateDynamicTitleCriteria();
                 }
+
+                // Fallback if static not found (though it should be)
+                if (!candidate) candidate = generateDynamicTitleCriteria();
             } else {
                 // Map type to pool key
                 const poolKey = type === 'year' ? 'decades' : type + 's'; // e.g. director -> directors

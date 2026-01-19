@@ -361,7 +361,6 @@ export const CRITERIA_POOLS = {
     runtime: [
         { id: 'runtime_lt_90', label: 'Runtime < 90 Minutes', value: { max: 90 }, type: 'runtime' },
         { id: 'runtime_gt_150', label: 'Runtime > 2.5 Hours', value: { min: 150 }, type: 'runtime' },
-        { id: 'runtime_gt_180', label: 'Runtime > 3 Hours', value: { min: 180 }, type: 'runtime' }
     ],
     revenue: [
         { id: 'rev_1b', label: 'Box Office > $1 Billion', value: { min: 1000000000 } },
@@ -397,6 +396,7 @@ export const CRITERIA_POOLS = {
         { id: '169593', label: 'Space Opera', value: 169593 }
     ],
     title: [
-        { id: 'one_word', label: 'One Word Title', value: 1, type: 'title', idValue: 'word_count' }
+        { id: 'one_word', label: 'One-Word Title', value: 1, type: 'title', idValue: 'word_count' },
+        { id: 'two_word', label: 'Two-Word Title', value: 2, type: 'title', idValue: 'word_count' }
     ]
 };

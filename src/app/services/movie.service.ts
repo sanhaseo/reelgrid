@@ -201,8 +201,8 @@ export class MovieService {
 
 
 
-        if (criteria.id === 'one_word') {
-          return cleanTitle.split(/\s+/).length === 1;
+        if (criteria.id === 'one_word' || criteria.id === 'two_word') {
+          return cleanTitle.split(/\s+/).length === (criteria.value as number);
         }
         return false;
 
