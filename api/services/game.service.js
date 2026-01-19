@@ -22,7 +22,7 @@ function generateDynamicTitleCriteria() {
 
 // Weighted Type Deck configuration
 const TYPE_DECK = [
-    'actor', 'actor', 'actor', 'actor', // 3x Actor
+    'actor', 'actor', 'actor', 'actor', // 4x Actor
     'director', 'director',    // 2x Director
     'genre', 'genre',          // 2x Genre
     'title', 'title',          // 2x Title
@@ -56,7 +56,7 @@ async function generateBoard() {
                     candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
                 } else if (r < 0.66) {
                     // 1/3 chance: Two Words (Static)
-                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_words');
+                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
                 } else {
                     // 1/3 chance: Starts With (Dynamic)
                     candidate = generateDynamicTitleCriteria();
@@ -65,9 +65,8 @@ async function generateBoard() {
                 // Fallback if static not found (though it should be)
                 if (!candidate) candidate = generateDynamicTitleCriteria();
             } else {
-                // Map type to pool key
-                const poolKey = type === 'year' ? 'decades' : type + 's'; // e.g. director -> directors
-                const pool = CRITERIA_POOLS[poolKey] || CRITERIA_POOLS[type]; // fallback if key matches
+                // Direct map: type in TYPE_DECK matches keys in CRITERIA_POOLS
+                const pool = CRITERIA_POOLS[type];
 
                 if (!pool || pool.length === 0) continue;
 

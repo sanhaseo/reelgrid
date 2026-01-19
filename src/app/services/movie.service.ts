@@ -199,8 +199,6 @@ export class MovieService {
           return criteria.value.some((prefix: string) => cleanTitle.toUpperCase().startsWith(prefix.toUpperCase()));
         }
 
-
-
         if (criteria.id === 'one_word' || criteria.id === 'two_word') {
           return cleanTitle.split(/\s+/).length === (criteria.value as number);
         }

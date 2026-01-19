@@ -1,5 +1,5 @@
 export const CRITERIA_POOLS = {
-    directors: [
+    director: [
         { id: '138', label: 'Quentin Tarantino', value: 'Quentin Tarantino', tmdbId: 138, type: 'director' },
         { id: '525', label: 'Christopher Nolan', value: 'Christopher Nolan', tmdbId: 525, type: 'director' },
         { id: '240', label: 'Stanley Kubrick', value: 'Stanley Kubrick', tmdbId: 240, type: 'director' },
@@ -30,7 +30,7 @@ export const CRITERIA_POOLS = {
         { id: '67367', label: "Rian Johnson", value: "Rian Johnson", tmdbId: 67367, type: 'director' },
         { id: '15344', label: "J. J. Abrams", value: "J.J. Abrams", tmdbId: 15344, type: 'director' },
     ],
-    actors: [
+    actor: [
         { id: '287', label: 'Brad Pitt', value: 'Brad Pitt', tmdbId: 287, type: 'actor' },
         { id: '6193', label: 'Leonardo DiCaprio', value: 'Leonardo DiCaprio', tmdbId: 6193, type: 'actor' },
         { id: '500', label: 'Tom Cruise', value: 'Tom Cruise', tmdbId: 500, type: 'actor' },
@@ -338,7 +338,7 @@ export const CRITERIA_POOLS = {
         { id: '54693', label: "Emma Stone", value: "Emma Stone", tmdbId: 54693, type: 'actor' },
         { id: '227454', label: "Alicia Vikander", value: "Alicia Vikander", tmdbId: 227454, type: 'actor' }
     ],
-    genres: [
+    genre: [
         { id: '28', label: 'Action', value: 28 },
         { id: '12', label: 'Adventure', value: 12 },
         { id: '16', label: 'Animation', value: 16 },
@@ -351,7 +351,7 @@ export const CRITERIA_POOLS = {
         { id: '878', label: 'Sci-Fi', value: 878 },
         { id: '53', label: 'Thriller', value: 53 }
     ],
-    decades: [
+    year: [
         { id: '1980s', label: '1980s', value: '1980-1989' },
         { id: '1990s', label: '1990s', value: '1990-1999' },
         { id: '2000s', label: '2000s', value: '2000-2009' },
@@ -371,7 +371,7 @@ export const CRITERIA_POOLS = {
         { id: 'r', label: 'Rated R', value: 'R' },
         { id: 'pg', label: 'Rated PG', value: 'PG' }
     ],
-    companies: [
+    company: [
         { id: '41077', label: 'A24', value: 'A24', tmdbId: 41077, type: 'company' },
         { id: '420', label: 'Marvel Studios', value: 'Marvel Studios', tmdbId: 420, type: 'company' },
         { id: '174', label: 'Warner Bros. Pictures', value: 'Warner Bros.', tmdbId: 174, type: 'company' },
@@ -385,7 +385,7 @@ export const CRITERIA_POOLS = {
         { id: '3', label: 'Pixar', value: 'Pixar', tmdbId: 3, type: 'company' },
         { id: '521', label: 'DreamWorks Animation', value: 'DreamWorks', tmdbId: 521, type: 'company' }
     ],
-    keywords: [
+    keyword: [
         { id: '818', label: 'Based on Novel', value: 818 },
         { id: '9672', label: 'Based on True Story', value: 9672 },
         { id: '5565', label: 'Biography', value: 5565 },
