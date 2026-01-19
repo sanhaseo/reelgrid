@@ -22,7 +22,7 @@ function generateDynamicTitleCriteria() {
 
 // Weighted Type Deck configuration
 const TYPE_DECK = [
-    'actor', 'actor', 'actor', 'actor', // 4x Actor
+    'actor', 'actor', 'actor', // 3x Actor
     'director', 'director',    // 2x Director
     'genre', 'genre',          // 2x Genre
     'title', 'title',          // 2x Title
@@ -39,8 +39,10 @@ async function generateBoard() {
         attempts++;
         console.log(`Attempt ${attempts}`);
 
-        // 1. Pick 6 types from the deck
-        const shuffledTypes = [...TYPE_DECK].sort(() => 0.5 - Math.random()).slice(0, 6);
+        // 1. Pick 5 types from the deck
+        const randomFive = [...TYPE_DECK].sort(() => 0.5 - Math.random()).slice(0, 5);
+        // Combine guaranteed actor with random 5, then shuffle position
+        const shuffledTypes = ['actor', ...randomFive].sort(() => 0.5 - Math.random());
 
         let selected = [];
         const usedIds = new Set();
@@ -50,19 +52,29 @@ async function generateBoard() {
 
             // Handle Dynamic/Special types
             if (type === 'title') {
-                const r = Math.random();
-                if (r < 0.33) {
-                    // 1/3 chance: One Word (Static)
-                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
-                } else if (r < 0.66) {
-                    // 1/3 chance: Two Words (Static)
-                    candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
-                } else {
-                    // 1/3 chance: Starts With (Dynamic)
-                    candidate = generateDynamicTitleCriteria();
+                // Retry loop for unique title criteria
+                let retries = 0;
+                while (retries < 10) {
+                    const r = Math.random();
+                    if (r < 0.33) {
+                        // 1/3 chance: One Word (Static)
+                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
+                    } else if (r < 0.66) {
+                        // 1/3 chance: Two Words (Static)
+                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
+                    } else {
+                        // 1/3 chance: Starts With (Dynamic)
+                        candidate = generateDynamicTitleCriteria();
+                    }
+
+                    if (candidate && !usedIds.has(candidate.id)) {
+                        break;
+                    }
+                    candidate = null;
+                    retries++;
                 }
 
-                // Fallback if static not found (though it should be)
+                // Fallback: If we couldn't find a unique one (e.g. static ones used), force a random dynamic one
                 if (!candidate) candidate = generateDynamicTitleCriteria();
             } else {
                 // Direct map: type in TYPE_DECK matches keys in CRITERIA_POOLS
