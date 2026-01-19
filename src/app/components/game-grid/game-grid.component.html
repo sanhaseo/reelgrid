@@ -10,7 +10,7 @@
   <div class="header-cell corner"></div>
 
   <!-- Column Headers -->
-  <div class="header-cell col-header" *ngFor="let col of colCriteria">
+  <div class="header-cell col-header clickable-header" *ngFor="let col of colCriteria" (click)="openCriteriaInfo(col)">
     <div class="criteria-label">{{ col.label }}</div>
     <div class="criteria-type">{{ col.type }}</div>
   </div>
@@ -18,7 +18,7 @@
   <!-- Rows -->
   <ng-container *ngFor="let row of rowCriteria; let i = index">
     <!-- Row Header -->
-    <div class="header-cell row-header">
+    <div class="header-cell row-header clickable-header" (click)="openCriteriaInfo(row)">
       <div class="criteria-label">{{ row.label }}</div>
       <div class="criteria-type">{{ row.type }}</div>
     </div>
@@ -37,3 +37,15 @@
 
 <app-search *ngIf="isSearchOpen" (movieSelected)="onMovieSelected($event)" (close)="closeSearch()">
 </app-search>
+
+<div class="modal-overlay" *ngIf="showCriteriaModal" (click)="closeCriteriaModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ selectedCriteria?.label }}</h2>
+      <button class="close-btn" (click)="closeCriteriaModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>{{ selectedCriteria ? getCriteriaDescription(selectedCriteria) : '' }}</p>
+    </div>
+  </div>
+</div>

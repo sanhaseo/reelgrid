@@ -183,4 +183,42 @@ export class GameGridComponent implements OnInit {
     if (percent < 50) return { label: 'Uncommon', colorClass: 'uncommon', percent: Math.round(percent) };
     return { label: 'Common', colorClass: 'common', percent: Math.round(percent) };
   }
+
+  selectedCriteria: Criteria | null = null;
+  showCriteriaModal = false;
+
+  openCriteriaInfo(criteria: Criteria): void {
+    this.selectedCriteria = criteria;
+    this.showCriteriaModal = true;
+  }
+
+  closeCriteriaModal(): void {
+    this.showCriteriaModal = false;
+    this.selectedCriteria = null;
+  }
+
+  getCriteriaDescription(c: Criteria): string {
+    switch (c.type) {
+      case 'title':
+        return 'Articles (A, An, The) are ignored. For example, "The Departed" counts as "Departed".';
+      case 'actor':
+        return `The movie must feature ${c.label} in the cast.`;
+      case 'director':
+        return `The movie must be directed by ${c.label}.`;
+      case 'company':
+        return `Produced by ${c.label}.`;
+      case 'box_office':
+        return 'Worldwide box office revenue > threshold.';
+      case 'year':
+        return 'Primary release date within the decade.';
+      case 'rating':
+        return `US Certification Rating (MPAA) is ${c.value}.`;
+      case 'runtime':
+        return 'Total runtime including credits.';
+      case 'keyword':
+        return `Must include the keyword (or belongs to franchise): ${c.label}.`;
+      default:
+        return 'Standard criteria.';
+    }
+  }
 }
