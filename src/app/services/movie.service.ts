@@ -171,11 +171,7 @@ export class MovieService {
         }
         return year === criteria.value;
 
-      case 'box_office':
-        if (movie.revenue === undefined) return false;
-        if (criteria.value.min) return movie.revenue >= criteria.value.min;
-        if (criteria.value.max) return movie.revenue <= criteria.value.max;
-        return false;
+
 
       case 'runtime':
         if (!movie.runtime) return false;
@@ -205,13 +201,7 @@ export class MovieService {
         return false;
 
       default:
-        // Generic Crew Check (Composer, Writer etc)
-        // Assume 'type' is the Job name if not matched above? 
-        // Or strictly defined. For now, check crew if type matches a job?
-        // Let's rely on specific 'type' strings but maybe 'crew' generic type is better?
-        // For now, let's just handle "Composer" specifically if requested, or look in crew.
-        const crewMatch = movie.crew?.some(c => c.job.toLowerCase() === criteria.type.toLowerCase() && c.name === criteria.value);
-        return crewMatch ?? false;
+        return false;
     }
   }
 }
