@@ -38,6 +38,7 @@ export interface Criteria {
   type: CriteriaType;
   label: string;
   value: any;
+  tmdbId?: number;
 }
 
 export interface GameState {
@@ -192,7 +193,7 @@ export class MovieService {
         return movie.keywords?.includes(criteria.value) ?? false;
 
       case 'company':
-        return movie.production_companies?.includes(criteria.value.tmdbId || criteria.value) ?? false;
+        return movie.production_companies?.includes(criteria.tmdbId || criteria.value) ?? false;
 
       case 'title':
         if (criteria.id === 'starts_with') {

@@ -30,7 +30,6 @@ export const CRITERIA_POOLS = {
         { id: '67367', label: "Rian Johnson", value: "Rian Johnson", tmdbId: 67367, type: 'director' },
         { id: '15344', label: "J. J. Abrams", value: "J.J. Abrams", tmdbId: 15344, type: 'director' },
         { id: '55934', label: "Taika Waititi", value: "Taika Waititi", tmdbId: 55934, type: 'director' },
-        { id: '291263', label: "Jordan Peele", value: "Jordan Peele", tmdbId: 291263, type: 'director' }
     ],
     actors: [
         { id: '287', label: 'Brad Pitt', value: 'Brad Pitt', tmdbId: 287, type: 'actor' },
