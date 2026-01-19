@@ -12,7 +12,7 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 2rem;
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: bold;
 }
 
@@ -27,7 +27,7 @@
     border: 1px solid #555;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .action-btn:hover {
@@ -46,9 +46,9 @@
 
 .grid-wrapper {
     display: grid;
-    grid-template-columns: 120px repeat(3, 160px);
-    grid-template-rows: 80px repeat(3, 240px);
-    gap: 8px;
+    grid-template-columns: 100px repeat(3, 130px);
+    grid-template-rows: 60px repeat(3, 190px);
+    gap: 6px;
 }
 
 .header-cell {
@@ -71,12 +71,12 @@
 }
 
 .criteria-label {
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #fff;
 }
 
 .criteria-type {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: #aaa;
     margin-top: 4px;
     text-transform: uppercase;
