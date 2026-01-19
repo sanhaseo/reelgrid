@@ -18,6 +18,8 @@ async function checkIntersection(rowCrit, colCrit) {
         others: []
     };
 
+    let postProcessing = [];
+
     const extractParams = (c) => {
         switch (c.type) {
             case 'director':
@@ -45,6 +47,9 @@ async function checkIntersection(rowCrit, colCrit) {
                 if (c.value.min) params.others.push(`with_runtime.gte=${c.value.min}`);
                 if (c.value.max) params.others.push(`with_runtime.lte=${c.value.max}`);
                 break;
+            case 'title':
+                postProcessing.push(c);
+                break;
         }
     };
 
@@ -60,8 +65,28 @@ async function checkIntersection(rowCrit, colCrit) {
     try {
         const res = await fetch(url, { headers });
         const data = await res.json();
-        // Return results if there are any, otherwise null
-        return data.total_results > 0 ? data.results : null;
+        let results = data.total_results > 0 ? data.results : null;
+
+        if (results && postProcessing.length > 0) {
+            results = results.filter(movie => {
+                return postProcessing.every(criteria => {
+                    const cleanTitle = normalizeTitle(movie.title);
+
+                    if (criteria.idValue === 'starts_with') {
+                        const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
+                        return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
+                    }
+                    if (criteria.idValue === 'word_count') {
+                        return cleanTitle.split(/\s+/).length === criteria.value;
+                    }
+                    return false;
+                });
+            });
+            // If filtering leaves no results, return null
+            if (results.length === 0) return null;
+        }
+
+        return results;
     } catch (e) {
         console.error('Validation Error', e);
         return null;
@@ -71,5 +96,11 @@ async function checkIntersection(rowCrit, colCrit) {
 module.exports = {
     TMDB_BASE_URL,
     getHeaders,
-    checkIntersection
+    checkIntersection,
+    normalizeTitle
 };
+
+function normalizeTitle(title) {
+    if (!title) return '';
+    return title.replace(/^(The|A|An)\s+/i, '').trim();
+}

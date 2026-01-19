@@ -192,16 +192,26 @@ export class MovieService {
         return movie.production_companies?.includes(criteria.tmdbId || criteria.value) ?? false;
 
       case 'title':
-        if (criteria.id === 'starts_with') {
-          return movie.title.startsWith(criteria.value);
+        const cleanTitle = this.normalizeTitle(movie.title);
+
+        if (Array.isArray(criteria.value)) {
+          // Dynamic "Starts with..."
+          return criteria.value.some((prefix: string) => cleanTitle.toUpperCase().startsWith(prefix.toUpperCase()));
         }
-        if (criteria.id === 'word_count') {
-          return movie.title.split(' ').length === criteria.value;
+
+
+
+        if (criteria.id === 'one_word') {
+          return cleanTitle.split(/\s+/).length === 1;
         }
         return false;
 
       default:
         return false;
     }
+  }
+
+  private normalizeTitle(title: string): string {
+    return title.replace(/^(The|A|An)\s+/i, '').trim();
   }
 }

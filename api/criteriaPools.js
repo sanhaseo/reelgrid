@@ -395,5 +395,8 @@ export const CRITERIA_POOLS = {
         { id: '4379', label: 'Time Travel', value: 4379 },
         { id: '4565', label: 'Post-Apocalyptic', value: 4565 },
         { id: '169593', label: 'Space Opera', value: 169593 }
+    ],
+    title: [
+        { id: 'one_word', label: 'One Word Title', value: 1, type: 'title', idValue: 'word_count' }
     ]
 };

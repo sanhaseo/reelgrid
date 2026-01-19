@@ -1,8 +1,27 @@
 const { CRITERIA_POOLS } = require('../criteriaPools');
 const { checkIntersection } = require('./tmdb.service');
 
+// Helper to generate dynamic title criteria
+function generateDynamicTitleCriteria() {
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const size = 3;
+    let chars = [];
+    while (chars.length < size) {
+        const char = alphabet[Math.floor(Math.random() * alphabet.length)];
+        if (!chars.includes(char)) chars.push(char);
+    }
+    chars.sort();
+    return {
+        id: `starts_with_${chars.join('')}`,
+        label: `Starts with ${chars.join(', ')}`,
+        value: chars, // Array of letters
+        type: 'title',
+        idValue: 'starts_with'
+    };
+}
+
 async function generateBoard() {
-    const flatPool = [
+    const staticPool = [
         ...CRITERIA_POOLS.directors.map(i => ({ ...i, type: 'director' })),
         ...CRITERIA_POOLS.actors.map(i => ({ ...i, type: 'actor' })),
         ...CRITERIA_POOLS.genres.map(i => ({ ...i, type: 'genre' })),
@@ -10,16 +29,27 @@ async function generateBoard() {
         ...CRITERIA_POOLS.rating.map(i => ({ ...i, type: 'rating' })),
         ...CRITERIA_POOLS.runtime.map(i => ({ ...i, type: 'runtime' })),
         ...CRITERIA_POOLS.companies.map(i => ({ ...i, type: 'company' })),
-        ...CRITERIA_POOLS.keywords.map(i => ({ ...i, type: 'keyword' }))
+        ...CRITERIA_POOLS.keywords.map(i => ({ ...i, type: 'keyword' })),
+        ...CRITERIA_POOLS.title.map(i => ({ ...i, type: 'title' }))
     ];
 
     let attempts = 0;
     while (attempts < 500) {
         attempts++;
         console.log(`Attempt ${attempts}`);
+
+        // Add dynamic criteria for this attempt
+        const dynamicTitle = generateDynamicTitleCriteria();
+        // Give it a boost in probability by adding it multiple times? 
+        // Or just ensure it's in the mix. 
+        // With so many actors/directors, 1 title criteria might get drowned out.
+        // Let's rely on standard shuffle for now.
+
+        const fullPool = [...staticPool, dynamicTitle];
+
         let selected = [];
         let typeCounts = {};
-        const shuffled = [...flatPool].sort(() => 0.5 - Math.random());
+        const shuffled = [...fullPool].sort(() => 0.5 - Math.random());
 
         for (const item of shuffled) {
             if (selected.length >= 6) break;
