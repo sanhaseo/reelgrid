@@ -20,45 +20,72 @@ function generateDynamicTitleCriteria() {
     };
 }
 
-async function generateBoard() {
-    const staticPool = [
-        ...CRITERIA_POOLS.directors.map(i => ({ ...i, type: 'director' })),
-        ...CRITERIA_POOLS.actors.map(i => ({ ...i, type: 'actor' })),
-        ...CRITERIA_POOLS.genres.map(i => ({ ...i, type: 'genre' })),
-        ...CRITERIA_POOLS.decades.map(i => ({ ...i, type: 'year' })),
-        ...CRITERIA_POOLS.rating.map(i => ({ ...i, type: 'rating' })),
-        ...CRITERIA_POOLS.runtime.map(i => ({ ...i, type: 'runtime' })),
-        ...CRITERIA_POOLS.companies.map(i => ({ ...i, type: 'company' })),
-        ...CRITERIA_POOLS.keywords.map(i => ({ ...i, type: 'keyword' })),
-        ...CRITERIA_POOLS.title.map(i => ({ ...i, type: 'title' }))
-    ];
+// Weighted Type Deck configuration
+const TYPE_DECK = [
+    'actor', 'actor', 'actor', 'actor', // 3x Actor
+    'director', 'director',    // 2x Director
+    'genre', 'genre',          // 2x Genre
+    'title', 'title',          // 2x Title
+    'company',
+    'keyword',
+    'year',
+    'runtime',
+    'rating'
+];
 
+async function generateBoard() {
     let attempts = 0;
     while (attempts < 500) {
         attempts++;
         console.log(`Attempt ${attempts}`);
 
-        // Add dynamic criteria for this attempt
-        const dynamicTitle = generateDynamicTitleCriteria();
-        // Give it a boost in probability by adding it multiple times? 
-        // Or just ensure it's in the mix. 
-        // With so many actors/directors, 1 title criteria might get drowned out.
-        // Let's rely on standard shuffle for now.
-
-        const fullPool = [...staticPool, dynamicTitle];
+        // 1. Pick 6 types from the deck
+        const shuffledTypes = [...TYPE_DECK].sort(() => 0.5 - Math.random()).slice(0, 6);
 
         let selected = [];
-        let typeCounts = {};
-        const shuffled = [...fullPool].sort(() => 0.5 - Math.random());
+        const usedIds = new Set();
 
-        for (const item of shuffled) {
-            if (selected.length >= 6) break;
-            const count = typeCounts[item.type] || 0;
-            const limit = item.type === 'actor' ? 2 : 1;
+        for (const type of shuffledTypes) {
+            let candidate;
 
-            if (count < limit) {
-                selected.push(item);
-                typeCounts[item.type] = count + 1;
+            // Handle Dynamic/Special types
+            if (type === 'title') {
+                // 50% chance of Dynamic, 50% chance of Static (if available)
+                // Actually, let's mix dynamic and static.
+                const staticTitles = CRITERIA_POOLS.title; // e.g. One Word
+                const useDynamic = Math.random() > 0.5;
+
+                if (useDynamic) {
+                    candidate = generateDynamicTitleCriteria();
+                } else if (staticTitles.length > 0) {
+                    candidate = staticTitles[Math.floor(Math.random() * staticTitles.length)];
+                } else {
+                    candidate = generateDynamicTitleCriteria(); // Fallback
+                }
+            } else {
+                // Map type to pool key
+                const poolKey = type === 'year' ? 'decades' : type + 's'; // e.g. director -> directors
+                const pool = CRITERIA_POOLS[poolKey] || CRITERIA_POOLS[type]; // fallback if key matches
+
+                if (!pool || pool.length === 0) continue;
+
+                // Try to find a unique candidate
+                let retries = 0;
+                while (retries < 10) {
+                    const item = pool[Math.floor(Math.random() * pool.length)];
+                    if (!usedIds.has(item.id)) {
+                        candidate = item;
+                        break;
+                    }
+                    retries++;
+                }
+            }
+
+            if (candidate) {
+                // Clone and ensure type is set
+                const criteria = { ...candidate, type };
+                selected.push(criteria);
+                usedIds.add(criteria.id);
             }
         }
 
