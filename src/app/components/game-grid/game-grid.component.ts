@@ -200,7 +200,7 @@ export class GameGridComponent implements OnInit {
   getCriteriaDescription(c: Criteria): string {
     switch (c.type) {
       case 'title':
-        return 'Articles (A, An, The) are ignored. For example, "The Departed" counts as "Departed".';
+        return 'Articles (A, An, The) are ignored.';
       case 'actor':
         return `The movie must feature ${c.label} in the cast.`;
       case 'director':

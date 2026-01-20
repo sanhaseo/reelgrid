@@ -10,7 +10,6 @@ export const CRITERIA_POOLS = {
         { id: '3223', label: 'Robert Zemeckis', value: 'Robert Zemeckis', tmdbId: 3223, type: 'director' },
         { id: '7467', label: 'David Fincher', value: 'David Fincher', tmdbId: 7467, type: 'director' },
         { id: '303', label: 'Ridley Scott', value: 'Ridley Scott', tmdbId: 303, type: 'director' },
-        { id: '1', label: 'George Lucas', value: 'George Lucas', tmdbId: 1, type: 'director' },
         { id: '7238', label: 'Hayao Miyazaki', value: 'Hayao Miyazaki', tmdbId: 7238, type: 'director' },
         { id: '1223', label: 'Joel Coen', value: 'Joel Coen', tmdbId: 1223, type: 'director' },
         { id: '105', label: 'Francis Ford Coppola', value: 'Francis Ford Coppola', tmdbId: 105, type: 'director' },
