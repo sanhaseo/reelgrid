@@ -1,34 +1,41 @@
-<div class="status-bar">
-  <div class="lives">Lives: {{ lives }}</div>
-  <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">Give Up</button>
-  <button (click)="onRegenerate()" class="action-btn">Regenerate Daily Board</button>
-  <div class="message" *ngIf="message">{{ message }}</div>
+<div *ngIf="isLoading" class="loading-container">
+  <div class="spinner"></div>
 </div>
 
-<div class="grid-wrapper">
-  <!-- Top Left Corner (Empty) -->
-  <div class="header-cell corner"></div>
-
-  <!-- Column Headers -->
-  <div class="header-cell col-header clickable-header" *ngFor="let col of colCriteria" (click)="openCriteriaInfo(col)">
-    <div class="criteria-label">{{ col.label }}</div>
-    <div class="criteria-type">{{ col.type }}</div>
+<div *ngIf="!isLoading">
+  <div class="status-bar">
+    <div class="lives">Lives: {{ lives }}</div>
+    <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">Give Up</button>
+    <button (click)="onRegenerate()" class="action-btn">Regenerate Daily Board</button>
+    <div class="message" *ngIf="message">{{ message }}</div>
   </div>
 
-  <!-- Rows -->
-  <ng-container *ngFor="let row of rowCriteria; let i = index">
-    <!-- Row Header -->
-    <div class="header-cell row-header clickable-header" (click)="openCriteriaInfo(row)">
-      <div class="criteria-label">{{ row.label }}</div>
-      <div class="criteria-type">{{ row.type }}</div>
+  <div class="grid-wrapper">
+    <!-- Top Left Corner (Empty) -->
+    <div class="header-cell corner"></div>
+
+    <!-- Column Headers -->
+    <div class="header-cell col-header clickable-header" *ngFor="let col of colCriteria"
+      (click)="openCriteriaInfo(col)">
+      <div class="criteria-label">{{ col.label }}</div>
+      <div class="criteria-type">{{ col.type }}</div>
     </div>
 
-    <!-- Grid Cells -->
-    <div *ngFor="let cell of grid[i]; let j = index" (click)="onCellClick(i, j)" class="cell-wrapper">
-      <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]">
-      </app-grid-cell>
-    </div>
-  </ng-container>
+    <!-- Rows -->
+    <ng-container *ngFor="let row of rowCriteria; let i = index">
+      <!-- Row Header -->
+      <div class="header-cell row-header clickable-header" (click)="openCriteriaInfo(row)">
+        <div class="criteria-label">{{ row.label }}</div>
+        <div class="criteria-type">{{ row.type }}</div>
+      </div>
+
+      <!-- Grid Cells -->
+      <div *ngFor="let cell of grid[i]; let j = index" (click)="onCellClick(i, j)" class="cell-wrapper">
+        <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]">
+        </app-grid-cell>
+      </div>
+    </ng-container>
+  </div>
 </div>
 
 <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"

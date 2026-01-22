@@ -28,6 +28,7 @@ export class GameGridComponent implements OnInit {
   message = '';
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
+  isLoading = true;
 
   // Store rarity info for filled cells: "Common", "Rare", etc.
   gridRarity: (RarityInfo | null)[][] = [
@@ -39,9 +40,16 @@ export class GameGridComponent implements OnInit {
   constructor(private movieService: MovieService) { }
 
   ngOnInit(): void {
-    this.movieService.getGameSetup().subscribe(setup => {
-      this.rowCriteria = setup.rowCriteria;
-      this.colCriteria = setup.colCriteria;
+    this.movieService.getGameSetup().subscribe({
+      next: (setup) => {
+        this.rowCriteria = setup.rowCriteria;
+        this.colCriteria = setup.colCriteria;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+        this.message = 'Failed to load game board.';
+      }
     });
   }
 
