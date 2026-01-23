@@ -6,8 +6,8 @@
         </div>
 
         <div class="search-input-wrapper">
-            <input type="text" [(ngModel)]="query" (ngModelChange)="onSearch()" placeholder="Type movie title..."
-                autofocus>
+            <input #searchInput type="text" [(ngModel)]="query" (ngModelChange)="onSearch()"
+                placeholder="Type movie title..." autofocus>
         </div>
 
         <div class="results-list">

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Movie, MovieService } from '../../services/movie.service';
@@ -11,13 +11,15 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
-export class SearchComponent {
+export class SearchComponent implements AfterViewInit {
   query = '';
   results: Movie[] = [];
   searchSubject = new Subject<string>();
 
   @Output() movieSelected = new EventEmitter<Movie>();
   @Output() close = new EventEmitter<void>();
+
+  @ViewChild('searchInput') searchInput!: ElementRef;
 
   constructor(private movieService: MovieService) {
     this.searchSubject.pipe(
@@ -27,6 +29,12 @@ export class SearchComponent {
     ).subscribe(movies => {
       this.results = movies;
     });
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      this.searchInput.nativeElement.focus();
+    }, 100);
   }
 
   onSearch(): void {
