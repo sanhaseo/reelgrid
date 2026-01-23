@@ -1,9 +1,6 @@
 <div class="modal-overlay" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-        <div class="search-header">
-            <h2>Select a Movie</h2>
-            <button class="close-btn" (click)="closeModal()">×</button>
-        </div>
+
 
         <div class="search-input-wrapper">
             <input #searchInput type="text" [(ngModel)]="query" (ngModelChange)="onSearch()"
