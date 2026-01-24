@@ -18,4 +18,5 @@ export interface RarityInfo {
 export class GridCellComponent {
   @Input() movie: Movie | null = null;
   @Input() rarity: RarityInfo | null = null;
+  @Input() isIncorrect: boolean = false;
 }

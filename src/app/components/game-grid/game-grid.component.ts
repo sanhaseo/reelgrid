@@ -29,6 +29,7 @@ export class GameGridComponent implements OnInit {
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
   isLoading = true;
+  incorrectCell: { row: number, col: number } | null = null;
 
   // Store rarity info for filled cells: "Common", "Rare", etc.
   gridRarity: (RarityInfo | null)[][] = [
@@ -146,8 +147,8 @@ export class GameGridComponent implements OnInit {
           this.checkWinCondition();
         } else {
           this.lives--;
-          this.message = `Incorrect! ${movie.title} does not match.`;
-          setTimeout(() => this.message = '', 3000);
+          this.incorrectCell = { row, col };
+          setTimeout(() => this.incorrectCell = null, 500);
           if (this.lives <= 0) {
             this.finishGame('loss');
           }

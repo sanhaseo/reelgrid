@@ -78,3 +78,53 @@
     border: 1px solid #777;
     color: #ddd;
 }
+
+/* Incorrect Guess Animation */
+.incorrect-flash {
+    animation: shake 0.5s ease-in-out;
+}
+
+.incorrect-flash::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(229, 9, 20, 0.5);
+    z-index: 5;
+    pointer-events: none;
+    animation: flashRedOpacity 0.5s ease-in-out;
+    border-radius: 8px;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-4px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(4px);
+    }
+}
+
+@keyframes flashRedOpacity {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    20%,
+    80% {
+        opacity: 1;
+    }
+}
