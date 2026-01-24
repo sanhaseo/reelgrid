@@ -8,7 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding-top: 100px;
+    padding-top: 200px;
     z-index: 1000;
 }
 
@@ -51,14 +51,15 @@ input:focus {
 
 .result-item {
     display: flex;
+    align-items: center;
     padding: 0.8rem;
-    cursor: pointer;
+    cursor: default;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     transition: background-color 0.2s;
 }
 
 .result-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .result-poster {
@@ -67,23 +68,53 @@ input:focus {
     object-fit: cover;
     border-radius: 4px;
     margin-right: 1rem;
+    flex-shrink: 0;
 }
 
 .result-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex: 1;
+    min-width: 0;
+    /* Allow title truncation if needed */
 }
 
 .result-title {
-    font-weight: bold;
+    /* font-weight: bold; */
     font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-self: flex-start;
 }
 
 .result-year {
     font-size: 0.8rem;
     opacity: 0.7;
     align-self: flex-start;
+}
+
+.guess-btn {
+    background-color: #e50914;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-left: 1rem;
+}
+
+.guess-btn:hover {
+    background-color: #f6121d;
+    transform: scale(1.03);
+}
+
+.guess-btn:active {
+    transform: scale(0.97);
 }
 
 .no-results {
