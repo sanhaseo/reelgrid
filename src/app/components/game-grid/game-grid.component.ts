@@ -39,6 +39,16 @@ export class GameGridComponent implements OnInit {
 
   constructor(private movieService: MovieService) { }
 
+  getUsedMovieIds(): number[] {
+    const ids: number[] = [];
+    this.grid.forEach(row => {
+      row.forEach(cell => {
+        if (cell?.id) ids.push(cell.id);
+      });
+    });
+    return ids;
+  }
+
   ngOnInit(): void {
     this.movieService.getGameSetup().subscribe({
       next: (setup) => {
@@ -104,14 +114,6 @@ export class GameGridComponent implements OnInit {
 
   onMovieSelected(movie: Movie): void {
     if (!this.selectedCell) return;
-
-    // Check if movie is already used
-    if (this.grid.some(row => row.some(cell => cell?.id === movie.id))) {
-      this.message = `You already used ${movie.title}!`;
-      setTimeout(() => this.message = '', 3000);
-      this.closeSearch();
-      return;
-    }
 
     // Fetch full details (cast/crew) before validation
     this.movieService.getMovieDetails(movie.id).subscribe(fullMovie => {

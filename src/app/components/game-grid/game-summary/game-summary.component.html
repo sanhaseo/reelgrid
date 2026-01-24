@@ -4,7 +4,7 @@
     <!-- Tabs -->
     <div class="summary-tabs">
         <button class="tab-btn" [class.active]="activeSummaryTab === 'stats'" (click)="setActiveTab('stats')">
-            Stats & Analysis
+            Statistics
         </button>
         <button class="tab-btn" [class.active]="activeSummaryTab === 'answers'" (click)="setActiveTab('answers')">
             Possible Answers
@@ -15,26 +15,6 @@
     <div class="summary-grid" *ngIf="activeSummaryTab === 'stats'">
         <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
             <div class="summary-cell center-align" *ngFor="let movies of row; let j = index">
-
-                <!-- User's Answer Stats -->
-                <div *ngIf="userGrid[i][j]" class="user-answer-stat">
-                    <div class="stat-row">
-                        <span class="label">You Picked:</span>
-                        <span class="value">{{ userGrid[i][j]?.title }}</span>
-                    </div>
-                    <div class="stat-bar-container">
-                        <div class="stat-bar" [style.width.%]="getStatPercentage(i, j, userGrid[i][j]?.title || '')">
-                        </div>
-                        <span class="stat-pct">{{ getStatPercentage(i, j, userGrid[i][j]?.title || '') }}%</span>
-                    </div>
-                </div>
-
-                <!-- No Answer -->
-                <div *ngIf="!userGrid[i][j]" class="no-answer-stat">
-                    <span>No correct answer given.</span>
-                </div>
-
-                <hr class="divider" *ngIf="summaryStats">
 
                 <!-- Community Stats -->
                 <div class="community-stats" *ngIf="summaryStats">

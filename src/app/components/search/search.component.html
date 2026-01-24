@@ -8,13 +8,15 @@
         </div>
 
         <div class="results-list">
-            <div *ngFor="let movie of results" class="result-item">
+            <div *ngFor="let movie of results" class="result-item" [class.used]="usedMovieIds.includes(movie.id)">
                 <img [src]="movie.poster_path" [alt]="movie.title" class="result-poster">
                 <div class="result-info">
                     <div class="result-title">{{ movie.title }}</div>
                     <div class="result-year">{{ movie.release_date | date:'yyyy' }}</div>
                 </div>
-                <button class="guess-btn" (click)="selectMovie(movie)">Guess</button>
+                <button class="guess-btn" [disabled]="usedMovieIds.includes(movie.id)" (click)="selectMovie(movie)">
+                    {{ usedMovieIds.includes(movie.id) ? 'Used' : 'Guess' }}
+                </button>
             </div>
             <div *ngIf="results.length === 0 && query.length > 2" class="no-results">
                 No movies found

@@ -118,10 +118,10 @@
 .modal-content {
     background: #181818;
     color: #fff;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 8px;
     width: 90%;
-    max-width: 500px;
+    max-width: 400px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     border: 1px solid #333;
 }
@@ -137,7 +137,7 @@
 
 .modal-header h2 {
     margin: 0;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
 }
 
 .close-btn {
@@ -154,7 +154,7 @@
 }
 
 .modal-body {
-    font-size: 1.1rem;
+    font-size: 1rem;
     line-height: 1.5;
     color: #ddd;
 }

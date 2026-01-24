@@ -42,7 +42,8 @@
   [userGrid]="grid">
 </app-game-summary>
 
-<app-search *ngIf="isSearchOpen" (movieSelected)="onMovieSelected($event)" (close)="closeSearch()">
+<app-search *ngIf="isSearchOpen" [usedMovieIds]="getUsedMovieIds()" (movieSelected)="onMovieSelected($event)"
+  (close)="closeSearch()">
 </app-search>
 
 <div class="modal-overlay" *ngIf="showCriteriaModal" (click)="closeCriteriaModal()">

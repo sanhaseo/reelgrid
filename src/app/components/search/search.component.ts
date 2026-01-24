@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Movie, MovieService } from '../../services/movie.service';
@@ -12,6 +12,7 @@ import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
   styleUrl: './search.component.css'
 })
 export class SearchComponent implements AfterViewInit {
+  @Input() usedMovieIds: number[] = [];
   query = '';
   results: Movie[] = [];
   searchSubject = new Subject<string>();

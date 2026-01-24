@@ -57,62 +57,6 @@
     font-size: 0.9rem;
 }
 
-/* Stats View Styles */
-.user-answer-stat {
-    margin-bottom: 1rem;
-}
-
-.stat-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-    font-size: 0.85rem;
-}
-
-.stat-row .label {
-    opacity: 0.7;
-}
-
-.stat-row .value {
-    color: #46d369;
-    font-weight: bold;
-}
-
-.stat-bar-container {
-    height: 6px;
-    background: #333;
-    border-radius: 3px;
-    position: relative;
-    overflow: hidden;
-}
-
-.stat-bar {
-    background: #46d369;
-    height: 100%;
-}
-
-.stat-pct {
-    font-size: 0.7rem;
-    position: absolute;
-    right: 2px;
-    top: -10px;
-    display: none;
-}
-
-.no-answer-stat {
-    color: #555;
-    font-style: italic;
-    font-size: 0.8rem;
-    margin-bottom: 1rem;
-    text-align: center;
-}
-
-.divider {
-    border: 0;
-    border-top: 1px solid #333;
-    margin: 1rem 0;
-}
-
 .stat-item {
     display: flex;
     flex-direction: column;

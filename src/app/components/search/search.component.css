@@ -117,6 +117,18 @@ input:focus {
     transform: scale(0.97);
 }
 
+.result-item.used {
+    background-color: rgba(0, 0, 0, 0.4);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.guess-btn:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .no-results {
     padding: 2rem;
     text-align: center;
