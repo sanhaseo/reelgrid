@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { SearchComponent } from '../search/search.component';
@@ -30,6 +30,8 @@ export class GameGridComponent implements OnInit {
   summaryStats: any[][] | null = null;
   isLoading = true;
   incorrectCell: { row: number, col: number } | null = null;
+
+  @ViewChild('summarySection') summarySection!: ElementRef;
 
   // Store rarity info for filled cells: "Common", "Rare", etc.
   gridRarity: (RarityInfo | null)[][] = [
@@ -179,6 +181,11 @@ export class GameGridComponent implements OnInit {
     // Fetch answers for summary
     this.movieService.getDailyAnswers().subscribe(data => {
       this.summaryAnswers = data.possibleAnswers;
+
+      // Scroll to summary after it renders
+      setTimeout(() => {
+        this.summarySection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     });
 
     // Fetch stats

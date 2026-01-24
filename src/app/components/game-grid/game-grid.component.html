@@ -39,9 +39,11 @@
   </div>
 </div>
 
-<app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
-  [userGrid]="grid">
-</app-game-summary>
+<div #summarySection>
+  <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
+    [userGrid]="grid">
+  </app-game-summary>
+</div>
 
 <app-search *ngIf="isSearchOpen" [usedMovieIds]="getUsedMovieIds()" (movieSelected)="onMovieSelected($event)"
   (close)="closeSearch()">
