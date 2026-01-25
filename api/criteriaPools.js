@@ -2922,6 +2922,13 @@ export const CRITERIA_POOLS = {
             "value": 2,
             "type": "title",
             "idValue": "word_count"
+        },
+        {
+            "id": "three_word",
+            "label": "Three-Word Title",
+            "value": 3,
+            "type": "title",
+            "idValue": "word_count"
         }
     ]
 };

@@ -172,8 +172,6 @@ export class MovieService {
         }
         return year === criteria.value;
 
-
-
       case 'runtime':
         if (!movie.runtime) return false;
         if (criteria.value.min) return movie.runtime >= criteria.value.min;
@@ -200,7 +198,7 @@ export class MovieService {
           return criteria.value.some((prefix: string) => cleanTitle.toUpperCase().startsWith(prefix.toUpperCase()));
         }
 
-        if (criteria.id === 'one_word' || criteria.id === 'two_word') {
+        if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word') {
           return cleanTitle.split(/\s+/).length === (criteria.value as number);
         }
         return false;

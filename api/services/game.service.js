@@ -56,14 +56,17 @@ async function generateBoard() {
                 let retries = 0;
                 while (retries < 10) {
                     const r = Math.random();
-                    if (r < 0.33) {
-                        // 1/3 chance: One Word (Static)
+                    if (r < 0.25) {
+                        // 1/4 chance: One Word (Static)
                         candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
-                    } else if (r < 0.66) {
-                        // 1/3 chance: Two Words (Static)
+                    } else if (r < 0.5) {
+                        // 1/4 chance: Two Words (Static)
                         candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
+                    } else if (r < 0.75) {
+                        // 1/4 chance: Three Words (Static)
+                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
                     } else {
-                        // 1/3 chance: Starts With (Dynamic)
+                        // 1/4 chance: Starts With (Dynamic)
                         candidate = generateDynamicTitleCriteria();
                     }
 
