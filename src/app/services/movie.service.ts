@@ -193,7 +193,7 @@ export class MovieService {
         return movie.production_companies?.includes(criteria.tmdbId || criteria.value) ?? false;
 
       case 'title':
-        const cleanTitle = this.normalizeTitle(movie.title);
+        const cleanTitle = movie.title ? movie.title.trim() : '';
 
         if (Array.isArray(criteria.value)) {
           // Dynamic "Starts with..."
@@ -210,7 +210,4 @@ export class MovieService {
     }
   }
 
-  private normalizeTitle(title: string): string {
-    return title.replace(/^(The|A|An)\s+/i, '').trim();
-  }
 }

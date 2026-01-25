@@ -70,7 +70,7 @@ async function checkIntersection(rowCrit, colCrit) {
         if (results && postProcessing.length > 0) {
             results = results.filter(movie => {
                 return postProcessing.every(criteria => {
-                    const cleanTitle = normalizeTitle(movie.title);
+                    const cleanTitle = movie.title ? movie.title.trim() : '';
 
                     if (criteria.idValue === 'starts_with') {
                         const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
@@ -96,11 +96,5 @@ async function checkIntersection(rowCrit, colCrit) {
 module.exports = {
     TMDB_BASE_URL,
     getHeaders,
-    checkIntersection,
-    normalizeTitle
+    checkIntersection
 };
-
-function normalizeTitle(title) {
-    if (!title) return '';
-    return title.replace(/^(The|A|An)\s+/i, '').trim();
-}
