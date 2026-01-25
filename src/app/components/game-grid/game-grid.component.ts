@@ -29,6 +29,7 @@ export class GameGridComponent implements OnInit {
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
   isLoading = true;
+  isRegenerating = false;
   incorrectCell: { row: number, col: number } | null = null;
 
   @ViewChild('summarySection') summarySection!: ElementRef;
@@ -70,8 +71,10 @@ export class GameGridComponent implements OnInit {
     const secret = prompt('Enter Admin Secret (CRON_SECRET) to force regeneration:');
     if (!secret) return;
 
+    this.isRegenerating = true;
     this.movieService.regenerateBoard(secret).subscribe({
       next: (setup) => {
+        this.isRegenerating = false;
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
         // Reset grid state
@@ -93,6 +96,7 @@ export class GameGridComponent implements OnInit {
         setTimeout(() => this.message = '', 3000);
       },
       error: (err) => {
+        this.isRegenerating = false;
         console.error('Regen Error', err);
         if (err.status === 401) {
           alert('Invalid Secret! Access Denied.');

@@ -6,7 +6,9 @@
   <div class="status-bar">
     <div class="lives">Lives: {{ lives }}</div>
     <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">Give Up</button>
-    <button (click)="onRegenerate()" class="action-btn">Regenerate Daily Board</button>
+    <button (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn">
+      {{ isRegenerating ? 'Regenerating...' : 'Regenerate Daily Board' }}
+    </button>
     <div class="message" *ngIf="message">{{ message }}</div>
   </div>
 
