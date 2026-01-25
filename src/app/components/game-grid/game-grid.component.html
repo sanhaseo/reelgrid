@@ -26,7 +26,8 @@
         <!-- Grid Cells -->
         <div *ngFor="let cell of grid[i]; let j = index" (click)="onCellClick(i, j)" class="cell-wrapper">
           <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]"
-            [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j">
+            [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j"
+            [isSelected]="selectedCell?.row === i && selectedCell?.col === j">
           </app-grid-cell>
         </div>
       </ng-container>

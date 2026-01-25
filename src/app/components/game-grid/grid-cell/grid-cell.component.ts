@@ -19,4 +19,5 @@ export class GridCellComponent {
   @Input() movie: Movie | null = null;
   @Input() rarity: RarityInfo | null = null;
   @Input() isIncorrect: boolean = false;
+  @Input() isSelected: boolean = false;
 }

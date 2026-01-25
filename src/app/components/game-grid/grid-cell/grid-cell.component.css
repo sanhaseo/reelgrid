@@ -17,6 +17,12 @@
     border: 2px solid #46d369;
 }
 
+.grid-cell.selected {
+    border: 3px solid #00bfff;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+    z-index: 10;
+}
+
 .placeholder {
     height: 100%;
     display: flex;
