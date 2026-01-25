@@ -24,7 +24,7 @@ export class GameGridComponent implements OnInit {
 
   selectedCell: { row: number, col: number } | null = null;
   isSearchOpen = false;
-  lives = 10;
+  guessesLeft = 10;
   gameOver = false;
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
@@ -82,7 +82,7 @@ export class GameGridComponent implements OnInit {
           [null, null, null],
           [null, null, null]
         ];
-        this.lives = 9;
+        this.guessesLeft = 10;
         this.gameOver = false;
         this.summaryAnswers = null; // Clear summary
         this.summaryStats = null;
@@ -131,6 +131,9 @@ export class GameGridComponent implements OnInit {
         const rowCrit = this.rowCriteria[row];
         const colCrit = this.colCriteria[col];
 
+        // Decrement guesses left on every attempt
+        this.guessesLeft--;
+
         if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
 
@@ -148,13 +151,15 @@ export class GameGridComponent implements OnInit {
           });
 
           this.checkWinCondition();
+          // If won, checkWinCondition will call finishGame('win') which sets gameOver = true.
+          // We can check if game is over to prevent loss message below if they won on last life.
         } else {
-          this.lives--;
           this.incorrectCell = { row, col };
           setTimeout(() => this.incorrectCell = null, 500);
-          if (this.lives <= 0) {
-            this.finishGame('loss');
-          }
+        }
+
+        if (this.guessesLeft <= 0 && !this.gameOver) {
+          this.finishGame('loss');
         }
       }
       this.closeSearch();

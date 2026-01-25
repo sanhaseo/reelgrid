@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './game-status.component.css'
 })
 export class GameStatusComponent {
-  @Input() lives = 10;
+  @Input() guessesLeft = 10;
   @Input() isRegenerating = false;
   @Input() gameOver = false;
   @Input() boardNumber = ''; // Placeholder for now
