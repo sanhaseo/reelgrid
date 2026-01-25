@@ -5,7 +5,7 @@
     background-color: #1a1a1a;
     padding: 1rem;
     border-radius: 8px;
-    border: 1px solid #333;
+    /* border: 1px solid #333; */
     min-width: 220px;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .stat-value {
-    font-size: 2rem;
+    font-size: 1.7rem;
     font-weight: bold;
     color: white;
     line-height: 1;
