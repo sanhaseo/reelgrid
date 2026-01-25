@@ -9,7 +9,8 @@
 
         <div class="results-list">
             <div *ngFor="let movie of results" class="result-item" [class.used]="usedMovieIds.includes(movie.id)">
-                <img [src]="movie.poster_path" [alt]="movie.title" class="result-poster">
+                <img *ngIf="movie.poster_path" [src]="movie.poster_path" [alt]="movie.title" class="result-poster">
+                <div *ngIf="!movie.poster_path" class="result-poster no-poster">No Image</div>
                 <div class="result-info">
                     <div class="result-title">{{ movie.title }}</div>
                     <div class="result-year">{{ movie.release_date | date:'yyyy' }}</div>

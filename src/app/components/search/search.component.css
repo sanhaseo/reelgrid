@@ -71,6 +71,18 @@ input:focus {
     flex-shrink: 0;
 }
 
+.no-poster {
+    background-color: #333;
+    color: #888;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7rem;
+    text-align: center;
+    line-height: 1.2;
+    border: 1px solid #444;
+}
+
 .result-info {
     display: flex;
     flex-direction: column;
