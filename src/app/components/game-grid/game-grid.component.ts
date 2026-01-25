@@ -4,11 +4,12 @@ import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { SearchComponent } from '../search/search.component';
 import { GridCellComponent, RarityInfo } from './grid-cell/grid-cell.component';
 import { GameSummaryComponent } from './game-summary/game-summary.component';
+import { GameStatusComponent } from './game-status/game-status.component';
 
 @Component({
   selector: 'app-game-grid',
   standalone: true,
-  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent],
+  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent],
   templateUrl: './game-grid.component.html',
   styleUrl: './game-grid.component.css'
 })
@@ -23,7 +24,7 @@ export class GameGridComponent implements OnInit {
 
   selectedCell: { row: number, col: number } | null = null;
   isSearchOpen = false;
-  lives = 9;
+  lives = 10;
   gameOver = false;
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;

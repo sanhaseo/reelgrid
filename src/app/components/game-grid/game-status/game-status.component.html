@@ -1,0 +1,21 @@
+<div class="status-container">
+    <div class="board-info">
+        <div class="board-number">CineGrid #{{ boardNumber }}</div>
+    </div>
+
+    <div class="status-stats">
+        <div class="stat-box">
+            <span class="stat-value">{{ lives }}</span>
+            <span class="stat-label">GUESSES LEFT</span>
+        </div>
+    </div>
+
+    <div class="status-actions">
+        <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">
+            Give Up
+        </button>
+        <button (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn">
+            {{ isRegenerating ? 'Regenerating...' : 'Regenerate Daily Board' }}
+        </button>
+    </div>
+</div>

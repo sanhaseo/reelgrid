@@ -7,17 +7,19 @@
     margin: 0 auto;
 }
 
-.status-bar {
+
+
+.game-content-row {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    font-size: 1rem;
-    font-weight: bold;
+    align-items: flex-start;
+    gap: 2rem;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: nowrap;
 }
 
-.lives {
-    color: #e50914;
+.side-panel {
+    min-width: 220px;
 }
 
 .action-btn {
