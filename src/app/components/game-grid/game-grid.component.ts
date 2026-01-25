@@ -25,7 +25,6 @@ export class GameGridComponent implements OnInit {
   isSearchOpen = false;
   lives = 9;
   gameOver = false;
-  message = '';
   summaryAnswers: Movie[][][] | null = null;
   summaryStats: any[][] | null = null;
   isLoading = true;
@@ -62,7 +61,6 @@ export class GameGridComponent implements OnInit {
       },
       error: () => {
         this.isLoading = false;
-        this.message = 'Failed to load game board.';
       }
     });
   }
@@ -85,7 +83,6 @@ export class GameGridComponent implements OnInit {
         ];
         this.lives = 9;
         this.gameOver = false;
-        this.message = 'New board generated!';
         this.summaryAnswers = null; // Clear summary
         this.summaryStats = null;
         this.gridRarity = [
@@ -93,7 +90,6 @@ export class GameGridComponent implements OnInit {
           [null, null, null],
           [null, null, null]
         ];
-        setTimeout(() => this.message = '', 3000);
       },
       error: (err) => {
         this.isRegenerating = false;
@@ -178,9 +174,6 @@ export class GameGridComponent implements OnInit {
 
   finishGame(result: 'win' | 'loss' | 'give-up'): void {
     this.gameOver = true;
-    if (result === 'win') this.message = 'You Won!';
-    else if (result === 'loss') this.message = 'Game Over!';
-    else this.message = 'You Gave Up!';
 
     // Fetch answers for summary
     this.movieService.getDailyAnswers().subscribe(data => {

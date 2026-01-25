@@ -9,7 +9,6 @@
     <button (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn">
       {{ isRegenerating ? 'Regenerating...' : 'Regenerate Daily Board' }}
     </button>
-    <div class="message" *ngIf="message">{{ message }}</div>
   </div>
 
   <div class="grid-wrapper">

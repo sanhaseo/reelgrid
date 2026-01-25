@@ -39,11 +39,6 @@
     cursor: not-allowed;
 }
 
-.message {
-    margin-left: auto;
-    color: #46d369;
-}
-
 .grid-wrapper {
     display: grid;
     grid-template-columns: 100px repeat(3, 130px);
