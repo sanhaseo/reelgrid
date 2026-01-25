@@ -159,6 +159,16 @@
     color: #ddd;
 }
 
+.criteria-image {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    float: left;
+    margin-right: 1rem;
+    margin-bottom: 0.5rem;
+}
+
 .example-note {
     margin-top: 1rem;
     color: #888;

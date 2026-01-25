@@ -39,6 +39,7 @@ export interface Criteria {
   label: string;
   value: any;
   tmdbId?: number;
+  image?: string;
 }
 
 export interface GameState {

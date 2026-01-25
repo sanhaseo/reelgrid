@@ -56,6 +56,8 @@
       <button class="close-btn" (click)="closeCriteriaModal()">&times;</button>
     </div>
     <div class="modal-body">
+      <img *ngIf="selectedCriteria?.image" [src]="selectedCriteria?.image" [alt]="selectedCriteria?.label"
+        class="criteria-image">
       <p>{{ selectedCriteria ? getCriteriaDescription(selectedCriteria) : '' }}</p>
     </div>
   </div>
