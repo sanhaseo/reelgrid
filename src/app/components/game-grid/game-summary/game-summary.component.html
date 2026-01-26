@@ -7,7 +7,7 @@
             Statistics
         </button>
         <button class="tab-btn" [class.active]="activeSummaryTab === 'answers'" (click)="setActiveTab('answers')">
-            Possible Answers
+            Answers
         </button>
     </div>
 
@@ -40,14 +40,32 @@
     <!-- ANSWERS VIEW (Existing List) -->
     <div class="summary-grid" *ngIf="activeSummaryTab === 'answers'">
         <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
-            <div class="summary-cell" *ngFor="let movies of row; let j = index">
-                <div class="possible-answers">
-                    <strong>Top Possible Answers:</strong>
-                    <ul>
-                        <li *ngFor="let m of movies | slice:0:5">
-                            {{ m.title }} <span class="year">({{ m.release_date | date:'yyyy' }})</span>
-                        </li>
-                    </ul>
+            <div class="summary-cell clickable-cell" *ngFor="let movies of row; let j = index"
+                (click)="openAnswersModal(movies)">
+                <div class="show-answers-text">
+                    Show Answers <span class="count">({{ movies.length }})</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Answers Modal -->
+    <div class="modal-overlay" *ngIf="showModal" (click)="closeAnswersModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Top Possible Answers ({{ selectedAnswers?.length }})</h2>
+                <button class="close-btn" (click)="closeAnswersModal()">&times;</button>
+            </div>
+            <div class="modal-body scrollable-unique">
+                <div class="answers-list-container">
+                    <div *ngFor="let m of selectedAnswers" class="answer-item">
+                        <img *ngIf="m.poster_path" [src]="m.poster_path" class="answer-thumb">
+                        <div *ngIf="!m.poster_path" class="answer-thumb placeholder"></div>
+                        <div class="answer-info">
+                            <div class="answer-title">{{ m.title }}</div>
+                            <div class="answer-year">{{ m.release_date | date:'yyyy' }}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

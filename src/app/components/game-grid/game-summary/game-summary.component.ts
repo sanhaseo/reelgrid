@@ -14,6 +14,9 @@ export class GameSummaryComponent {
   @Input() summaryStats: any[][] | null = null;
   @Input() userGrid: (Movie | null)[][] = [];
 
+  selectedAnswers: Movie[] | null = null;
+  showModal = false;
+
   activeSummaryTab: 'stats' | 'answers' = 'stats';
 
   setActiveTab(tab: 'stats' | 'answers'): void {
@@ -78,5 +81,15 @@ export class GameSummaryComponent {
       title: minTitle,
       percent: Math.round((minCount / cellStat.total) * 100)
     };
+  }
+
+  openAnswersModal(movies: Movie[]): void {
+    this.selectedAnswers = movies;
+    this.showModal = true;
+  }
+
+  closeAnswersModal(): void {
+    this.showModal = false;
+    this.selectedAnswers = null;
   }
 }
