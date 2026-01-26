@@ -81,12 +81,18 @@
 }
 
 .stat-movie {
-    font-weight: bold;
+    /* font-weight: bold; */
     color: #fff;
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.stat-movie.placeholder {
+    color: #555;
+    font-weight: normal;
+    font-style: italic;
 }
 
 .stat-pct-pill {
