@@ -92,4 +92,10 @@ export class GameSummaryComponent {
     this.showModal = false;
     this.selectedAnswers = null;
   }
+
+  getImageUrl(posterPath: string | null): string {
+    if (!posterPath) return '';
+    if (posterPath.startsWith('http')) return posterPath;
+    return `https://image.tmdb.org/t/p/w200${posterPath}`;
+  }
 }

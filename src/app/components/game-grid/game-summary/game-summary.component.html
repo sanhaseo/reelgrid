@@ -59,7 +59,7 @@
             <div class="modal-body scrollable-unique">
                 <div class="answers-list-container">
                     <div *ngFor="let m of selectedAnswers" class="answer-item">
-                        <img *ngIf="m.poster_path" [src]="m.poster_path" class="answer-thumb">
+                        <img *ngIf="m.poster_path" [src]="getImageUrl(m.poster_path)" class="answer-thumb">
                         <div *ngIf="!m.poster_path" class="answer-thumb placeholder"></div>
                         <div class="answer-info">
                             <div class="answer-title">{{ m.title }}</div>
