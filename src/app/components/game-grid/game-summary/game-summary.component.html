@@ -12,38 +12,21 @@
     </div>
 
     <!-- STATS VIEW -->
-    <div class="summary-grid" *ngIf="activeSummaryTab === 'stats'">
-        <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
-            <div class="summary-cell center-align" *ngFor="let movies of row; let j = index">
-
-                <!-- Community Stats -->
-                <div class="community-stats" *ngIf="summaryStats">
-                    <!-- Most Popular -->
-                    <div class="stat-item">
-                        <span class="stat-label popular">Most Popular 🏆</span>
-                        <ng-container *ngIf="getTopAnswer(i, j) as top; else noTop">
-                            <span class="stat-movie">{{ top.title }}</span>
-                            <span class="stat-pct-pill">{{ top.percent }}%</span>
-                        </ng-container>
-                        <ng-template #noTop>
-                            <span class="stat-movie placeholder">None</span>
-                        </ng-template>
-                    </div>
-
-                    <!-- Least Popular (Rare) -->
-                    <div class="stat-item">
-                        <span class="stat-label rare">Rare Find 💎</span>
-                        <ng-container *ngIf="getLeastPopular(i, j) as rare; else noRare">
-                            <span class="stat-movie">{{ rare.title }}</span>
-                            <span class="stat-pct-pill">{{ rare.percent }}%</span>
-                        </ng-container>
-                        <ng-template #noRare>
-                            <span class="stat-movie placeholder">None</span>
-                        </ng-template>
-                    </div>
-                </div>
-            </div>
+    <div class="summary-content" *ngIf="activeSummaryTab === 'stats'">
+        <div class="stat-controls">
+            <label>View Board:</label>
+            <select #statSelect (change)="setStatView(statSelect.value === 'popular' ? 'popular' : 'rare')">
+                <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers</option>
+                <option value="rare" [selected]="activeStatView === 'rare'">Rare Finds</option>
+            </select>
         </div>
+
+        <app-summary-board *ngIf="activeStatView === 'popular'" [gridData]="getPopularGrid()"
+            title="Most Popular Choices">
+        </app-summary-board>
+
+        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" title="Rarest Valid Answers">
+        </app-summary-board>
     </div>
 
     <!-- ANSWERS VIEW (Existing List) -->

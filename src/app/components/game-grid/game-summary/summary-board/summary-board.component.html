@@ -1,0 +1,13 @@
+<div class="board-container">
+    <h3>{{ title }}</h3>
+    <div class="summary-grid-wrapper">
+        <div class="summary-row" *ngFor="let row of gridData; let i = index">
+            <div class="summary-cell-wrapper" *ngFor="let cell of row; let j = index">
+                <app-grid-cell *ngIf="cell" [movie]="cell.movie" [rarity]="cell.rarity"></app-grid-cell>
+                <div *ngIf="!cell" class="empty-cell">
+                    <span>-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

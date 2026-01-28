@@ -10,6 +10,34 @@
     color: #fff;
 }
 
+.stat-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-controls label {
+    color: #aaa;
+    font-size: 0.9rem;
+}
+
+.stat-controls select {
+    background-color: #1f1f1f;
+    color: white;
+    border: 1px solid #444;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.stat-controls select:focus {
+    outline: none;
+    border-color: #e50914;
+}
+
 /* Tabs */
 .summary-tabs {
     display: flex;
