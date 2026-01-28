@@ -9,8 +9,7 @@
       <div class="header-cell corner"></div>
 
       <!-- Column Headers -->
-      <div class="header-cell col-header clickable-header" *ngFor="let col of colCriteria"
-        (click)="openCriteriaInfo(col)">
+      <div class="header-cell clickable-header" *ngFor="let col of colCriteria" (click)="openCriteriaInfo(col)">
         <div class="criteria-label">{{ col.label }}</div>
         <div class="criteria-type">{{ col.type }}</div>
       </div>
@@ -18,7 +17,7 @@
       <!-- Rows -->
       <ng-container *ngFor="let row of rowCriteria; let i = index">
         <!-- Row Header -->
-        <div class="header-cell row-header clickable-header" (click)="openCriteriaInfo(row)">
+        <div class="header-cell clickable-header" (click)="openCriteriaInfo(row)">
           <div class="criteria-label">{{ row.label }}</div>
           <div class="criteria-type">{{ row.type }}</div>
         </div>
