@@ -4,33 +4,17 @@
 
 <div *ngIf="!isLoading" class="game-container">
   <div class="game-content-row">
-    <div class="grid-wrapper">
-      <!-- Top Left Corner (Empty) -->
-      <div class="header-cell corner"></div>
+    <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
+      [cellTemplate]="gameCellTemplate" (criteriaClick)="openCriteriaInfo($event)"
+      (cellClick)="onCellClick($event.row, $event.col)">
+    </app-board>
 
-      <!-- Column Headers -->
-      <div class="header-cell clickable-header" *ngFor="let col of colCriteria" (click)="openCriteriaInfo(col)">
-        <div class="criteria-label">{{ col.label }}</div>
-        <div class="criteria-type">{{ col.type }}</div>
-      </div>
-
-      <!-- Rows -->
-      <ng-container *ngFor="let row of rowCriteria; let i = index">
-        <!-- Row Header -->
-        <div class="header-cell clickable-header" (click)="openCriteriaInfo(row)">
-          <div class="criteria-label">{{ row.label }}</div>
-          <div class="criteria-type">{{ row.type }}</div>
-        </div>
-
-        <!-- Grid Cells -->
-        <div *ngFor="let cell of grid[i]; let j = index" (click)="onCellClick(i, j)" class="cell-wrapper">
-          <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]"
-            [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j"
-            [isSelected]="selectedCell?.row === i && selectedCell?.col === j">
-          </app-grid-cell>
-        </div>
-      </ng-container>
-    </div>
+    <ng-template #gameCellTemplate let-cell let-i="row" let-j="col">
+      <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]"
+        [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j"
+        [isSelected]="selectedCell?.row === i && selectedCell?.col === j">
+      </app-grid-cell>
+    </ng-template>
 
     <!-- Side Panel -->
     <div class="side-panel">
@@ -43,7 +27,7 @@
 
 <div #summarySection>
   <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
-    [userGrid]="grid">
+    [userGrid]="grid" [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
   </app-game-summary>
 </div>
 

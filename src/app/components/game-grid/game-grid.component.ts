@@ -3,13 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { SearchComponent } from '../search/search.component';
 import { GridCellComponent, RarityInfo } from './grid-cell/grid-cell.component';
+import { BoardComponent } from './board/board.component';
 import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
 
 @Component({
   selector: 'app-game-grid',
   standalone: true,
-  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent],
+  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent],
   templateUrl: './game-grid.component.html',
   styleUrl: './game-grid.component.css'
 })

@@ -22,10 +22,11 @@
         </div>
 
         <app-summary-board *ngIf="activeStatView === 'popular'" [gridData]="getPopularGrid()"
-            title="Most Popular Choices">
+            title="Most Popular Choices" [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
         </app-summary-board>
 
-        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" title="Rarest Valid Answers">
+        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" title="Rarest Valid Answers"
+            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
         </app-summary-board>
     </div>
 

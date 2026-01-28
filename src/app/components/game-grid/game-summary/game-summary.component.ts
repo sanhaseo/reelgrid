@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Movie } from '../../../services/movie.service';
+import { Movie, Criteria } from '../../../services/movie.service';
 import { SummaryBoardComponent, SummaryStatCell } from './summary-board/summary-board.component';
 import { RarityInfo } from '../grid-cell/grid-cell.component';
 
@@ -15,6 +15,8 @@ export class GameSummaryComponent {
   @Input() summaryAnswers: Movie[][][] | null = null;
   @Input() summaryStats: any[][] | null = null;
   @Input() userGrid: (Movie | null)[][] = [];
+  @Input() rowCriteria: Criteria[] = [];
+  @Input() colCriteria: Criteria[] = [];
 
   selectedAnswers: Movie[] | null = null;
   showModal = false;

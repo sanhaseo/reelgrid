@@ -1,0 +1,51 @@
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 100px repeat(3, 130px);
+    grid-template-rows: 60px repeat(3, 190px);
+    gap: 6px;
+}
+
+.header-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #1f1f1f;
+    border-radius: 8px;
+    padding: 10px;
+    text-align: center;
+}
+
+.corner {
+    visibility: hidden;
+    background: transparent;
+}
+
+.criteria-label {
+    font-size: 0.9rem;
+    color: #fff;
+    /* font-weight: bold; */
+    word-break: break-word;
+    line-height: 1.2;
+}
+
+.criteria-type {
+    font-size: 0.7rem;
+    color: #aaa;
+    margin-top: 4px;
+    text-transform: uppercase;
+}
+
+.cell-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.clickable-header {
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.clickable-header:hover {
+    background-color: #2f2f2f;
+}
