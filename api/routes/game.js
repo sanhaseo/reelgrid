@@ -105,8 +105,6 @@ router.post('/stats', async (req, res) => {
             const currentCount = typeof entry === 'number' ? entry : 0;
             entry = {
                 count: currentCount,
-                id: movie.id,
-                title: movie.title,
                 poster_path: movie.poster_path
             };
         }

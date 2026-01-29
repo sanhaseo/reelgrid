@@ -130,15 +130,9 @@ export class GameSummaryComponent {
         topId = parseInt(key) || (typeof entry === 'object' ? (entry as any).id : 0);
 
         if (typeof entry === 'object') {
-          topTitle = (entry as any).title;
           topPoster = (entry as any).poster_path;
         } else {
-          // Legacy fallback (key was title?) No, if key was title, parseInt is NaN.
-          // If we just deployed, key IS ID.
-          // If old data exists, key might be title.
-          // If key is title, parseInt is NaN.
-          // Assume we cleared DB or handle regenerate.
-          // For safety, let's trust entry.title.
+          // Legacy fallback if needed
         }
       }
     }
@@ -174,7 +168,6 @@ export class GameSummaryComponent {
           minId = parseInt(key) || (typeof entry === 'object' ? (entry as any).id : 0);
 
           if (typeof entry === 'object') {
-            minTitle = (entry as any).title;
             minPoster = (entry as any).poster_path;
           }
         }
