@@ -70,8 +70,8 @@ export class MovieService {
     return this.http.get<{ possibleAnswers: Movie[][][] }>('/api/game/answers');
   }
 
-  submitGuessStats(row: number, col: number, movieTitle: string): Observable<any> {
-    return this.http.post('/api/game/stats', { row, col, movieTitle });
+  submitGuessStats(row: number, col: number, movie: Partial<Movie>): Observable<any> {
+    return this.http.post('/api/game/stats', { row, col, movie });
   }
 
   getDailyGameStats(): Observable<any[][]> {

@@ -64,8 +64,12 @@ router.get('/answers', async (req, res) => {
 
 // Submit Game Stat (Increment count for a guess)
 router.post('/stats', async (req, res) => {
-    const { row, col, movieTitle } = req.body;
+    const { row, col, movie } = req.body;
+    if (!movie || !movie.title) {
+        return res.status(400).json({ error: 'Invalid movie data' });
+    }
     const today = new Date().toISOString().split('T')[0];
+    const movieTitle = movie.title;
 
     try {
         let stats = await DailyGameStats.findOne({ date: today });
@@ -92,8 +96,20 @@ router.post('/stats', async (req, res) => {
         // Increment counts
         stats.cellStats[row][col].total = (stats.cellStats[row][col].total || 0) + 1;
 
-        const currentCount = stats.cellStats[row][col].answers[movieTitle] || 0;
-        stats.cellStats[row][col].answers[movieTitle] = currentCount + 1;
+        let entry = stats.cellStats[row][col].answers[movieTitle];
+
+        // Handle initialization or migration from old number-only format
+        if (!entry || typeof entry === 'number') {
+            const currentCount = typeof entry === 'number' ? entry : 0;
+            entry = {
+                count: currentCount,
+                id: movie.id,
+                poster_path: movie.poster_path
+            };
+        }
+
+        entry.count++;
+        stats.cellStats[row][col].answers[movieTitle] = entry;
 
         // Mark as modified for Mixed type
         stats.markModified('cellStats');

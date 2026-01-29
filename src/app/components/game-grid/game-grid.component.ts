@@ -138,8 +138,13 @@ export class GameGridComponent implements OnInit {
         if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
 
-          // Submit stats asynchronously
-          this.movieService.submitGuessStats(row, col, fullMovie.title).subscribe({
+          // Submit stats asynchronously (only send necessary data)
+          const statsPayload = {
+            id: fullMovie.id,
+            title: fullMovie.title,
+            poster_path: fullMovie.poster_path
+          };
+          this.movieService.submitGuessStats(row, col, statsPayload).subscribe({
             next: (res: any) => {
               if (res.success && res.cellStat) {
                 const total = res.cellStat.total;

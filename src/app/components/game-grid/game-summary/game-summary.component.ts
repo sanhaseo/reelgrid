@@ -55,7 +55,19 @@ export class GameSummaryComponent {
         // But if it's null, we return null.
 
         if (stat) {
-          const movie = this.findMovieObject(i, j, stat.title);
+          let movie = this.findMovieObject(i, j, stat.title);
+
+          if (!movie && stat.poster_path) {
+            // Fallback: Use metadata from stats if not found in daily solutions
+            movie = {
+              id: 0,
+              title: stat.title,
+              poster_path: stat.poster_path,
+              release_date: '',
+              genres: []
+            } as Movie;
+          }
+
           if (movie) {
             const rarityInfo = this.getRarityInfo(stat.percent, type === 'popular');
             row.push({ movie, rarity: rarityInfo });
@@ -102,11 +114,12 @@ export class GameSummaryComponent {
     const cellStat = this.summaryStats[row][col];
     if (!cellStat || cellStat.total === 0) return 0;
 
-    const count = cellStat.answers[movieTitle] || 0;
+    const entry = cellStat.answers[movieTitle];
+    const count = typeof entry === 'object' ? entry.count : (entry || 0);
     return Math.round((count / cellStat.total) * 100);
   }
 
-  getTopAnswer(row: number, col: number): { title: string, percent: number } | null {
+  getTopAnswer(row: number, col: number): { title: string, percent: number, poster_path?: string } | null {
     if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
 
     const cellStat = this.summaryStats[row][col];
@@ -114,22 +127,28 @@ export class GameSummaryComponent {
 
     let topTitle = '';
     let maxCount = -1;
+    let topPoster = '';
 
-    for (const [title, count] of Object.entries(cellStat.answers)) {
-      if ((count as number) > maxCount) {
-        maxCount = count as number;
+    for (const [title, entry] of Object.entries(cellStat.answers)) {
+      const count = typeof entry === 'object' ? (entry as any).count : (entry as number);
+      if (count > maxCount) {
+        maxCount = count;
         topTitle = title;
+        if (typeof entry === 'object') {
+          topPoster = (entry as any).poster_path;
+        }
       }
     }
 
     if (!topTitle) return null;
     return {
       title: topTitle,
-      percent: Math.round((maxCount / cellStat.total) * 100)
+      percent: Math.round((maxCount / cellStat.total) * 100),
+      poster_path: topPoster
     };
   }
 
-  getLeastPopular(row: number, col: number): { title: string, percent: number } | null {
+  getLeastPopular(row: number, col: number): { title: string, percent: number, poster_path?: string } | null {
     if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
 
     const cellStat = this.summaryStats[row][col];
@@ -137,14 +156,20 @@ export class GameSummaryComponent {
 
     let minTitle = '';
     let minCount = Infinity;
+    let minPoster = '';
     let hasEntries = false;
 
-    for (const [title, count] of Object.entries(cellStat.answers)) {
-      if ((count as number) > 0) {
+    for (const [title, entry] of Object.entries(cellStat.answers)) {
+      const count = typeof entry === 'object' ? (entry as any).count : (entry as number);
+
+      if (count > 0) {
         hasEntries = true;
-        if ((count as number) < minCount) {
-          minCount = count as number;
+        if (count < minCount) {
+          minCount = count;
           minTitle = title;
+          if (typeof entry === 'object') {
+            minPoster = (entry as any).poster_path;
+          }
         }
       }
     }
@@ -152,7 +177,8 @@ export class GameSummaryComponent {
     if (!hasEntries || !minTitle) return null;
     return {
       title: minTitle,
-      percent: Math.round((minCount / cellStat.total) * 100)
+      percent: Math.round((minCount / cellStat.total) * 100),
+      poster_path: minPoster
     };
   }
 
