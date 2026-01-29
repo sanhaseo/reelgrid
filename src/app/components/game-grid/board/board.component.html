@@ -3,7 +3,8 @@
     <div class="header-cell corner"></div>
 
     <!-- Column Headers -->
-    <div class="header-cell col-header clickable-header" *ngFor="let col of colCriteria" (click)="onCriteriaClick(col)">
+    <div class="header-cell col-header" [class.clickable-header]="isInteractive" *ngFor="let col of colCriteria"
+        (click)="isInteractive && onCriteriaClick(col)">
         <div class="criteria-label">{{ col.label }}</div>
         <div class="criteria-type">{{ col.type }}</div>
     </div>
@@ -11,13 +12,15 @@
     <!-- Rows -->
     <ng-container *ngFor="let row of rowCriteria; let i = index">
         <!-- Row Header -->
-        <div class="header-cell row-header clickable-header" (click)="onCriteriaClick(row)">
+        <div class="header-cell row-header" [class.clickable-header]="isInteractive"
+            (click)="isInteractive && onCriteriaClick(row)">
             <div class="criteria-label">{{ row.label }}</div>
             <div class="criteria-type">{{ row.type }}</div>
         </div>
 
         <!-- Grid Cells -->
-        <div *ngFor="let cellData of gridData[i]; let j = index" (click)="onCellClick(i, j)" class="cell-wrapper">
+        <div *ngFor="let cellData of gridData[i]; let j = index" (click)="isInteractive && onCellClick(i, j)"
+            class="cell-wrapper" [style.cursor]="isInteractive ? 'pointer' : 'default'">
             <ng-container *ngTemplateOutlet="cellTemplate; context: { $implicit: cellData, row: i, col: j }">
             </ng-container>
         </div>

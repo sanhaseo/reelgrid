@@ -14,6 +14,7 @@ export class BoardComponent {
     @Input() colCriteria: Criteria[] = [];
     @Input() gridData: any[][] = [];
     @Input() cellTemplate!: TemplateRef<any>;
+    @Input() isInteractive: boolean = true;
 
     @Output() criteriaClick = new EventEmitter<Criteria>();
     @Output() cellClick = new EventEmitter<{ row: number, col: number }>();
