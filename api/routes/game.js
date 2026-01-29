@@ -96,20 +96,23 @@ router.post('/stats', async (req, res) => {
         // Increment counts
         stats.cellStats[row][col].total = (stats.cellStats[row][col].total || 0) + 1;
 
-        let entry = stats.cellStats[row][col].answers[movieTitle];
+        const movieId = movie.id.toString();
 
-        // Handle initialization or migration from old number-only format
+        let entry = stats.cellStats[row][col].answers[movieId];
+
+        // Handle initialization
         if (!entry || typeof entry === 'number') {
             const currentCount = typeof entry === 'number' ? entry : 0;
             entry = {
                 count: currentCount,
                 id: movie.id,
+                title: movie.title,
                 poster_path: movie.poster_path
             };
         }
 
         entry.count++;
-        stats.cellStats[row][col].answers[movieTitle] = entry;
+        stats.cellStats[row][col].answers[movieId] = entry;
 
         // Mark as modified for Mixed type
         stats.markModified('cellStats');

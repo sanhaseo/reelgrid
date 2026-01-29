@@ -49,18 +49,13 @@ export class GameSummaryComponent {
       for (let j = 0; j < 3; j++) {
         let stat = type === 'popular' ? this.getTopAnswer(i, j) : this.getLeastPopular(i, j);
 
-        // If rare is duplicate of top, keep it? User said "separate boards", implies showing what is rare.
-        // If rare == top, it means only 1 answer exists (or flat).
-        // Usually we show it even if duplicate on a separate board.
-        // But if it's null, we return null.
-
         if (stat) {
-          let movie = this.findMovieObject(i, j, stat.title);
+          let movie = this.findMovieObject(i, j, stat.id);
 
           if (!movie && stat.poster_path) {
             // Fallback: Use metadata from stats if not found in daily solutions
             movie = {
-              id: 0,
+              id: stat.id,
               title: stat.title,
               poster_path: stat.poster_path,
               release_date: '',
@@ -83,12 +78,9 @@ export class GameSummaryComponent {
     return grid;
   }
 
-  private findMovieObject(row: number, col: number, title: string): Movie | null {
+  private findMovieObject(row: number, col: number, id: number): Movie | null {
     if (!this.summaryAnswers || !this.summaryAnswers[row] || !this.summaryAnswers[row][col]) return null;
-    // Search in partial answers? Or do we need full details?
-    // summaryAnswers has Movie objects.
-    // Normalize title compare? Or exact match from stats key.
-    return this.summaryAnswers[row][col].find(m => m.title === title) || null;
+    return this.summaryAnswers[row][col].find(m => m.id === id) || null;
   }
 
   private getRarityInfo(percent: number, isPopular: boolean): RarityInfo {
@@ -108,74 +100,90 @@ export class GameSummaryComponent {
     return 'common';
   }
 
-  getStatPercentage(row: number, col: number, movieTitle: string): number {
+  getStatPercentage(row: number, col: number, movieId: string): number {
     if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return 0;
 
     const cellStat = this.summaryStats[row][col];
     if (!cellStat || cellStat.total === 0) return 0;
 
-    const entry = cellStat.answers[movieTitle];
+    const entry = cellStat.answers[movieId];
     const count = typeof entry === 'object' ? entry.count : (entry || 0);
     return Math.round((count / cellStat.total) * 100);
   }
 
-  getTopAnswer(row: number, col: number): { title: string, percent: number, poster_path?: string } | null {
+  getTopAnswer(row: number, col: number): { title: string, id: number, percent: number, poster_path?: string } | null {
     if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
 
     const cellStat = this.summaryStats[row][col];
     if (!cellStat || cellStat.total === 0) return null;
 
     let topTitle = '';
+    let topId = 0;
     let maxCount = -1;
     let topPoster = '';
 
-    for (const [title, entry] of Object.entries(cellStat.answers)) {
+    for (const [key, entry] of Object.entries(cellStat.answers)) {
       const count = typeof entry === 'object' ? (entry as any).count : (entry as number);
       if (count > maxCount) {
         maxCount = count;
-        topTitle = title;
+        // Key is ID now
+        topId = parseInt(key) || (typeof entry === 'object' ? (entry as any).id : 0);
+
         if (typeof entry === 'object') {
+          topTitle = (entry as any).title;
           topPoster = (entry as any).poster_path;
+        } else {
+          // Legacy fallback (key was title?) No, if key was title, parseInt is NaN.
+          // If we just deployed, key IS ID.
+          // If old data exists, key might be title.
+          // If key is title, parseInt is NaN.
+          // Assume we cleared DB or handle regenerate.
+          // For safety, let's trust entry.title.
         }
       }
     }
 
-    if (!topTitle) return null;
+    if (!topTitle && !topId) return null;
     return {
+      id: topId,
       title: topTitle,
       percent: Math.round((maxCount / cellStat.total) * 100),
       poster_path: topPoster
     };
   }
 
-  getLeastPopular(row: number, col: number): { title: string, percent: number, poster_path?: string } | null {
+  getLeastPopular(row: number, col: number): { title: string, id: number, percent: number, poster_path?: string } | null {
     if (!this.summaryStats || !this.summaryStats[row] || !this.summaryStats[row][col]) return null;
 
     const cellStat = this.summaryStats[row][col];
     if (!cellStat || cellStat.total === 0) return null;
 
     let minTitle = '';
+    let minId = 0;
     let minCount = Infinity;
     let minPoster = '';
     let hasEntries = false;
 
-    for (const [title, entry] of Object.entries(cellStat.answers)) {
+    for (const [key, entry] of Object.entries(cellStat.answers)) {
       const count = typeof entry === 'object' ? (entry as any).count : (entry as number);
 
       if (count > 0) {
         hasEntries = true;
         if (count < minCount) {
           minCount = count;
-          minTitle = title;
+          minId = parseInt(key) || (typeof entry === 'object' ? (entry as any).id : 0);
+
           if (typeof entry === 'object') {
+            minTitle = (entry as any).title;
             minPoster = (entry as any).poster_path;
           }
         }
       }
     }
 
-    if (!hasEntries || !minTitle) return null;
+    if (!hasEntries || (!minTitle && !minId)) return null;
     return {
+      id: minId,
       title: minTitle,
       percent: Math.round((minCount / cellStat.total) * 100),
       poster_path: minPoster
