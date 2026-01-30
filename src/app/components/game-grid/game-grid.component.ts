@@ -146,9 +146,9 @@ export class GameGridComponent implements OnInit {
           this.movieService.submitGuessStats(row, col, statsPayload).subscribe({
             next: (res: any) => {
               if (res.success && res.cellStat) {
-                const total = res.cellStat.total;
-                const count = res.cellStat.answers[fullMovie.id] || 0;
-                const percent = (count / total) * 100;
+                const total = res.cellStat.total - 1;
+                const count = res.cellStat.answers[fullMovie.id].count - 1 || 0;
+                const percent = total === 0 ? 0 : (count / total) * 100;
                 this.gridRarity[row][col] = this.calculateRarity(percent);
               }
             },
