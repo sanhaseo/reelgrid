@@ -141,14 +141,13 @@ export class GameGridComponent implements OnInit {
           // Submit stats asynchronously (only send necessary data)
           const statsPayload = {
             id: fullMovie.id,
-            title: fullMovie.title,
             poster_path: fullMovie.poster_path
           };
           this.movieService.submitGuessStats(row, col, statsPayload).subscribe({
             next: (res: any) => {
               if (res.success && res.cellStat) {
                 const total = res.cellStat.total;
-                const count = res.cellStat.answers[fullMovie.title] || 0;
+                const count = res.cellStat.answers[fullMovie.id] || 0;
                 const percent = (count / total) * 100;
                 this.gridRarity[row][col] = this.calculateRarity(percent);
               }

@@ -121,11 +121,11 @@ async function generateBoard() {
                     validBoard = false;
                     break;
                 }
-                // Store minimal movie data to save space
+                // Store minimal movie data to save space, but use full poster path to match frontend (MovieService)
                 possibleAnswers[r][c] = matches.map(m => ({
                     id: m.id,
                     title: m.title,
-                    poster_path: m.poster_path,
+                    poster_path: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : null,
                     release_date: m.release_date
                 }));
             }

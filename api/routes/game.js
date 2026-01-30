@@ -65,11 +65,10 @@ router.get('/answers', async (req, res) => {
 // Submit Game Stat (Increment count for a guess)
 router.post('/stats', async (req, res) => {
     const { row, col, movie } = req.body;
-    if (!movie || !movie.title) {
+    if (!movie || !movie.id) {
         return res.status(400).json({ error: 'Invalid movie data' });
     }
     const today = new Date().toISOString().split('T')[0];
-    const movieTitle = movie.title;
 
     try {
         let stats = await DailyGameStats.findOne({ date: today });
