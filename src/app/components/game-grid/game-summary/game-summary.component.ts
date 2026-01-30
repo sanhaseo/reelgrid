@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria } from '../../../services/movie.service';
 import { SummaryBoardComponent, SummaryStatCell } from './summary-board/summary-board.component';
-import { RarityInfo } from '../grid-cell/grid-cell.component';
+import { calculateRarity, RarityInfo } from '../../../utils/rarity';
 
 @Component({
   selector: 'app-game-summary',
@@ -84,20 +84,7 @@ export class GameSummaryComponent {
   }
 
   private getRarityInfo(percent: number, isPopular: boolean): RarityInfo {
-    // Simplistic mapping
-    return {
-      label: isPopular ? 'Popular' : 'Rare',
-      percent: percent,
-      colorClass: this.getRarityColorClass(percent)
-    };
-  }
-
-  private getRarityColorClass(percent: number): string {
-    if (percent <= 1) return 'legendary';
-    if (percent <= 5) return 'epic';
-    if (percent <= 15) return 'rare';
-    if (percent <= 30) return 'uncommon';
-    return 'common';
+    return calculateRarity(percent);
   }
 
   getStatPercentage(row: number, col: number, movieId: string): number {

@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { SearchComponent } from '../search/search.component';
-import { GridCellComponent, RarityInfo } from './grid-cell/grid-cell.component';
+import { GridCellComponent } from './grid-cell/grid-cell.component';
 import { BoardComponent } from './board/board.component';
+import { calculateRarity, RarityInfo } from '../../utils/rarity';
 import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
 
@@ -203,11 +204,7 @@ export class GameGridComponent implements OnInit {
   }
 
   calculateRarity(percent: number): RarityInfo {
-    if (percent < 5) return { label: 'Legendary', colorClass: 'legendary', percent: Math.round(percent) };
-    if (percent < 10) return { label: 'Epic', colorClass: 'epic', percent: Math.round(percent) };
-    if (percent < 25) return { label: 'Rare', colorClass: 'rare', percent: Math.round(percent) };
-    if (percent < 50) return { label: 'Uncommon', colorClass: 'uncommon', percent: Math.round(percent) };
-    return { label: 'Common', colorClass: 'common', percent: Math.round(percent) };
+    return calculateRarity(percent);
   }
 
   selectedCriteria: Criteria | null = null;
