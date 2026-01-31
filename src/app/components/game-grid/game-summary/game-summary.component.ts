@@ -22,14 +22,14 @@ export class GameSummaryComponent {
   selectedAnswers: Movie[] | null = null;
   showModal = false;
 
-  activeSummaryTab: 'results' | 'stats' | 'answers' = 'results';
-  activeStatView: 'popular' | 'rare' = 'popular';
+  activeSummaryTab: 'results' | 'stats' = 'results';
+  activeStatView: 'popular' | 'rare' | 'answers' = 'popular';
 
-  setActiveTab(tab: 'results' | 'stats' | 'answers'): void {
+  setActiveTab(tab: 'results' | 'stats'): void {
     this.activeSummaryTab = tab;
   }
 
-  setStatView(view: 'popular' | 'rare'): void {
+  setStatView(view: 'popular' | 'rare' | 'answers'): void {
     this.activeStatView = view;
   }
 

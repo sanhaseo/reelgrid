@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Criteria, Movie } from '../../../../services/movie.service';
 import { GridCellComponent, RarityInfo } from '../../grid-cell/grid-cell.component';
@@ -17,8 +17,9 @@ export interface SummaryStatCell {
     styleUrl: './summary-board.component.css'
 })
 export class SummaryBoardComponent {
-    @Input() gridData: (SummaryStatCell | null)[][] = [];
+    @Input() gridData: any[][] = [];
     @Input() title: string = '';
     @Input() rowCriteria: Criteria[] = [];
     @Input() colCriteria: Criteria[] = [];
+    @Input() customCellTemplate: TemplateRef<any> | null = null;
 }

@@ -7,10 +7,7 @@
             Results
         </button>
         <button class="tab-btn" [class.active]="activeSummaryTab === 'stats'" (click)="setActiveTab('stats')">
-            Statistics
-        </button>
-        <button class="tab-btn" [class.active]="activeSummaryTab === 'answers'" (click)="setActiveTab('answers')">
-            Answers
+            Stats & Answers
         </button>
     </div>
 
@@ -21,13 +18,14 @@
         </div>
     </div>
 
-    <!-- STATS VIEW -->
+    <!-- STATS & ANSWERS VIEW -->
     <div class="summary-content" *ngIf="activeSummaryTab === 'stats'">
         <div class="stat-controls">
             <label>View Board:</label>
-            <select #statSelect (change)="setStatView(statSelect.value === 'popular' ? 'popular' : 'rare')">
+            <select #statSelect (change)="setStatView($any(statSelect.value))">
                 <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers</option>
                 <option value="rare" [selected]="activeStatView === 'rare'">Rare Finds</option>
+                <option value="answers" [selected]="activeStatView === 'answers'">All Possible Answers</option>
             </select>
         </div>
 
@@ -38,18 +36,19 @@
         <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" title="Rarest Valid Answers"
             [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
         </app-summary-board>
-    </div>
 
-    <!-- ANSWERS VIEW (Existing List) -->
-    <div class="summary-grid" *ngIf="activeSummaryTab === 'answers'">
-        <div class="summary-row" *ngFor="let row of summaryAnswers; let i = index">
-            <div class="summary-cell clickable-cell" *ngFor="let movies of row; let j = index"
-                (click)="openAnswersModal(movies)">
+        <app-summary-board *ngIf="activeStatView === 'answers'" [gridData]="summaryAnswers || []"
+            title="All Possible Answers" [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"
+            [customCellTemplate]="answersCell">
+        </app-summary-board>
+
+        <ng-template #answersCell let-movies>
+            <div class="summary-cell clickable-cell" (click)="openAnswersModal(movies)">
                 <div class="show-answers-text">
-                    Show Answers <span class="count">({{ movies.length }})</span>
+                    Show Answers <span class="count">({{ movies?.length || 0 }})</span>
                 </div>
             </div>
-        </div>
+        </ng-template>
     </div>
 
     <!-- Answers Modal -->
