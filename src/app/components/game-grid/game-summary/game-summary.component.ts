@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Movie, Criteria } from '../../../services/movie.service';
 import { SummaryBoardComponent, SummaryStatCell } from './summary-board/summary-board.component';
 import { calculateRarity, RarityInfo } from '../../../utils/rarity';
+import { AnswersModalComponent } from './answers-modal/answers-modal.component';
 
 @Component({
   selector: 'app-game-summary',
   standalone: true,
-  imports: [CommonModule, SummaryBoardComponent],
+  imports: [CommonModule, SummaryBoardComponent, AnswersModalComponent],
   templateUrl: './game-summary.component.html',
   styleUrl: './game-summary.component.css'
 })
