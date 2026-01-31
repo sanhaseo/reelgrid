@@ -74,7 +74,7 @@ router.post('/stats', async (req, res) => {
         let stats = await DailyGameStats.findOne({ date: today });
 
         if (!stats) {
-            stats = new DailyGameStats({ date: today, cellStats: [] });
+            stats = new DailyGameStats({ date: today, cellStats: [], totalCompletedGames: 0 });
         }
 
         // Initialize grid if empty or partial

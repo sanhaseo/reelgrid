@@ -25,6 +25,7 @@
             <select #statSelect (change)="setStatView($any(statSelect.value))">
                 <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers</option>
                 <option value="rare" [selected]="activeStatView === 'rare'">Least Popular Answers</option>
+                <option value="frequency" [selected]="activeStatView === 'frequency'">Answer Frequency</option>
                 <option value="answers" [selected]="activeStatView === 'answers'">Possible Answers</option>
             </select>
         </div>
@@ -37,9 +38,22 @@
             [colCriteria]="colCriteria">
         </app-summary-board>
 
+        <app-summary-board *ngIf="activeStatView === 'frequency'" [gridData]="getFrequencyGrid()"
+            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="frequencyCell">
+        </app-summary-board>
+
         <app-summary-board *ngIf="activeStatView === 'answers'" [gridData]="summaryAnswers || []"
             [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="answersCell">
         </app-summary-board>
+
+        <ng-template #frequencyCell let-data>
+            <div class="summary-cell" style="justify-content: center; align-items: center; display: flex;">
+                <div style="font-size: 1.5rem; font-weight: bold; color: #fff;">
+                    {{ data?.percent || 0 }}%
+                </div>
+                <div style="font-size: 0.8rem; color: #aaa; margin-top: 4px;">Correct</div>
+            </div>
+        </ng-template>
 
         <ng-template #answersCell let-movies>
             <div class="summary-cell clickable-cell" (click)="openAnswersModal(movies)">
