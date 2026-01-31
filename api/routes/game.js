@@ -125,12 +125,64 @@ router.post('/stats', async (req, res) => {
     }
 });
 
+// Submit Game Completion
+router.post('/complete', async (req, res) => {
+    const { attempts, solvedCells } = req.body; // solvedCells: [{row, col}, ...]
+    const today = new Date().toISOString().split('T')[0];
+
+    // Only count as completed if player made at least one attempt
+    if (!attempts || attempts <= 0) {
+        return res.json({ success: true, ignored: true });
+    }
+
+    try {
+        let stats = await DailyGameStats.findOne({ date: today });
+        if (!stats) {
+            stats = new DailyGameStats({ date: today, totalCompletedGames: 0, cellStats: [] });
+        }
+
+        // Initialize grid if empty (though stats usually exist by now)
+        if (!Array.isArray(stats.cellStats)) stats.cellStats = [];
+        for (let r = 0; r < 3; r++) {
+            if (!stats.cellStats[r]) stats.cellStats[r] = [];
+            for (let c = 0; c < 3; c++) {
+                if (!stats.cellStats[r][c]) {
+                    stats.cellStats[r][c] = { total: 0, completionCount: 0, answers: {} };
+                }
+            }
+        }
+
+        // Increment total completed games
+        stats.totalCompletedGames = (stats.totalCompletedGames || 0) + 1;
+
+        // Increment completionCount for solved cells
+        if (Array.isArray(solvedCells)) {
+            solvedCells.forEach(({ row, col }) => {
+                if (stats.cellStats[row] && stats.cellStats[row][col]) {
+                    stats.cellStats[row][col].completionCount = (stats.cellStats[row][col].completionCount || 0) + 1;
+                }
+            });
+        }
+
+        stats.markModified('cellStats');
+        await stats.save();
+
+        res.json({ success: true, totalCompletedGames: stats.totalCompletedGames });
+    } catch (e) {
+        console.error('Completion Submit Error', e);
+        res.status(500).json({ error: 'Failed to submit completion' });
+    }
+});
+
 // Get Daily Game Stats
 router.get('/stats', async (req, res) => {
     const today = new Date().toISOString().split('T')[0];
     try {
         const stats = await DailyGameStats.findOne({ date: today });
-        res.json(stats ? stats.cellStats : []);
+        res.json({
+            cellStats: stats ? stats.cellStats : [],
+            totalCompletedGames: stats ? (stats.totalCompletedGames || 0) : 0
+        });
     } catch (e) {
         res.status(500).json({ error: 'Failed to fetch stats' });
     }

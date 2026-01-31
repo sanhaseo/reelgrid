@@ -15,6 +15,7 @@ import { AnswersModalComponent } from './answers-modal/answers-modal.component';
 export class GameSummaryComponent {
   @Input() summaryAnswers: Movie[][][] | null = null;
   @Input() summaryStats: any[][] | null = null;
+  @Input() totalCompletedGames = 0;
   @Input() userGrid: (Movie | null)[][] = [];
   @Input() rowCriteria: Criteria[] = [];
   @Input() colCriteria: Criteria[] = [];
@@ -23,13 +24,13 @@ export class GameSummaryComponent {
   showModal = false;
 
   activeSummaryTab: 'results' | 'stats' = 'results';
-  activeStatView: 'popular' | 'rare' | 'answers' = 'popular';
+  activeStatView: 'popular' | 'rare' | 'answers' | 'frequency' = 'popular';
 
   setActiveTab(tab: 'results' | 'stats'): void {
     this.activeSummaryTab = tab;
   }
 
-  setStatView(view: 'popular' | 'rare' | 'answers'): void {
+  setStatView(view: 'popular' | 'rare' | 'answers' | 'frequency'): void {
     this.activeStatView = view;
   }
 
@@ -39,6 +40,34 @@ export class GameSummaryComponent {
 
   getRareGrid(): (SummaryStatCell | null)[][] {
     return this.computeGrid('rare');
+  }
+
+  getFrequencyGrid(): any[][] {
+    if (!this.summaryStats || this.totalCompletedGames === 0) {
+      return this.createEmptyGrid();
+    }
+
+    const grid: any[][] = [];
+    for (let r = 0; r < 3; r++) {
+      const row: any[] = [];
+      for (let c = 0; c < 3; c++) {
+        const cellStat = this.summaryStats[r][c];
+        // total correctly answered for this cell
+        const totalCorrect = cellStat?.completionCount || 0;
+        const percent = Math.round((totalCorrect / this.totalCompletedGames) * 100);
+        row.push({ percent });
+      }
+      grid.push(row);
+    }
+    return grid;
+  }
+
+  private createEmptyGrid() {
+    return [
+      [null, null, null],
+      [null, null, null],
+      [null, null, null]
+    ];
   }
 
   private computeGrid(type: 'popular' | 'rare'): (SummaryStatCell | null)[][] {

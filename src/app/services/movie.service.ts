@@ -74,8 +74,12 @@ export class MovieService {
     return this.http.post('/api/game/stats', { row, col, movie });
   }
 
-  getDailyGameStats(): Observable<any[][]> {
-    return this.http.get<any[][]>('/api/game/stats');
+  completeGame(attempts: number, solvedCells: { row: number, col: number }[]): Observable<any> {
+    return this.http.post('/api/game/complete', { attempts, solvedCells });
+  }
+
+  getDailyGameStats(): Observable<{ cellStats: any[][], totalCompletedGames: number }> {
+    return this.http.get<{ cellStats: any[][], totalCompletedGames: number }>('/api/game/stats');
   }
 
   searchMovies(query: string): Observable<Movie[]> {

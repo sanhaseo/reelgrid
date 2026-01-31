@@ -187,6 +187,26 @@ export class GameGridComponent implements OnInit {
   finishGame(result: 'win' | 'loss' | 'give-up'): void {
     this.gameOver = true;
 
+    // Submit completion
+    const attemptsUsed = 10 - this.guessesLeft;
+    const solvedCells: { row: number, col: number }[] = [];
+
+    this.grid.forEach((row, r) => {
+      row.forEach((cell, c) => {
+        if (cell) {
+          solvedCells.push({ row: r, col: c });
+        }
+      });
+    });
+
+    this.movieService.completeGame(attemptsUsed, solvedCells).subscribe(() => {
+      // Fetch stats after completion to ensure latest numbers
+      this.movieService.getDailyGameStats().subscribe(res => {
+        this.summaryStats = res.cellStats;
+        this.totalCompletedGames = res.totalCompletedGames;
+      });
+    });
+
     // Fetch answers for summary
     this.movieService.getDailyAnswers().subscribe(data => {
       this.summaryAnswers = data.possibleAnswers;
@@ -196,12 +216,9 @@ export class GameGridComponent implements OnInit {
         this.summarySection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
     });
-
-    // Fetch stats
-    this.movieService.getDailyGameStats().subscribe(stats => {
-      this.summaryStats = stats;
-    });
   }
+
+  totalCompletedGames = 0;
 
   calculateRarity(percent: number): RarityInfo {
     return calculateRarity(percent);
