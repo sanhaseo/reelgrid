@@ -54,7 +54,7 @@ export class GameSummaryComponent {
         const cellStat = this.summaryStats[r][c];
         // total correctly answered for this cell
         const totalCorrect = cellStat?.completionCount || 0;
-        const percent = Math.round((totalCorrect / this.totalCompletedGames) * 100);
+        const percent = (totalCorrect / this.totalCompletedGames) * 100;
         row.push({ percent });
       }
       grid.push(row);
