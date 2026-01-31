@@ -4,12 +4,6 @@
     align-items: center;
 }
 
-h3 {
-    color: #fff;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
 /* Grid layout logic moved to BoardComponent */
 
 .summary-cell-wrapper {
@@ -38,6 +32,6 @@ h3 {
     color: #555;
     font-size: 1.5rem;
     background-color: rgba(255, 255, 255, 0.03);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
+    /* border: 1px dashed rgba(255, 255, 255, 0.1); */
     border-radius: 6px;
 }

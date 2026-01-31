@@ -24,22 +24,21 @@
             <label>View Board:</label>
             <select #statSelect (change)="setStatView($any(statSelect.value))">
                 <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers</option>
-                <option value="rare" [selected]="activeStatView === 'rare'">Rare Finds</option>
-                <option value="answers" [selected]="activeStatView === 'answers'">All Possible Answers</option>
+                <option value="rare" [selected]="activeStatView === 'rare'">Least Popular Answers</option>
+                <option value="answers" [selected]="activeStatView === 'answers'">Possible Answers</option>
             </select>
         </div>
 
         <app-summary-board *ngIf="activeStatView === 'popular'" [gridData]="getPopularGrid()"
-            title="Most Popular Choices" [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
-        </app-summary-board>
-
-        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" title="Rarest Valid Answers"
             [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
         </app-summary-board>
 
+        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" [rowCriteria]="rowCriteria"
+            [colCriteria]="colCriteria">
+        </app-summary-board>
+
         <app-summary-board *ngIf="activeStatView === 'answers'" [gridData]="summaryAnswers || []"
-            title="All Possible Answers" [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"
-            [customCellTemplate]="answersCell">
+            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="answersCell">
         </app-summary-board>
 
         <ng-template #answersCell let-movies>

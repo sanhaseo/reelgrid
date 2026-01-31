@@ -18,7 +18,6 @@ export interface SummaryStatCell {
 })
 export class SummaryBoardComponent {
     @Input() gridData: any[][] = [];
-    @Input() title: string = '';
     @Input() rowCriteria: Criteria[] = [];
     @Input() colCriteria: Criteria[] = [];
     @Input() customCellTemplate: TemplateRef<any> | null = null;
