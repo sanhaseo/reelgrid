@@ -1,13 +1,8 @@
-/* Summary Section */
 .summary-section {
     margin-top: 4rem;
     width: 100%;
-}
-
-.summary-section h2 {
-    text-align: center;
-    margin-bottom: 1.5rem;
-    color: #fff;
+    min-height: 800px;
+    /* Contains the stats board without layout shift */
 }
 
 .stat-controls {
