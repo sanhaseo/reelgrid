@@ -22,10 +22,10 @@ export class GameSummaryComponent {
   selectedAnswers: Movie[] | null = null;
   showModal = false;
 
-  activeSummaryTab: 'stats' | 'answers' = 'stats';
+  activeSummaryTab: 'results' | 'stats' | 'answers' = 'results';
   activeStatView: 'popular' | 'rare' = 'popular';
 
-  setActiveTab(tab: 'stats' | 'answers'): void {
+  setActiveTab(tab: 'results' | 'stats' | 'answers'): void {
     this.activeSummaryTab = tab;
   }
 

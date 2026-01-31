@@ -3,12 +3,22 @@
 
     <!-- Tabs -->
     <div class="summary-tabs">
+        <button class="tab-btn" [class.active]="activeSummaryTab === 'results'" (click)="setActiveTab('results')">
+            Results
+        </button>
         <button class="tab-btn" [class.active]="activeSummaryTab === 'stats'" (click)="setActiveTab('stats')">
             Statistics
         </button>
         <button class="tab-btn" [class.active]="activeSummaryTab === 'answers'" (click)="setActiveTab('answers')">
             Answers
         </button>
+    </div>
+
+    <!-- RESULTS VIEW (Placeholder) -->
+    <div class="summary-content" *ngIf="activeSummaryTab === 'results'">
+        <div style="text-align: center; padding: 2rem; color: #888;">
+            <p>Results will be displayed here.</p>
+        </div>
     </div>
 
     <!-- STATS VIEW -->
@@ -42,7 +52,6 @@
         </div>
     </div>
 
-    <!-- Answers Modal -->
     <!-- Answers Modal -->
     <app-answers-modal *ngIf="showModal" [answers]="selectedAnswers" (close)="closeAnswersModal()"></app-answers-modal>
 </div>
