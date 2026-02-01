@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { GameGridComponent } from './components/game-grid/game-grid.component';
+import { GameComponent } from './components/game/game.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, GameGridComponent],
+  imports: [CommonModule, RouterOutlet, GameComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css' // Angular 17 default
 })

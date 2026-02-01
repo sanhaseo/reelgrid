@@ -39,12 +39,6 @@
     cursor: not-allowed;
 }
 
-/* Grid layout logic moved to BoardComponent */
-
-.clickable-header {
-    /* Kept for specificity if needed, but mostly handled in board now */
-}
-
 /* Modal */
 .modal-overlay {
     position: fixed;

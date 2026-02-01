@@ -287,12 +287,12 @@ export const CRITERIA_POOLS = {
             "image": "https://image.tmdb.org/t/p/w185/nXA9vMvskmIDB5NqHCkTQPmemep.jpg"
         },
         {
-            "id": "71580",
+            "id": "90633",
             "label": "Gal Gadot",
             "value": "Gal Gadot",
-            "tmdbId": 71580,
+            "tmdbId": 90633,
             "type": "actor",
-            "image": "https://image.tmdb.org/t/p/w185/wz3MRiMmoz6b5X3oSzMRC9nLxY1.jpg"
+            "image": "https://image.tmdb.org/t/p/w185/g55dgcZQkLMolkKqgP7OD2yfGXu.jpg"
         },
         {
             "id": "224513",

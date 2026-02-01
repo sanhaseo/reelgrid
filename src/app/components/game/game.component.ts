@@ -9,13 +9,13 @@ import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
 
 @Component({
-  selector: 'app-game-grid',
+  selector: 'app-game',
   standalone: true,
   imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent],
-  templateUrl: './game-grid.component.html',
-  styleUrl: './game-grid.component.css'
+  templateUrl: './game.component.html',
+  styleUrl: './game.component.css'
 })
-export class GameGridComponent implements OnInit {
+export class GameComponent implements OnInit {
   rowCriteria: Criteria[] = [];
   colCriteria: Criteria[] = [];
   grid: (Movie | null)[][] = [
