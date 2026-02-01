@@ -1,5 +1,6 @@
 :root {
-  --primary-color: #e50914; /* Netflix Red-ish */
+  --primary-color: #e50914;
+  /* Netflix Red-ish */
   --secondary-color: #221f1f;
   --background-color: #141414;
   --text-color: #ffffff;
@@ -22,7 +23,12 @@ body {
   box-sizing: border-box;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0;
   font-weight: 600;
 }
@@ -40,3 +46,13 @@ button {
   font-family: inherit;
 }
 
+
+.logo {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.red {
+  color: var(--primary-color);
+}

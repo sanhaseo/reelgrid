@@ -2,13 +2,3 @@
     text-align: center;
     padding: 2rem;
 }
-
-.logo {
-    font-size: 2rem;
-    margin-bottom: 2rem;
-    font-family: 'Inter', sans-serif;
-}
-
-.red {
-    color: var(--primary-color);
-}

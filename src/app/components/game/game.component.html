@@ -3,6 +3,9 @@
 </div>
 
 <div *ngIf="!isLoading" class="game-container">
+  <header>
+    <h1 class="logo">Cine<span class="red">Grid</span></h1>
+  </header>
   <div class="game-content-row">
     <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
       [cellTemplate]="gameCellTemplate" (criteriaClick)="openCriteriaInfo($event)"
@@ -23,13 +26,19 @@
       </app-game-status>
     </div>
   </div>
-</div>
 
-<div #summarySection>
-  <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
-    [totalCompletedGames]="totalCompletedGames" [userGrid]="grid" [rowCriteria]="rowCriteria"
-    [colCriteria]="colCriteria">
-  </app-game-summary>
+  <div #summarySection>
+    <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
+      [totalCompletedGames]="totalCompletedGames" [userGrid]="grid" [rowCriteria]="rowCriteria"
+      [colCriteria]="colCriteria">
+    </app-game-summary>
+  </div>
+  <footer>
+    <div class="attribution">
+      Movie data provided by <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer"><img
+          src="assets/tmdb_logo.svg" alt="TMDB Logo" class="tmdb-logo"></a>
+    </div>
+  </footer>
 </div>
 
 <app-search *ngIf="isSearchOpen" [usedMovieIds]="getUsedMovieIds()" (movieSelected)="onMovieSelected($event)"
