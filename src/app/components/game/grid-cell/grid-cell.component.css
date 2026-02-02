@@ -15,6 +15,27 @@
 
 .grid-cell.correct {
     border: 2px solid #46d369;
+    /* Default fallback */
+}
+
+.grid-cell.correct.legendary {
+    border-color: #FFD700;
+}
+
+.grid-cell.correct.epic {
+    border-color: #b026ff;
+}
+
+.grid-cell.correct.rare {
+    border-color: #00bfff;
+}
+
+.grid-cell.correct.uncommon {
+    border-color: #32cd32;
+}
+
+.grid-cell.correct.common {
+    border-color: #777;
 }
 
 .grid-cell.selected {
