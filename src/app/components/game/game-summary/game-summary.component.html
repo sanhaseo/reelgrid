@@ -10,10 +10,17 @@
         </button>
     </div>
 
-    <!-- RESULTS VIEW (Placeholder) -->
+    <!-- RESULTS VIEW -->
     <div class="summary-content" *ngIf="activeSummaryTab === 'results'">
-        <div style="text-align: center; padding: 2rem; color: #888;">
-            <p>Results will be displayed here.</p>
+        <div class="simple-results-container">
+            <div class="simple-grid">
+                <div *ngFor="let row of userGrid" class="simple-row">
+                    <div *ngFor="let cell of row" class="simple-cell">
+                        <span class="result-emoji" *ngIf="cell">🟩</span>
+                        <span class="result-emoji" *ngIf="!cell">❌</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

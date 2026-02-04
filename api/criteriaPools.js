@@ -141,13 +141,6 @@ export const CRITERIA_POOLS = {
             "type": "director"
         },
         {
-            "id": "9339",
-            "label": "Lilly Wachowski",
-            "value": "Lilly Wachowski",
-            "tmdbId": 9339,
-            "type": "director"
-        },
-        {
             "id": "59",
             "label": "Luc Besson",
             "value": "Luc Besson",

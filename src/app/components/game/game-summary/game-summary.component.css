@@ -146,4 +146,44 @@
     font-weight: normal;
 }
 
-/* Modal Styles Removed (Moved to AnswersModalComponent) */
+
+/* Simple Results Grid */
+.simple-results-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.simple-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    /* Spacing between rows */
+    background-color: #1a1a1a;
+    /* Dark background card */
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.simple-row {
+    display: flex;
+    gap: 8px;
+    /* Spacing between cols */
+}
+
+.simple-cell {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.result-emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

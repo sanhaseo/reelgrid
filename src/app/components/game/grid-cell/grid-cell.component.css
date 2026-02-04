@@ -14,7 +14,7 @@
 }
 
 .grid-cell.correct {
-    border: 2px solid #46d369;
+    border: 2px solid black;
     /* Default fallback */
 }
 
