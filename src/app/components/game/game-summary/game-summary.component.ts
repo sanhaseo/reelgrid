@@ -209,4 +209,36 @@ export class GameSummaryComponent {
     this.showModal = false;
     this.selectedAnswers = null;
   }
+  shareResults(): void {
+    if (!this.userGrid) return;
+
+    let emojiGrid = '';
+    let correctCount = 0;
+    const totalCells = 9;
+
+    for (let i = 0; i < 3; i++) {
+      let rowStr = '';
+      for (let j = 0; j < 3; j++) {
+        const cell = this.userGrid[i][j];
+        if (cell) {
+          rowStr += '🟩';
+          correctCount++;
+        } else {
+          rowStr += '❌';
+        }
+      }
+      emojiGrid += rowStr + '\n';
+    }
+
+    const today = new Date().toLocaleDateString();
+    const shareText = `CineGrid ${today}\nBoard #1\n\n${emojiGrid}\nScore: ${correctCount}/${totalCells}\n\nhttps://example.com`;
+
+    navigator.clipboard.writeText(shareText).then(() => {
+      // Show temporary toast or feedback
+      this.showToast = true;
+      setTimeout(() => this.showToast = false, 2000);
+    });
+  }
+
+  showToast = false;
 }
