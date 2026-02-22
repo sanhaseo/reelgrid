@@ -33,6 +33,7 @@ export class GameComponent implements OnInit {
   isLoading = true;
   isRegenerating = false;
   incorrectCell: { row: number, col: number } | null = null;
+  totalCompletedGames = 0;
 
   @ViewChild('summarySection') summarySection!: ElementRef;
 
@@ -42,6 +43,9 @@ export class GameComponent implements OnInit {
     [null, null, null],
     [null, null, null]
   ];
+
+  selectedCriteria: Criteria | null = null;
+  showCriteriaModal = false;
 
   constructor(private movieService: MovieService) { }
 
@@ -61,11 +65,52 @@ export class GameComponent implements OnInit {
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
         this.isLoading = false;
+        this.loadGameState();
       },
       error: () => {
         this.isLoading = false;
       }
     });
+  }
+
+  getCurrentGameDate(): string {
+    return new Date().toISOString().split('T')[0];
+  }
+
+  saveGameState(): void {
+    const state = {
+      date: this.getCurrentGameDate(),
+      grid: this.grid,
+      gridRarity: this.gridRarity,
+      guessesLeft: this.guessesLeft,
+      gameOver: this.gameOver
+    };
+    localStorage.setItem('cinegrid_state_v1', JSON.stringify(state));
+  }
+
+  loadGameState(): void {
+    const saved = localStorage.getItem('cinegrid_state_v1');
+    if (saved) {
+      try {
+        const state = JSON.parse(saved);
+        if (state.date === this.getCurrentGameDate()) {
+          this.grid = state.grid;
+          this.gridRarity = state.gridRarity;
+          this.guessesLeft = state.guessesLeft;
+          this.gameOver = state.gameOver;
+
+          if (this.gameOver) {
+            this.fetchSummaryData();
+          }
+        } else {
+          // Different day, clear old state
+          localStorage.removeItem('cinegrid_state_v1');
+        }
+      } catch (e) {
+        console.error('Failed to parse saved state', e);
+        localStorage.removeItem('cinegrid_state_v1');
+      }
+    }
   }
 
   onRegenerate(): void {
@@ -93,6 +138,9 @@ export class GameComponent implements OnInit {
           [null, null, null],
           [null, null, null]
         ];
+        // Clear old local storage so they start fresh on the new board
+        localStorage.removeItem('cinegrid_state_v1');
+        this.saveGameState();
       },
       error: (err) => {
         this.isRegenerating = false;
@@ -138,6 +186,7 @@ export class GameComponent implements OnInit {
 
         if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
+          this.saveGameState(); // Save early so grid updates
 
           // Submit stats asynchronously (only send necessary data)
           const statsPayload = {
@@ -151,21 +200,22 @@ export class GameComponent implements OnInit {
                 const count = res.cellStat.answers[fullMovie.id].count - 1 || 0;
                 const percent = total === 0 ? 0 : (count / total) * 100;
                 this.gridRarity[row][col] = this.calculateRarity(percent);
+                this.saveGameState(); // Save rarity badge
               }
             },
             error: (e) => console.error('Stats submit failed', e)
           });
 
           this.checkWinCondition();
-          // If won, checkWinCondition will call finishGame('win') which sets gameOver = true.
-          // We can check if game is over to prevent loss message below if they won on last life.
         } else {
           this.incorrectCell = { row, col };
           setTimeout(() => this.incorrectCell = null, 500);
-        }
 
-        if (this.guessesLeft <= 0 && !this.gameOver) {
-          this.finishGame('loss');
+          if (this.guessesLeft <= 0 && !this.gameOver) {
+            this.finishGame('loss');
+          } else {
+            this.saveGameState();
+          }
         }
       }
       this.closeSearch();
@@ -184,10 +234,25 @@ export class GameComponent implements OnInit {
     }
   }
 
+  private fetchSummaryData(): void {
+    this.movieService.getDailyGameStats().subscribe(res => {
+      this.summaryStats = res.cellStats;
+      this.totalCompletedGames = res.totalCompletedGames;
+    });
+
+    this.movieService.getDailyAnswers().subscribe(data => {
+      this.summaryAnswers = data.possibleAnswers;
+      setTimeout(() => {
+        this.summarySection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    });
+  }
+
   finishGame(result: 'win' | 'loss' | 'give-up'): void {
     this.gameOver = true;
+    this.saveGameState();
 
-    // Submit completion
+    // Submit completion to backend
     const attemptsUsed = 10 - this.guessesLeft;
     const solvedCells: { row: number, col: number }[] = [];
 
@@ -200,32 +265,13 @@ export class GameComponent implements OnInit {
     });
 
     this.movieService.completeGame(attemptsUsed, solvedCells).subscribe(() => {
-      // Fetch stats after completion to ensure latest numbers
-      this.movieService.getDailyGameStats().subscribe(res => {
-        this.summaryStats = res.cellStats;
-        this.totalCompletedGames = res.totalCompletedGames;
-      });
-    });
-
-    // Fetch answers for summary
-    this.movieService.getDailyAnswers().subscribe(data => {
-      this.summaryAnswers = data.possibleAnswers;
-
-      // Scroll to summary after it renders
-      setTimeout(() => {
-        this.summarySection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      this.fetchSummaryData();
     });
   }
-
-  totalCompletedGames = 0;
 
   calculateRarity(percent: number): RarityInfo {
     return calculateRarity(percent);
   }
-
-  selectedCriteria: Criteria | null = null;
-  showCriteriaModal = false;
 
   openCriteriaInfo(criteria: Criteria): void {
     this.selectedCriteria = criteria;
