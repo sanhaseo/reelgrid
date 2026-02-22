@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria } from '../../../services/movie.service';
 import { SummaryBoardComponent, SummaryStatCell } from './summary-board/summary-board.component';
@@ -12,7 +12,7 @@ import { AnswersModalComponent } from './answers-modal/answers-modal.component';
   templateUrl: './game-summary.component.html',
   styleUrl: './game-summary.component.css'
 })
-export class GameSummaryComponent {
+export class GameSummaryComponent implements OnInit, OnDestroy {
   @Input() summaryAnswers: Movie[][][] | null = null;
   @Input() summaryStats: any[][] | null = null;
   @Input() totalCompletedGames = 0;
@@ -25,6 +25,39 @@ export class GameSummaryComponent {
 
   activeSummaryTab: 'results' | 'stats' = 'results';
   activeStatView: 'popular' | 'rare' | 'answers' | 'frequency' = 'popular';
+
+  timeUntilNextGame: string = '00:00:00';
+  private timerInterval: any;
+
+  ngOnInit(): void {
+    this.updateTimer();
+    this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
+  }
+
+  private updateTimer(): void {
+    const now = new Date();
+    // Midnight UTC of next day
+    const nextGame = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+    const diff = nextGame.getTime() - now.getTime();
+
+    if (diff <= 0) {
+      this.timeUntilNextGame = '00:00:00';
+      return;
+    }
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    this.timeUntilNextGame = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+  }
 
   setActiveTab(tab: 'results' | 'stats'): void {
     this.activeSummaryTab = tab;
@@ -209,6 +242,7 @@ export class GameSummaryComponent {
     this.showModal = false;
     this.selectedAnswers = null;
   }
+
   shareResults(): void {
     if (!this.userGrid) return;
 

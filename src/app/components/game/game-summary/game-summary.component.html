@@ -25,6 +25,9 @@
             <button class="share-btn" (click)="shareResults()">
                 Share Result
             </button>
+            <div class="next-game-timer">
+                Next grid in {{ timeUntilNextGame }}
+            </div>
 
             <div class="toast" *ngIf="showToast">
                 Copied to clipboard!
