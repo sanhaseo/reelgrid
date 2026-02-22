@@ -12,8 +12,10 @@ router.get('/setup', async (req, res) => {
         // 1. Check if daily game exists
         let dailyGame = await DailyGame.findOne({ date: today });
 
+        // Request chunk for /setup
         if (dailyGame) {
             return res.json({
+                date: dailyGame.date,
                 rowCriteria: dailyGame.rowCriteria,
                 colCriteria: dailyGame.colCriteria,
                 isNew: false
@@ -37,6 +39,7 @@ router.get('/setup', async (req, res) => {
 
         // Don't send possibleAnswers to frontend!
         res.json({
+            date: today,
             rowCriteria: board.rowCriteria,
             colCriteria: board.colCriteria,
             isNew: true
@@ -212,6 +215,7 @@ router.get('/regenerate', async (req, res) => {
         await dailyGame.save();
 
         res.json({
+            date: today,
             rowCriteria: board.rowCriteria,
             colCriteria: board.colCriteria
         });

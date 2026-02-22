@@ -22,7 +22,7 @@
     <!-- Side Panel -->
     <div class="side-panel">
       <app-game-status [guessesLeft]="guessesLeft" [gameOver]="gameOver" [isRegenerating]="isRegenerating"
-        (giveUp)="onGiveUp()" (regenerate)="onRegenerate()">
+        [boardDate]="boardDate" (giveUp)="onGiveUp()" (regenerate)="onRegenerate()">
       </app-game-status>
     </div>
   </div>

@@ -54,14 +54,14 @@ export interface GameState {
 export class MovieService {
   constructor(private http: HttpClient) { }
 
-  getGameSetup(): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
-    return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/setup');
+  getGameSetup(): Observable<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }> {
+    return this.http.get<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/setup');
   }
 
 
 
-  regenerateBoard(secret: string): Observable<{ rowCriteria: Criteria[], colCriteria: Criteria[] }> {
-    return this.http.get<{ rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {
+  regenerateBoard(secret: string): Observable<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }> {
+    return this.http.get<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {
       headers: { 'Authorization': `Bearer ${secret}` }
     });
   }

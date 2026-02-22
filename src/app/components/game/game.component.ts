@@ -34,6 +34,7 @@ export class GameComponent implements OnInit {
   isRegenerating = false;
   incorrectCell: { row: number, col: number } | null = null;
   totalCompletedGames = 0;
+  boardDate = '';
 
   @ViewChild('summarySection') summarySection!: ElementRef;
 
@@ -59,11 +60,23 @@ export class GameComponent implements OnInit {
     return ids;
   }
 
+  formatDate(dateString: string): string {
+    if (!dateString) return '';
+    // Append T00:00:00 to parse correctly in local time zone without rolling back a day
+    const d = new Date(`${dateString}T00:00:00`);
+    return d.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    });
+  }
+
   ngOnInit(): void {
     this.movieService.getGameSetup().subscribe({
       next: (setup) => {
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
+        this.boardDate = this.formatDate(setup.date || this.getCurrentGameDate());
         this.isLoading = false;
         this.loadGameState();
       },
@@ -123,6 +136,7 @@ export class GameComponent implements OnInit {
         this.isRegenerating = false;
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
+        this.boardDate = this.formatDate(setup.date || this.getCurrentGameDate());
         // Reset grid state
         this.grid = [
           [null, null, null],

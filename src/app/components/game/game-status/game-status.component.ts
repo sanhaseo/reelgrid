@@ -12,7 +12,7 @@ export class GameStatusComponent {
   @Input() guessesLeft = 10;
   @Input() isRegenerating = false;
   @Input() gameOver = false;
-  @Input() boardNumber = ''; // Placeholder for now
+  @Input() boardDate = '';
 
   @Output() giveUp = new EventEmitter<void>();
   @Output() regenerate = new EventEmitter<void>();
