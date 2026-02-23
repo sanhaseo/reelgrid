@@ -1,0 +1,117 @@
+/* Modal Shared Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background: #181818;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #333;
+    padding-bottom: 0.5rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.close-btn:hover {
+    color: #fff;
+}
+
+.modal-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #ddd;
+}
+
+/* Archive UI */
+.archive-modal {
+    max-width: 500px;
+    width: 95%;
+}
+
+.archive-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Scrollbar for Archive Grid */
+.archive-grid::-webkit-scrollbar {
+    width: 8px;
+}
+
+.archive-grid::-webkit-scrollbar-track {
+    background: #222;
+    border-radius: 4px;
+}
+
+.archive-grid::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.archive-item {
+    background: #252525;
+    border: 1px solid #444;
+    color: #e0e0e0;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.archive-item:hover {
+    background: #333;
+    border-color: #666;
+}
+
+.archive-item.active-date {
+    background: #e50914;
+    color: white;
+    border-color: #e50914;
+}
+
+.archive-list .empty-archive {
+    text-align: center;
+    color: #888;
+    padding: 2rem 0;
+}

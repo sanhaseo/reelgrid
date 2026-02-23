@@ -3,8 +3,11 @@
 </div>
 
 <div *ngIf="!isLoading" class="game-container">
-  <header>
+  <header class="app-header">
     <h1 class="logo">Cine<span class="red">Grid</span></h1>
+    <button class="archive-btn" (click)="openArchiveModal()" title="Play Archive">
+      📅 Archive
+    </button>
   </header>
   <div class="game-content-row">
     <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
@@ -58,3 +61,7 @@
     </div>
   </div>
 </div>
+
+<app-archive-modal [show]="showArchiveModal" [archiveDates]="archiveDates" [activeBoardDate]="activeBoardDate"
+  (close)="closeArchiveModal()" (dateSelected)="loadBoard($event)">
+</app-archive-modal>

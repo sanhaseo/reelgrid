@@ -7,11 +7,12 @@ import { BoardComponent } from './board/board.component';
 import { calculateRarity, RarityInfo } from '../../utils/rarity';
 import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
+import { ArchiveModalComponent } from './archive-modal/archive-modal.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent],
+  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent, ArchiveModalComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
@@ -35,6 +36,10 @@ export class GameComponent implements OnInit {
   incorrectCell: { row: number, col: number } | null = null;
   totalCompletedGames = 0;
   boardDate = '';
+  activeBoardDate = ''; // The 'YYYY-MM-DD' of the currently loaded board
+
+  showArchiveModal = false;
+  archiveDates: string[] = [];
 
   @ViewChild('summarySection') summarySection!: ElementRef;
 
@@ -72,16 +77,45 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.movieService.getGameSetup().subscribe({
+    this.loadBoard(); // Loads today's board by default
+  }
+
+  loadBoard(date?: string): void {
+    this.isLoading = true;
+    this.summaryAnswers = null;
+    this.summaryStats = null;
+    this.movieService.getGameSetup(date).subscribe({
       next: (setup) => {
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
-        this.boardDate = this.formatDate(setup.date || this.getCurrentGameDate());
+        this.activeBoardDate = setup.date || this.getCurrentGameDate();
+        this.boardDate = this.formatDate(this.activeBoardDate);
         this.isLoading = false;
+
+        // Reset state memory before loading
+        this.grid = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ];
+        this.gridRarity = [
+          [null, null, null],
+          [null, null, null],
+          [null, null, null]
+        ];
+        this.guessesLeft = 10;
+        this.gameOver = false;
+
         this.loadGameState();
+
+        if (this.showArchiveModal) {
+          this.showArchiveModal = false;
+        }
       },
-      error: () => {
+      error: (err) => {
         this.isLoading = false;
+        alert('Failed to load board.');
+        console.error(err);
       }
     });
   }
@@ -91,39 +125,54 @@ export class GameComponent implements OnInit {
   }
 
   saveGameState(): void {
+    if (!this.activeBoardDate) return;
+
     const state = {
-      date: this.getCurrentGameDate(),
+      date: this.activeBoardDate,
       grid: this.grid,
       gridRarity: this.gridRarity,
       guessesLeft: this.guessesLeft,
       gameOver: this.gameOver
     };
-    localStorage.setItem('cinegrid_state_v1', JSON.stringify(state));
+    localStorage.setItem(`cinegrid_state_v1_${this.activeBoardDate}`, JSON.stringify(state));
   }
 
   loadGameState(): void {
-    const saved = localStorage.getItem('cinegrid_state_v1');
+    if (!this.activeBoardDate) return;
+
+    // Clean up generic state variable from previous versions
+    localStorage.removeItem('cinegrid_state_v1');
+
+    const saved = localStorage.getItem(`cinegrid_state_v1_${this.activeBoardDate}`);
     if (saved) {
       try {
         const state = JSON.parse(saved);
-        if (state.date === this.getCurrentGameDate()) {
+        if (state.date === this.activeBoardDate) {
           this.grid = state.grid;
           this.gridRarity = state.gridRarity;
           this.guessesLeft = state.guessesLeft;
           this.gameOver = state.gameOver;
 
           if (this.gameOver) {
-            this.fetchSummaryData();
+            this.fetchSummaryData(); // Fetch answers for past boards too
           }
-        } else {
-          // Different day, clear old state
-          localStorage.removeItem('cinegrid_state_v1');
         }
       } catch (e) {
         console.error('Failed to parse saved state', e);
-        localStorage.removeItem('cinegrid_state_v1');
+        localStorage.removeItem(`cinegrid_state_v1_${this.activeBoardDate}`);
       }
     }
+  }
+
+  openArchiveModal(): void {
+    this.movieService.getArchiveDates().subscribe(res => {
+      this.archiveDates = res.availableDates;
+      this.showArchiveModal = true;
+    });
+  }
+
+  closeArchiveModal(): void {
+    this.showArchiveModal = false;
   }
 
   onRegenerate(): void {

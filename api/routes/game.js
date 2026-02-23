@@ -4,15 +4,26 @@ const DailyGame = require('../models/DailyGame');
 const DailyGameStats = require('../models/DailyGameStats');
 const { generateBoard } = require('../services/game.service');
 
-// Get Daily Game Setup
+// Get Available Archive Dates
+router.get('/archive', async (req, res) => {
+    try {
+        const games = await DailyGame.find({}, 'date').sort({ date: -1 });
+        const availableDates = games.map(g => g.date);
+        res.json({ availableDates });
+    } catch (e) {
+        res.status(500).json({ error: 'Failed to fetch archive dates' });
+    }
+});
+
+// Get Daily Game Setup (or specific archived date)
 router.get('/setup', async (req, res) => {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const requestedDate = req.query.date || today;
 
     try {
-        // 1. Check if daily game exists
-        let dailyGame = await DailyGame.findOne({ date: today });
+        // 1. Check if the specific daily game exists
+        let dailyGame = await DailyGame.findOne({ date: requestedDate });
 
-        // Request chunk for /setup
         if (dailyGame) {
             return res.json({
                 date: dailyGame.date,
@@ -22,7 +33,12 @@ router.get('/setup', async (req, res) => {
             });
         }
 
-        // 2. If not, generate new one
+        // If a past date was requested but not found, return an error
+        if (requestedDate !== today) {
+            return res.status(404).json({ error: 'Archived game not found' });
+        }
+
+        // 2. If it's today and not found, generate new one
         const board = await generateBoard();
         if (!board) {
             return res.status(500).json({ error: 'Failed to generate valid board' });

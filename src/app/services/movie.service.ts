@@ -54,8 +54,13 @@ export interface GameState {
 export class MovieService {
   constructor(private http: HttpClient) { }
 
-  getGameSetup(): Observable<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }> {
-    return this.http.get<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/setup');
+  getGameSetup(date?: string): Observable<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }> {
+    const url = date ? `/api/game/setup?date=${date}` : '/api/game/setup';
+    return this.http.get<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }>(url);
+  }
+
+  getArchiveDates(): Observable<{ availableDates: string[] }> {
+    return this.http.get<{ availableDates: string[] }>('/api/game/archive');
   }
 
 

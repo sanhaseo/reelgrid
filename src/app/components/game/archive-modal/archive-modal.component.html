@@ -1,0 +1,17 @@
+<div class="modal-overlay" *ngIf="show" (click)="onClose()">
+    <div class="modal-content archive-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>Archived Boards</h2>
+            <button class="close-btn" (click)="onClose()">&times;</button>
+        </div>
+        <div class="modal-body archive-list">
+            <div class="archive-grid">
+                <button *ngFor="let date of archiveDates" class="archive-item"
+                    [class.active-date]="date === activeBoardDate" (click)="onDateSelect(date)">
+                    {{ formatDate(date) }}
+                </button>
+            </div>
+            <p *ngIf="archiveDates.length === 0" class="empty-archive">No archived boards available yet.</p>
+        </div>
+    </div>
+</div>
