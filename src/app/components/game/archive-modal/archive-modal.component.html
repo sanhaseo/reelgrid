@@ -19,7 +19,8 @@
             <div class="calendar-grid">
                 <div *ngFor="let day of calendarDays" class="calendar-day" [class.padding]="day.isPadding"
                     [class.unavailable]="!day.isAvailable && !day.isPadding" [class.available]="day.isAvailable"
-                    [class.active-date]="day.dateStr === activeBoardDate" (click)="onDateSelect(day)">
+                    [class.active-date]="day.dateStr === activeBoardDate" (click)="onDateSelect(day)"
+                    [title]="day.status === 'in-progress' ? 'In-Progress (' + day.score + '/9)' : (day.status === 'finished' ? 'Finished (' + day.score + '/9)' : '')">
 
                     <span class="day-num" *ngIf="!day.isPadding">{{ day.dayNum }}</span>
 

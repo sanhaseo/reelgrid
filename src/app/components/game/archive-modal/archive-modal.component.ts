@@ -126,6 +126,11 @@ export class ArchiveModalComponent implements OnChanges {
         score
       });
     }
+
+    // Add trailing padding to make it a fixed 6 rows (42 days)
+    while (this.calendarDays.length < 42) {
+      this.calendarDays.push({ dateStr: '', dayNum: 0, isAvailable: false, isPadding: true });
+    }
   }
 
   onClose(): void {
