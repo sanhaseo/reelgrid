@@ -5,8 +5,8 @@
 <div *ngIf="!isLoading" class="game-container">
   <header class="app-header">
     <h1 class="logo">Cine<span class="red">Grid</span></h1>
-    <button class="archive-btn" (click)="openArchiveModal()" title="Play Archive">
-      📅 Archive
+    <button class="archive-btn icon-btn" (click)="openArchiveModal()" title="Play Archive" aria-label="Play Archive">
+      <span class="material-icons">calendar_month</span>
     </button>
   </header>
   <div class="game-content-row">

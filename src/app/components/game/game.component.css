@@ -196,19 +196,19 @@ footer {
 }
 
 .archive-btn {
-    background: #333;
-    color: #fff;
-    border: 1px solid #555;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    background: transparent;
+    color: #ccc;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    transition: background 0.2s;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
 .archive-btn:hover {
-    background: #444;
+    background: #333;
+    color: #fff;
 }
