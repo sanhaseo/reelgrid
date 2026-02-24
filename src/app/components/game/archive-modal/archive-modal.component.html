@@ -4,14 +4,32 @@
             <h2>Archived Boards</h2>
             <button class="close-btn" (click)="onClose()">&times;</button>
         </div>
-        <div class="modal-body archive-list">
-            <div class="archive-grid">
-                <button *ngFor="let date of archiveDates" class="archive-item"
-                    [class.active-date]="date === activeBoardDate" (click)="onDateSelect(date)">
-                    {{ formatDate(date) }}
-                </button>
+        <div class="modal-body">
+
+            <div class="calendar-controls">
+                <button class="nav-btn" (click)="previousMonth()">&lt;</button>
+                <h3>{{ currentMonthStr }}</h3>
+                <button class="nav-btn" (click)="nextMonth()">&gt;</button>
             </div>
-            <p *ngIf="archiveDates.length === 0" class="empty-archive">No archived boards available yet.</p>
+
+            <div class="calendar-header">
+                <div class="weekday" *ngFor="let d of weekdays">{{ d }}</div>
+            </div>
+
+            <div class="calendar-grid">
+                <div *ngFor="let day of calendarDays" class="calendar-day" [class.padding]="day.isPadding"
+                    [class.unavailable]="!day.isAvailable && !day.isPadding" [class.available]="day.isAvailable"
+                    [class.active-date]="day.dateStr === activeBoardDate" (click)="onDateSelect(day)">
+
+                    <span class="day-num" *ngIf="!day.isPadding">{{ day.dayNum }}</span>
+
+                    <div class="day-progress" *ngIf="day.status">
+                        <span *ngIf="day.status === 'in-progress'" class="in-progress">⏳ {{ day.score }}/9</span>
+                        <span *ngIf="day.status === 'finished'" class="finished">✓ {{ day.score }}/9</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
