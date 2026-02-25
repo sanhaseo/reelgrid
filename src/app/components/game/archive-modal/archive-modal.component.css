@@ -226,3 +226,37 @@
 .day-progress .finished {
     color: #4caf50;
 }
+
+.status-dot {
+    display: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.in-progress .status-dot {
+    background-color: #ffc107;
+}
+
+.finished .status-dot {
+    background-color: #4caf50;
+}
+
+@media (max-width: 480px) {
+    .status-text {
+        display: none;
+    }
+
+    .status-dot {
+        display: block;
+    }
+
+    .day-num {
+        font-size: 1rem;
+    }
+
+    .day-progress {
+        margin-top: 2px;
+    }
+}

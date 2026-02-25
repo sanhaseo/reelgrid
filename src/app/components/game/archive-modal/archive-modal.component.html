@@ -25,8 +25,14 @@
                     <span class="day-num" *ngIf="!day.isPadding">{{ day.dayNum }}</span>
 
                     <div class="day-progress" *ngIf="day.status">
-                        <span *ngIf="day.status === 'in-progress'" class="in-progress">⏳ {{ day.score }}/9</span>
-                        <span *ngIf="day.status === 'finished'" class="finished">✓ {{ day.score }}/9</span>
+                        <span *ngIf="day.status === 'in-progress'" class="in-progress">
+                            <span class="status-dot"></span>
+                            <span class="status-text">⏳ {{ day.score }}/9</span>
+                        </span>
+                        <span *ngIf="day.status === 'finished'" class="finished">
+                            <span class="status-dot"></span>
+                            <span class="status-text">✓ {{ day.score }}/9</span>
+                        </span>
                     </div>
                 </div>
             </div>
