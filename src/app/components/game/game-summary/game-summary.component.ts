@@ -19,7 +19,7 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
   @Input() rowCriteria: Criteria[] = [];
   @Input() colCriteria: Criteria[] = [];
 
-  selectedAnswers: any[] | null = null;
+  selectedAnswers: Movie[] | null = null;
   showModal = false;
 
   activeSummaryTab: 'results' | 'stats' = 'results';
