@@ -1,7 +1,7 @@
 <div class="modal-overlay" (click)="onClose()">
     <div class="modal-content" (click)="stopPropagation($event)">
         <div class="modal-header">
-            <h2>Top Possible Answers ({{ answers?.length }})</h2>
+            <h2>Player Answers ({{ answers?.length }})</h2>
             <button class="close-btn" (click)="onClose()">&times;</button>
         </div>
         <div class="modal-body scrollable-unique">
@@ -11,7 +11,8 @@
                     <div *ngIf="!m.poster_path" class="answer-thumb placeholder"></div>
                     <div class="answer-info">
                         <div class="answer-title">{{ m.title }}</div>
-                        <div class="answer-year">{{ m.release_date | date:'yyyy' }}</div>
+                        <div class="answer-year">{{ m.release_date | date:'yyyy' }} <span *ngIf="m.count">• {{ m.count
+                                }} guesses</span></div>
                     </div>
                 </div>
             </div>

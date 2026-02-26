@@ -111,30 +111,21 @@ async function generateBoard() {
         const colCriteria = selected.slice(3, 6);
 
         let validBoard = true;
-        let possibleAnswers = [[], [], []]; // 3x3 grid
 
         for (let r = 0; r < 3; r++) {
-            possibleAnswers[r] = [];
             for (let c = 0; c < 3; c++) {
                 const matches = await checkIntersection(rowCriteria[r], colCriteria[c]);
                 if (!matches || matches.length <= 1) { // Ensure at least 2 potential answers for solvability
                     validBoard = false;
                     break;
                 }
-                // Store minimal movie data to save space, but use full poster path to match frontend (MovieService)
-                possibleAnswers[r][c] = matches.map(m => ({
-                    id: m.id,
-                    title: m.title,
-                    poster_path: m.poster_path ? `https://image.tmdb.org/t/p/w500${m.poster_path}` : null,
-                    release_date: m.release_date
-                }));
             }
             if (!validBoard) break;
         }
 
         if (validBoard) {
             console.log('Generated valid board in ' + attempts + ' attempts');
-            return { rowCriteria, colCriteria, possibleAnswers };
+            return { rowCriteria, colCriteria };
         }
     }
     return null;

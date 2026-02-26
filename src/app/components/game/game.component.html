@@ -30,11 +30,10 @@
     </div>
   </div>
 
-  <div #summarySection>
-    <app-game-summary *ngIf="summaryAnswers" [summaryAnswers]="summaryAnswers" [summaryStats]="summaryStats"
-      [totalCompletedGames]="totalCompletedGames" [userGrid]="grid" [rowCriteria]="rowCriteria"
-      [colCriteria]="colCriteria">
-    </app-game-summary>
+  <!-- Game Summary Details (Rendered below grid when game over) -->
+  <div class="game-summary-container" *ngIf="gameOver" #summarySection>
+    <app-game-summary [totalCompletedGames]="totalCompletedGames" [summaryStats]="summaryStats" [userGrid]="grid"
+      [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"></app-game-summary>
   </div>
   <footer>
     <div class="attribution">

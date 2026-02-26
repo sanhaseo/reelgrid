@@ -48,12 +48,10 @@ router.get('/setup', async (req, res) => {
         dailyGame = new DailyGame({
             date: today,
             rowCriteria: board.rowCriteria,
-            colCriteria: board.colCriteria,
-            possibleAnswers: board.possibleAnswers
+            colCriteria: board.colCriteria
         });
         await dailyGame.save();
 
-        // Don't send possibleAnswers to frontend!
         res.json({
             date: today,
             rowCriteria: board.rowCriteria,
@@ -64,20 +62,6 @@ router.get('/setup', async (req, res) => {
     } catch (e) {
         console.error('Setup Error', e);
         res.status(500).json({ error: 'Server Error' });
-    }
-});
-
-// Get Daily Game Answers (Reveal Solution)
-router.get('/answers', async (req, res) => {
-    const today = new Date().toISOString().split('T')[0];
-    try {
-        const dailyGame = await DailyGame.findOne({ date: today });
-        if (!dailyGame) {
-            return res.status(404).json({ error: 'No game found for today' });
-        }
-        res.json({ possibleAnswers: dailyGame.possibleAnswers });
-    } catch (e) {
-        res.status(500).json({ error: 'Failed to fetch answers' });
     }
 });
 
@@ -123,8 +107,14 @@ router.post('/stats', async (req, res) => {
             const currentCount = typeof entry === 'number' ? entry : 0;
             entry = {
                 count: currentCount,
-                poster_path: movie.poster_path
+                poster_path: movie.poster_path, // Could be null, but stats should save it
+                title: movie.title,
+                release_date: movie.release_date
             };
+        } else {
+            // Guarantee existing stats get updated with title & release date if previously missing
+            entry.title = entry.title || movie.title;
+            entry.release_date = entry.release_date || movie.release_date;
         }
 
         entry.count++;
@@ -225,8 +215,7 @@ router.get('/regenerate', async (req, res) => {
         const dailyGame = new DailyGame({
             date: today,
             rowCriteria: board.rowCriteria,
-            colCriteria: board.colCriteria,
-            possibleAnswers: board.possibleAnswers
+            colCriteria: board.colCriteria
         });
         await dailyGame.save();
 

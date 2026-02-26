@@ -18,6 +18,7 @@ export interface Movie {
   keywords?: number[];
   production_companies?: number[];
   credits?: any; // To store raw credits response
+  count?: number;
 }
 
 export type CriteriaType =
@@ -69,10 +70,6 @@ export class MovieService {
     return this.http.get<{ date?: string, rowCriteria: Criteria[], colCriteria: Criteria[] }>('/api/game/regenerate', {
       headers: { 'Authorization': `Bearer ${secret}` }
     });
-  }
-
-  getDailyAnswers(): Observable<{ possibleAnswers: Movie[][][] }> {
-    return this.http.get<{ possibleAnswers: Movie[][][] }>('/api/game/answers');
   }
 
   submitGuessStats(row: number, col: number, movie: Partial<Movie>): Observable<any> {

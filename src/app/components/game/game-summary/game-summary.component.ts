@@ -13,14 +13,13 @@ import { AnswersModalComponent } from './answers-modal/answers-modal.component';
   styleUrl: './game-summary.component.css'
 })
 export class GameSummaryComponent implements OnInit, OnDestroy {
-  @Input() summaryAnswers: Movie[][][] | null = null;
   @Input() summaryStats: any[][] | null = null;
   @Input() totalCompletedGames = 0;
   @Input() userGrid: (Movie | null)[][] = [];
   @Input() rowCriteria: Criteria[] = [];
   @Input() colCriteria: Criteria[] = [];
 
-  selectedAnswers: Movie[] | null = null;
+  selectedAnswers: any[] | null = null;
   showModal = false;
 
   activeSummaryTab: 'results' | 'stats' = 'results';
@@ -95,6 +94,44 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
     return grid;
   }
 
+  getPlayerAnswersGrid(): any[][][] {
+    if (!this.summaryStats || this.totalCompletedGames === 0) {
+      return [
+        [[], [], []],
+        [[], [], []],
+        [[], [], []]
+      ];
+    }
+
+    const grid: any[][][] = [];
+    for (let r = 0; r < 3; r++) {
+      const row: any[][] = [];
+      for (let c = 0; c < 3; c++) {
+        const cellStat = this.summaryStats[r][c];
+        let cellAnswers: any[] = [];
+        if (cellStat && cellStat.answers) {
+          for (const [key, entry] of Object.entries(cellStat.answers)) {
+            const answerObj = entry as any;
+            if (answerObj && (typeof answerObj === 'object' ? answerObj.count > 0 : answerObj > 0)) {
+              cellAnswers.push({
+                id: parseInt(key) || (typeof answerObj === 'object' ? answerObj.id : 0),
+                title: answerObj.title || 'Unknown Title',
+                poster_path: answerObj.poster_path || '',
+                release_date: answerObj.release_date || '',
+                count: typeof answerObj === 'object' ? answerObj.count : answerObj
+              });
+            }
+          }
+          // Sort descending by count
+          cellAnswers.sort((a: any, b: any) => b.count - a.count);
+        }
+        row.push(cellAnswers);
+      }
+      grid.push(row);
+    }
+    return grid;
+  }
+
   private createEmptyGrid() {
     return [
       [null, null, null],
@@ -113,18 +150,14 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
         let stat = type === 'popular' ? this.getTopAnswer(i, j) : this.getLeastPopular(i, j);
 
         if (stat) {
-          let movie = this.findMovieObject(i, j, stat.id);
-
-          if (!movie && stat.poster_path) {
-            // Fallback: Use metadata from stats if not found in daily solutions
-            movie = {
-              id: stat.id,
-              title: stat.title,
-              poster_path: stat.poster_path,
-              release_date: '',
-              genres: []
-            } as Movie;
-          }
+          // Since we no longer have summaryAnswers, we solely rely on metadata from stats
+          let movie = {
+            id: stat.id,
+            title: stat.title,
+            poster_path: stat.poster_path,
+            release_date: '',
+            genres: []
+          } as Movie;
 
           if (movie) {
             const rarityInfo = this.getRarityInfo(stat.percent, type === 'popular');
@@ -139,11 +172,6 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
       grid.push(row);
     }
     return grid;
-  }
-
-  private findMovieObject(row: number, col: number, id: number): Movie | null {
-    if (!this.summaryAnswers || !this.summaryAnswers[row] || !this.summaryAnswers[row][col]) return null;
-    return this.summaryAnswers[row][col].find(m => m.id === id) || null;
   }
 
   private getRarityInfo(percent: number, isPopular: boolean): RarityInfo {
@@ -233,7 +261,7 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
     };
   }
 
-  openAnswersModal(movies: Movie[]): void {
+  openAnswersModal(movies: any[]): void {
     this.selectedAnswers = movies;
     this.showModal = true;
   }

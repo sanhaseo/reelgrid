@@ -82,7 +82,6 @@ export class GameComponent implements OnInit {
 
   loadBoard(date?: string): void {
     this.isLoading = true;
-    this.summaryAnswers = null;
     this.summaryStats = null;
     this.movieService.getGameSetup(date).subscribe({
       next: (setup) => {
@@ -194,7 +193,6 @@ export class GameComponent implements OnInit {
         ];
         this.guessesLeft = 10;
         this.gameOver = false;
-        this.summaryAnswers = null; // Clear summary
         this.summaryStats = null;
         this.gridRarity = [
           [null, null, null],
@@ -301,10 +299,7 @@ export class GameComponent implements OnInit {
     this.movieService.getDailyGameStats().subscribe(res => {
       this.summaryStats = res.cellStats;
       this.totalCompletedGames = res.totalCompletedGames;
-    });
 
-    this.movieService.getDailyAnswers().subscribe(data => {
-      this.summaryAnswers = data.possibleAnswers;
       setTimeout(() => {
         this.summarySection?.nativeElement?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }, 100);
