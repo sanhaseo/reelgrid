@@ -252,7 +252,9 @@ export class GameComponent implements OnInit {
           // Submit stats asynchronously (only send necessary data)
           const statsPayload = {
             id: fullMovie.id,
-            poster_path: fullMovie.poster_path
+            poster_path: fullMovie.poster_path,
+            title: fullMovie.title,
+            release_date: fullMovie.release_date
           };
           this.movieService.submitGuessStats(row, col, statsPayload).subscribe({
             next: (res: any) => {
