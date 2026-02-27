@@ -1,6 +1,17 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 .summary-section {
     margin-top: 4rem;
     width: 100%;
+    min-width: min(100%, 560px);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
     /* Contains the stats board without layout shift */
 }
 
@@ -31,6 +42,17 @@
 .stat-controls select:focus {
     outline: none;
     border-color: #e50914;
+}
+
+/* Summary Content Styling */
+.summary-content {
+    padding: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .summary-content {
+        padding: 1rem 0.5rem;
+    }
 }
 
 /* Accordion Sections */
@@ -161,7 +183,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
+    /* Padding managed by summary-content parent now */
 }
 
 .simple-grid {

@@ -58,6 +58,13 @@
     cursor: not-allowed;
 }
 
+/* Game Summary Container */
+.game-summary-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
 /* Modal */
 .modal-overlay {
     position: fixed;

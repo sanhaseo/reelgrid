@@ -31,6 +31,15 @@
             --cell-height: 120px;
         }
     }
+
+    @media (max-width: 340px) {
+        :host {
+            --header-col-width: 50px;
+            --cell-width: 70px;
+            --header-row-height: 40px;
+            --cell-height: 105px;
+        }
+    }
 }
 
 .header-cell {
