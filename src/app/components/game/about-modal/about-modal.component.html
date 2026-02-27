@@ -1,0 +1,12 @@
+<div class="modal-overlay" *ngIf="show" (click)="onClose()">
+    <div class="modal-content about-modal" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>About CineGrid</h2>
+            <button class="close-btn" (click)="onClose()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Welcome to CineGrid! Test your movie knowledge by filling the grid.</p>
+            <p>Placeholder text: More instructions will go here.</p>
+        </div>
+    </div>
+</div>

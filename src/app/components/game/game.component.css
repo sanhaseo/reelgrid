@@ -199,11 +199,17 @@ footer {
     padding: 0 1.5rem 2rem 1.5rem;
 }
 
+.header-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
 .app-header .logo {
     margin: 0;
 }
 
-.archive-btn {
+.icon-btn {
     background: transparent;
     color: #ccc;
     border: none;
@@ -216,7 +222,7 @@ footer {
     transition: all 0.2s;
 }
 
-.archive-btn:hover {
+.icon-btn:hover {
     background: #333;
     color: #fff;
 }

@@ -8,11 +8,12 @@ import { calculateRarity, RarityInfo } from '../../utils/rarity';
 import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
 import { ArchiveModalComponent } from './archive-modal/archive-modal.component';
+import { AboutModalComponent } from './about-modal/about-modal.component';
 
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent, ArchiveModalComponent],
+  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent, ArchiveModalComponent, AboutModalComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
@@ -40,6 +41,8 @@ export class GameComponent implements OnInit {
 
   showArchiveModal = false;
   archiveDates: string[] = [];
+
+  showAboutModal = false;
 
   @ViewChild('summarySection') summarySection!: ElementRef;
 
@@ -172,6 +175,14 @@ export class GameComponent implements OnInit {
 
   closeArchiveModal(): void {
     this.showArchiveModal = false;
+  }
+
+  openAboutModal(): void {
+    this.showAboutModal = true;
+  }
+
+  closeAboutModal(): void {
+    this.showAboutModal = false;
   }
 
   onRegenerate(): void {
