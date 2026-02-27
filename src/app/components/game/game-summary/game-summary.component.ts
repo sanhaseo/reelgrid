@@ -64,6 +64,15 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
 
   toggleStats(): void {
     this.isStatsOpen = !this.isStatsOpen;
+
+    if (this.isStatsOpen) {
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        });
+      }, 350); // Delay to allow CSS transition to finish affecting height before scrolling
+    }
   }
 
   setStatView(view: 'popular' | 'rare' | 'answers' | 'frequency'): void {

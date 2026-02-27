@@ -6,82 +6,95 @@
             <span class="accordion-title">Results</span>
             <span class="accordion-icon" [class.open]="isResultsOpen">▼</span>
         </div>
-        <div class="summary-content" *ngIf="isResultsOpen">
-            <div class="simple-results-container" style="flex-direction: column; gap: 1rem;">
-                <div class="simple-grid">
-                    <div *ngFor="let row of userGrid" class="simple-row">
-                        <div *ngFor="let cell of row" class="simple-cell">
-                            <span class="result-emoji" *ngIf="cell">🟩</span>
-                            <span class="result-emoji" *ngIf="!cell">❌</span>
+        <div class="accordion-body" [class.open]="isResultsOpen">
+            <div class="accordion-inner">
+                <div class="summary-content">
+                    <div class="simple-results-container" style="flex-direction: column; gap: 1rem;">
+                        <div class="simple-grid">
+                            <div *ngFor="let row of userGrid" class="simple-row">
+                                <div *ngFor="let cell of row" class="simple-cell">
+                                    <span class="result-emoji" *ngIf="cell">🟩</span>
+                                    <span class="result-emoji" *ngIf="!cell">❌</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="share-btn" (click)="shareResults()">
+                            Share Result
+                        </button>
+                        <div class="next-game-timer">
+                            Next game in {{ timeUntilNextGame }}
+                        </div>
+
+                        <div class="toast" *ngIf="showToast">
+                            Copied to clipboard!
                         </div>
                     </div>
                 </div>
-
-                <button class="share-btn" (click)="shareResults()">
-                    Share Result
-                </button>
-                <div class="next-game-timer">
-                    Next game in {{ timeUntilNextGame }}
-                </div>
-
-                <div class="toast" *ngIf="showToast">
-                    Copied to clipboard!
-                </div>
             </div>
         </div>
-    </div>
 
-    <!-- STATS & ANSWERS ACCORDION -->
-    <div class="accordion-section">
-        <div class="accordion-header" (click)="toggleStats()">
-            <span class="accordion-title">Stats & Answers</span>
-            <span class="accordion-icon" [class.open]="isStatsOpen">▼</span>
-        </div>
-        <div class="summary-content" *ngIf="isStatsOpen">
-            <div class="stat-controls">
-                <label>View Board:</label>
-                <select #statSelect (change)="setStatView($any(statSelect.value))">
-                    <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers</option>
-                    <option value="rare" [selected]="activeStatView === 'rare'">Least Popular Answers</option>
-                    <option value="frequency" [selected]="activeStatView === 'frequency'">Answer Frequency</option>
-                    <option value="answers" [selected]="activeStatView === 'answers'">Player Answers</option>
-                </select>
+        <!-- STATS & ANSWERS ACCORDION -->
+        <div class="accordion-section">
+            <div class="accordion-header" (click)="toggleStats()">
+                <span class="accordion-title">Stats & Answers</span>
+                <span class="accordion-icon" [class.open]="isStatsOpen">▼</span>
+            </div>
+            <div class="accordion-body" [class.open]="isStatsOpen">
+                <div class="accordion-inner">
+                    <div class="summary-content">
+                        <div class="stat-controls">
+                            <label>View Board:</label>
+                            <select #statSelect (change)="setStatView($any(statSelect.value))">
+                                <option value="popular" [selected]="activeStatView === 'popular'">Most Popular Answers
+                                </option>
+                                <option value="rare" [selected]="activeStatView === 'rare'">Least Popular Answers
+                                </option>
+                                <option value="frequency" [selected]="activeStatView === 'frequency'">Answer Frequency
+                                </option>
+                                <option value="answers" [selected]="activeStatView === 'answers'">Player Answers
+                                </option>
+                            </select>
+                        </div>
+
+                        <app-summary-board *ngIf="activeStatView === 'popular'" [gridData]="getPopularGrid()"
+                            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
+                        </app-summary-board>
+
+                        <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()"
+                            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
+                        </app-summary-board>
+
+                        <app-summary-board *ngIf="activeStatView === 'frequency'" [gridData]="getFrequencyGrid()"
+                            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"
+                            [customCellTemplate]="frequencyCell">
+                        </app-summary-board>
+
+                        <app-summary-board *ngIf="activeStatView === 'answers'" [gridData]="getPlayerAnswersGrid()"
+                            [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="answersCell">
+                        </app-summary-board>
+
+                        <ng-template #frequencyCell let-data>
+                            <div class="summary-cell"
+                                style="justify-content: center; align-items: center; display: flex;">
+                                <div style="font-size: 1.3rem; font-weight: bold; color: #fff;">
+                                    {{ (data?.percent || 0) | number:'1.1-1' }}%
+                                </div>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #answersCell let-movies>
+                            <div class="summary-cell clickable-cell" (click)="openAnswersModal(movies)">
+                                <div class="show-answers-text">
+                                    Show Answers <span class="count">({{ movies?.length || 0 }})</span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
             </div>
 
-            <app-summary-board *ngIf="activeStatView === 'popular'" [gridData]="getPopularGrid()"
-                [rowCriteria]="rowCriteria" [colCriteria]="colCriteria">
-            </app-summary-board>
-
-            <app-summary-board *ngIf="activeStatView === 'rare'" [gridData]="getRareGrid()" [rowCriteria]="rowCriteria"
-                [colCriteria]="colCriteria">
-            </app-summary-board>
-
-            <app-summary-board *ngIf="activeStatView === 'frequency'" [gridData]="getFrequencyGrid()"
-                [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="frequencyCell">
-            </app-summary-board>
-
-            <app-summary-board *ngIf="activeStatView === 'answers'" [gridData]="getPlayerAnswersGrid()"
-                [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [customCellTemplate]="answersCell">
-            </app-summary-board>
-
-            <ng-template #frequencyCell let-data>
-                <div class="summary-cell" style="justify-content: center; align-items: center; display: flex;">
-                    <div style="font-size: 1.3rem; font-weight: bold; color: #fff;">
-                        {{ (data?.percent || 0) | number:'1.1-1' }}%
-                    </div>
-                </div>
-            </ng-template>
-
-            <ng-template #answersCell let-movies>
-                <div class="summary-cell clickable-cell" (click)="openAnswersModal(movies)">
-                    <div class="show-answers-text">
-                        Show Answers <span class="count">({{ movies?.length || 0 }})</span>
-                    </div>
-                </div>
-            </ng-template>
+            <!-- Answers Modal -->
+            <app-answers-modal *ngIf="showModal" [answers]="selectedAnswers"
+                (close)="closeAnswersModal()"></app-answers-modal>
         </div>
-    </div>
-
-    <!-- Answers Modal -->
-    <app-answers-modal *ngIf="showModal" [answers]="selectedAnswers" (close)="closeAnswersModal()"></app-answers-modal>
-</div>
