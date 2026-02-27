@@ -21,8 +21,8 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
 
   selectedAnswers: Movie[] | null = null;
   showModal = false;
-
-  activeSummaryTab: 'results' | 'stats' = 'results';
+  isResultsOpen: boolean = true;
+  isStatsOpen: boolean = false;
   activeStatView: 'popular' | 'rare' | 'answers' | 'frequency' = 'popular';
 
   timeUntilNextGame: string = '00:00:00';
@@ -58,8 +58,12 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
     this.timeUntilNextGame = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
   }
 
-  setActiveTab(tab: 'results' | 'stats'): void {
-    this.activeSummaryTab = tab;
+  toggleResults(): void {
+    this.isResultsOpen = !this.isResultsOpen;
+  }
+
+  toggleStats(): void {
+    this.isStatsOpen = !this.isStatsOpen;
   }
 
   setStatView(view: 'popular' | 'rare' | 'answers' | 'frequency'): void {
