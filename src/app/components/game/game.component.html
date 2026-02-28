@@ -1,8 +1,4 @@
-<div *ngIf="isLoading" class="loading-container">
-  <div class="spinner"></div>
-</div>
-
-<div *ngIf="!isLoading" class="game-container">
+<div class="game-container">
   <header class="app-header">
     <h1 class="logo">Cine<span class="red">Grid</span></h1>
     <div class="header-actions">
@@ -14,32 +10,40 @@
       </button>
     </div>
   </header>
-  <div class="game-content-row">
-    <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
-      [cellTemplate]="gameCellTemplate" (criteriaClick)="openCriteriaInfo($event)"
-      (cellClick)="onCellClick($event.row, $event.col)">
-    </app-board>
 
-    <ng-template #gameCellTemplate let-cell let-i="row" let-j="col">
-      <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]"
-        [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j"
-        [isSelected]="selectedCell?.row === i && selectedCell?.col === j">
-      </app-grid-cell>
-    </ng-template>
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+  </div>
 
-    <!-- Side Panel -->
-    <div class="side-panel">
-      <app-game-status [guessesLeft]="guessesLeft" [gameOver]="gameOver" [isRegenerating]="isRegenerating"
-        [boardDate]="boardDate" (giveUp)="onGiveUp()" (regenerate)="onRegenerate()">
-      </app-game-status>
+  <ng-container *ngIf="!isLoading">
+    <div class="game-content-row">
+      <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
+        [cellTemplate]="gameCellTemplate" (criteriaClick)="openCriteriaInfo($event)"
+        (cellClick)="onCellClick($event.row, $event.col)">
+      </app-board>
+
+      <ng-template #gameCellTemplate let-cell let-i="row" let-j="col">
+        <app-grid-cell [movie]="cell" [rarity]="gridRarity[i][j]"
+          [isIncorrect]="incorrectCell?.row === i && incorrectCell?.col === j"
+          [isSelected]="selectedCell?.row === i && selectedCell?.col === j">
+        </app-grid-cell>
+      </ng-template>
+
+      <!-- Side Panel -->
+      <div class="side-panel">
+        <app-game-status [guessesLeft]="guessesLeft" [gameOver]="gameOver" [isRegenerating]="isRegenerating"
+          [boardDate]="boardDate" (giveUp)="onGiveUp()" (regenerate)="onRegenerate()">
+        </app-game-status>
+      </div>
     </div>
-  </div>
 
-  <!-- Game Summary Details (Rendered below grid when game over) -->
-  <div class="game-summary-container" *ngIf="gameOver" #summarySection>
-    <app-game-summary [totalCompletedGames]="totalCompletedGames" [summaryStats]="summaryStats" [userGrid]="grid"
-      [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"></app-game-summary>
-  </div>
+    <!-- Game Summary Details (Rendered below grid when game over) -->
+    <div class="game-summary-container" *ngIf="gameOver" #summarySection>
+      <app-game-summary [totalCompletedGames]="totalCompletedGames" [summaryStats]="summaryStats" [userGrid]="grid"
+        [rowCriteria]="rowCriteria" [colCriteria]="colCriteria"></app-game-summary>
+    </div>
+  </ng-container>
+
   <footer>
     <div class="attribution">
       Movie data provided by <a href="https://www.themoviedb.org" target="_blank" rel="noopener noreferrer"><img
