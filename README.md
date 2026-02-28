@@ -5,8 +5,7 @@ Welcome to CineGrid! Test your movie knowledge by filling the grid.
 ## How to Play
 
 Select a movie for each cell that matches both the row and column criteria. You have 10 guesses to fill the 3x3 grid. 
-
-**Important:** Each movie can only be used once per game.
+Each movie can only be used once per game.
 
 ## Rarity Score
 
@@ -14,10 +13,10 @@ Each correct guess receives a rarity score based on how many other players guess
 
 ## Daily Board
 
-A brand new game board is generated every single day at Midnight (UTC). 
+A new game board is generated every day at Midnight UTC. 
 
 ## Acknowledgments
 
-* **Inspiration:** This game is deeply inspired by [GeoGrid](https://geogridgame.com). 
+* **Inspiration:** This game is inspired by [GeoGrid](https://geogridgame.com). 
 * **Data:** Movie data is provided by [TMDB](https://www.themoviedb.org/).
-* **Development:** This project was written and built primarily using AI, specifically **Antigravity with Gemini**.
+* **Development:** This project was written and built primarily using AI, specifically Antigravity with Gemini.
