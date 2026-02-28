@@ -4,9 +4,25 @@
             <h2>About CineGrid</h2>
             <button class="close-btn" (click)="onClose()">&times;</button>
         </div>
-        <div class="modal-body">
-            <p>Welcome to CineGrid! Test your movie knowledge by filling the grid.</p>
-            <p>Placeholder text: More instructions will go here.</p>
+        <div class="modal-body scrollable-unique">
+            <h3>How to Play</h3>
+            <p>Select a movie for each cell that matches both the row and column criteria. You have 10 guesses to fill
+                the 3x3 grid. <strong>Each movie can only be used once per game.</strong></p>
+
+            <h3>Rarity Score</h3>
+            <p>Each correct guess receives a rarity score based on how many other players guessed that exact same movie.
+                More obscure answers earn rarer tier badges! Try to find the most unique movies possible to keep your
+                rarity percentage low.</p>
+
+            <h3>Daily Board</h3>
+            <p>A brand new game board is generated every single day at Midnight (UTC).</p>
+
+            <hr style="border-color: #333; margin: 1.5rem 0;">
+
+            <p style="font-size: 0.85rem; color: #888;">
+                Inspired by <a href="https://geogridgame.com" target="_blank" style="color: #4da6ff;">GeoGrid</a>.<br>
+                Movie data provided by TMDB.
+            </p>
         </div>
     </div>
 </div>

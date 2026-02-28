@@ -1,27 +1,23 @@
-# CineGridApp
+# CineGrid
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Welcome to CineGrid! Test your movie knowledge by filling the grid. 
 
-## Development server
+## How to Play
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Select a movie for each cell that matches both the row and column criteria. You have 10 guesses to fill the 3x3 grid. 
 
-## Code scaffolding
+**Important:** Each movie can only be used once per game.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Rarity Score
 
-## Build
+Each correct guess receives a rarity score based on how many other players guessed that exact same movie. More obscure answers earn rarer tier badges! Try to find the most unique movies possible to keep your rarity percentage low.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Daily Board
 
-## Running unit tests
+A brand new game board is generated every single day at Midnight (UTC). 
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Acknowledgments
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+* **Inspiration:** This game is deeply inspired by [GeoGrid](https://geogridgame.com). 
+* **Data:** Movie data is provided by [TMDB](https://www.themoviedb.org/).
+* **Development:** This project was written and built primarily using AI, specifically **Antigravity with Gemini**.
