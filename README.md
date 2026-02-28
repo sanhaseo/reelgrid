@@ -19,4 +19,4 @@ A new game board is generated every day at Midnight UTC.
 
 * **Inspiration:** This game is inspired by [GeoGrid](https://geogridgame.com). 
 * **Data:** Movie data is provided by [TMDB](https://www.themoviedb.org/).
-* **Development:** This project was written and built primarily using AI, specifically Antigravity with Gemini.
+* **Development:** This project was written primarily using AI, specifically Antigravity with Gemini.
