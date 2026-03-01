@@ -28,51 +28,55 @@
 }
 
 [data-theme="light"] {
-  --primary-color: #e50914;
+  --primary-color: #d84b4b;
+  /* Softer red for pastel */
   --secondary-color: #e5e5e5;
-  --background-color: #f5f5f1;
-  --text-color: #141414;
+  --background-color: #fcf9f2;
+  /* Light yellowish pastel tone */
+  --text-color: #2b2b2b;
   --card-bg: #ffffff;
 
-  --bg-main: #f5f5f1;
-  --bg-panel: #ffffff;
-  --bg-modal: #ffffff;
+  --bg-main: #fcf9f2;
+  --bg-panel: #fffcf5;
+  --bg-modal: #fffcf5;
   --bg-overlay: rgba(0, 0, 0, 0.5);
-  --bg-button: #e5e5e5;
-  --bg-button-hover: #d4d4d4;
-  --bg-cell-empty: #f0f0f0;
+  --bg-button: #f2ebd9;
+  --bg-button-hover: #e5dac1;
+  --bg-cell-empty: #f7f3ea;
   --bg-cell-hover: rgba(0, 0, 0, 0.05);
 
-  --text-main: #141414;
-  --text-muted: #333333;
-  --text-subtle: #666666;
+  --text-main: #2b2b2b;
+  --text-muted: #4f4f4f;
+  --text-subtle: #737373;
 
-  --border-main: #cccccc;
-  --border-subtle: #bbbbbb;
+  --border-main: #e5dac1;
+  --border-subtle: #f2ebd9;
 }
 
 [data-theme="ocean"] {
-  --primary-color: #0077b6;
-  --secondary-color: #023e8a;
-  --background-color: #03045e;
-  --text-color: #caf0f8;
-  --card-bg: #0077b6;
+  --primary-color: #258195;
+  /* Warm teal/ocean */
+  --secondary-color: #b2ebf2;
+  --background-color: #e6f4f1;
+  /* Light pastel ocean water */
+  --text-color: #1a4f5c;
+  --card-bg: #ffffff;
 
-  --bg-main: #03045e;
-  --bg-panel: #023e8a;
-  --bg-modal: #023e8a;
-  --bg-overlay: rgba(3, 4, 94, 0.8);
-  --bg-button: #0096c7;
-  --bg-button-hover: #48cae4;
-  --bg-cell-empty: #0077b6;
-  --bg-cell-hover: rgba(255, 255, 255, 0.1);
+  --bg-main: #e6f4f1;
+  --bg-panel: #f2fafa;
+  --bg-modal: #f2fafa;
+  --bg-overlay: rgba(26, 79, 92, 0.5);
+  --bg-button: #cce7e3;
+  --bg-button-hover: #abd4ce;
+  --bg-cell-empty: #d9efea;
+  --bg-cell-hover: rgba(37, 129, 149, 0.1);
 
-  --text-main: #ffffff;
-  --text-muted: #caf0f8;
-  --text-subtle: #90e0ef;
+  --text-main: #1a4f5c;
+  --text-muted: #2e6d7a;
+  --text-subtle: #4c8a98;
 
-  --border-main: #00b4d8;
-  --border-subtle: #48cae4;
+  --border-main: #abd4ce;
+  --border-subtle: #cce7e3;
 }
 
 body {
