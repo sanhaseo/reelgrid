@@ -11,8 +11,10 @@
                     <div *ngIf="!m.poster_path" class="answer-thumb placeholder"></div>
                     <div class="answer-info">
                         <div class="answer-title">{{ m.title }}</div>
-                        <div class="answer-year">{{ m.release_date | date:'yyyy' }} <span *ngIf="m.count">• {{ m.count
-                                }} guesses</span></div>
+                        <div class="answer-year">{{ m.release_date | date:'yyyy' }}</div>
+                    </div>
+                    <div *ngIf="m.count" class="answer-count">
+                        {{ m.count }} {{ m.count === 1 ? 'guess' : 'guesses' }}
                     </div>
                 </div>
             </div>

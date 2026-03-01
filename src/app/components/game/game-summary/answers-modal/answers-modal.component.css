@@ -97,6 +97,16 @@
 .answer-info {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+}
+
+.answer-count {
+    font-size: 0.9rem;
+    /* font-weight: 600; */
+    margin-left: 1rem;
+    color: var(--text-main);
+    text-align: right;
+    white-space: nowrap;
 }
 
 .answer-title {
