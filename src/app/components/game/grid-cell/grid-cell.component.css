@@ -114,7 +114,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: color-mix(in srgb, var(--primary-color) 50%, transparent);
+    background-color: color-mix(in srgb, #e50914 50%, transparent);
     z-index: 5;
     pointer-events: none;
     animation: flashRedOpacity 0.5s ease-in-out;
