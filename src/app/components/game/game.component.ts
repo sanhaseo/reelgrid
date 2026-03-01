@@ -46,7 +46,7 @@ export class GameComponent implements OnInit {
   showAboutModal = false;
 
   themes = ['dark', 'light', 'ocean'];
-  currentTheme = 'dark';
+  currentTheme = 'ocean';
 
   @ViewChild('summarySection') summarySection!: ElementRef;
 

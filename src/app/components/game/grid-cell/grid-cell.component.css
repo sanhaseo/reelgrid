@@ -13,31 +13,6 @@
     background-color: var(--bg-button-hover);
 }
 
-.grid-cell.correct {
-    border: 2px solid black;
-    /* Default fallback */
-}
-
-.grid-cell.correct.legendary {
-    border-color: #FFD700;
-}
-
-.grid-cell.correct.epic {
-    border-color: #b026ff;
-}
-
-.grid-cell.correct.rare {
-    border-color: #00bfff;
-}
-
-.grid-cell.correct.uncommon {
-    border-color: #32cd32;
-}
-
-.grid-cell.correct.common {
-    border-color: #777;
-}
-
 .grid-cell.selected {
     background-color: var(--border-subtle);
     z-index: 10;
@@ -78,27 +53,27 @@
 .rarity-badge.legendary {
     background: linear-gradient(135deg, #FFD700, #FFA500);
     color: #000;
-    border: 1px solid #FFD700;
+    /* border: 1px solid #FFD700; */
 }
 
 .rarity-badge.epic {
     background: linear-gradient(135deg, #b026ff, #8000ff);
-    border: 1px solid #b026ff;
+    /* border: 1px solid #b026ff; */
 }
 
 .rarity-badge.rare {
     background: linear-gradient(135deg, #00bfff, #0073e6);
-    border: 1px solid #00bfff;
+    /* border: 1px solid #00bfff; */
 }
 
 .rarity-badge.uncommon {
     background: linear-gradient(135deg, #32cd32, #008000);
-    border: 1px solid #32cd32;
+    /* border: 1px solid #32cd32; */
 }
 
 .rarity-badge.common {
     background: #555;
-    border: 1px solid #777;
+    /* border: 1px solid #777; */
     color: #ddd;
 }
 
