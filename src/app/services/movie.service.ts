@@ -72,16 +72,17 @@ export class MovieService {
     });
   }
 
-  submitGuessStats(row: number, col: number, movie: Partial<Movie>): Observable<any> {
-    return this.http.post('/api/game/stats', { row, col, movie });
+  submitGuessStats(row: number, col: number, movie: Partial<Movie>, date?: string): Observable<any> {
+    return this.http.post('/api/game/stats', { row, col, movie, date });
   }
 
-  completeGame(attempts: number, solvedCells: { row: number, col: number }[]): Observable<any> {
-    return this.http.post('/api/game/complete', { attempts, solvedCells });
+  completeGame(attempts: number, solvedCells: { row: number, col: number }[], date?: string): Observable<any> {
+    return this.http.post('/api/game/complete', { attempts, solvedCells, date });
   }
 
-  getDailyGameStats(): Observable<{ cellStats: any[][], totalCompletedGames: number }> {
-    return this.http.get<{ cellStats: any[][], totalCompletedGames: number }>('/api/game/stats');
+  getDailyGameStats(date?: string): Observable<{ cellStats: any[][], totalCompletedGames: number }> {
+    const url = date ? `/api/game/stats?date=${date}` : '/api/game/stats';
+    return this.http.get<{ cellStats: any[][], totalCompletedGames: number }>(url);
   }
 
   searchMovies(query: string): Observable<Movie[]> {

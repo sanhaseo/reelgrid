@@ -293,7 +293,7 @@ export class GameComponent implements OnInit {
             title: fullMovie.title,
             release_date: fullMovie.release_date
           };
-          this.movieService.submitGuessStats(row, col, statsPayload).subscribe({
+          this.movieService.submitGuessStats(row, col, statsPayload, this.activeBoardDate).subscribe({
             next: (res: any) => {
               if (res.success && res.cellStat) {
                 const total = res.cellStat.total - 1;
@@ -335,7 +335,7 @@ export class GameComponent implements OnInit {
   }
 
   private fetchSummaryData(): void {
-    this.movieService.getDailyGameStats().subscribe(res => {
+    this.movieService.getDailyGameStats(this.activeBoardDate).subscribe(res => {
       this.summaryStats = res.cellStats;
       this.totalCompletedGames = res.totalCompletedGames;
 
@@ -361,7 +361,7 @@ export class GameComponent implements OnInit {
       });
     });
 
-    this.movieService.completeGame(attemptsUsed, solvedCells).subscribe(() => {
+    this.movieService.completeGame(attemptsUsed, solvedCells, this.activeBoardDate).subscribe(() => {
       this.fetchSummaryData();
     });
   }

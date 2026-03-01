@@ -67,11 +67,11 @@ router.get('/setup', async (req, res) => {
 
 // Submit Game Stat (Increment count for a guess)
 router.post('/stats', async (req, res) => {
-    const { row, col, movie } = req.body;
+    const { row, col, movie, date } = req.body;
     if (!movie || !movie.id) {
         return res.status(400).json({ error: 'Invalid movie data' });
     }
-    const today = new Date().toISOString().split('T')[0];
+    const today = date || new Date().toISOString().split('T')[0];
 
     try {
         let stats = await DailyGameStats.findOne({ date: today });
@@ -136,8 +136,8 @@ router.post('/stats', async (req, res) => {
 
 // Submit Game Completion
 router.post('/complete', async (req, res) => {
-    const { attempts, solvedCells } = req.body; // solvedCells: [{row, col}, ...]
-    const today = new Date().toISOString().split('T')[0];
+    const { attempts, solvedCells, date } = req.body; // solvedCells: [{row, col}, ...]
+    const today = date || new Date().toISOString().split('T')[0];
 
     // Only count as completed if player made at least one attempt
     if (!attempts || attempts <= 0) {
@@ -185,7 +185,7 @@ router.post('/complete', async (req, res) => {
 
 // Get Daily Game Stats
 router.get('/stats', async (req, res) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = req.query.date || new Date().toISOString().split('T')[0];
     try {
         const stats = await DailyGameStats.findOne({ date: today });
         res.json({
