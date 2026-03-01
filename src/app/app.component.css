@@ -1,6 +1,6 @@
 .main {
     text-align: center;
-    padding: 2rem;
+    padding: 1rem 0.5rem;
 }
 
 @media (max-width: 600px) {

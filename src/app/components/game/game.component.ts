@@ -9,6 +9,7 @@ import { GameSummaryComponent } from './game-summary/game-summary.component';
 import { GameStatusComponent } from './game-status/game-status.component';
 import { ArchiveModalComponent } from './archive-modal/archive-modal.component';
 import { AboutModalComponent } from './about-modal/about-modal.component';
+import confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-game',
@@ -278,6 +279,11 @@ export class GameComponent implements OnInit {
 
         if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
+          confetti({
+            particleCount: 20,
+            spread: 20,
+            origin: { y: 0.6 }
+          });
           this.saveGameState(); // Save early so grid updates
 
           // Submit stats asynchronously (only send necessary data)
