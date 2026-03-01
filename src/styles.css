@@ -54,29 +54,27 @@
 }
 
 [data-theme="ocean"] {
-  --primary-color: #258195;
-  /* Warm teal/ocean */
-  --secondary-color: #b2ebf2;
-  --background-color: #e6f4f1;
-  /* Light pastel ocean water */
-  --text-color: #1a4f5c;
-  --card-bg: #ffffff;
+  --primary-color: #59a5d8;
+  --secondary-color: #7d9ebf;
+  --background-color: #1c3144;
+  --text-color: #e0eaf5;
+  --card-bg: #243f56;
 
-  --bg-main: #e6f4f1;
-  --bg-panel: #f2fafa;
-  --bg-modal: #f2fafa;
-  --bg-overlay: rgba(26, 79, 92, 0.5);
-  --bg-button: #cce7e3;
-  --bg-button-hover: #abd4ce;
-  --bg-cell-empty: #d9efea;
-  --bg-cell-hover: rgba(37, 129, 149, 0.1);
+  --bg-main: #1c3144;
+  --bg-panel: #243f56;
+  --bg-modal: #243f56;
+  --bg-overlay: rgba(28, 49, 68, 0.7);
+  --bg-button: #32526e;
+  --bg-button-hover: #486e8e;
+  --bg-cell-empty: #243f56;
+  --bg-cell-hover: rgba(89, 165, 216, 0.15);
 
-  --text-main: #1a4f5c;
-  --text-muted: #2e6d7a;
-  --text-subtle: #4c8a98;
+  --text-main: #e0eaf5;
+  --text-muted: #a4bdd3;
+  --text-subtle: #7d9ebf;
 
-  --border-main: #abd4ce;
-  --border-subtle: #cce7e3;
+  --border-main: #486e8e;
+  --border-subtle: #32526e;
 }
 
 body {
