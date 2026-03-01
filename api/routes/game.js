@@ -73,57 +73,62 @@ router.post('/stats', async (req, res) => {
     }
     const today = date || new Date().toISOString().split('T')[0];
 
+    const movieId = movie.id.toString();
+
+    const updateDoc = {
+        $inc: {
+            [`cellStats.${row}.${col}.total`]: 1,
+            [`cellStats.${row}.${col}.answers.${movieId}.count`]: 1
+        },
+        $set: {
+            [`cellStats.${row}.${col}.answers.${movieId}.poster_path`]: movie.poster_path, // Could be null, but stats should save it
+            [`cellStats.${row}.${col}.answers.${movieId}.title`]: movie.title,
+            [`cellStats.${row}.${col}.answers.${movieId}.release_date`]: movie.release_date
+        }
+    };
+
     try {
-        let stats = await DailyGameStats.findOne({ date: today });
+        let stats = await DailyGameStats.findOneAndUpdate(
+            { date: today },
+            updateDoc,
+            { new: true }
+        );
 
         if (!stats) {
-            stats = new DailyGameStats({ date: today, cellStats: [], totalCompletedGames: 0 });
-        }
+            // Document doesn't exist yet for this date. Initialize grid safely.
+            const emptyCellStats = Array(3).fill(null).map(() =>
+                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0, answers: {} }))
+            );
 
-        // Initialize grid if empty or partial
-        if (!Array.isArray(stats.cellStats)) stats.cellStats = [];
-        for (let r = 0; r < 3; r++) {
-            if (!stats.cellStats[r]) stats.cellStats[r] = [];
-            for (let c = 0; c < 3; c++) {
-                if (!stats.cellStats[r][c]) {
-                    stats.cellStats[r][c] = { total: 0, answers: {} };
-                }
-                // Double check answers object exists
-                if (!stats.cellStats[r][c].answers) {
-                    stats.cellStats[r][c].answers = {};
+            // Apply this guess's stats locally
+            emptyCellStats[row][col].total = 1;
+            emptyCellStats[row][col].answers[movieId] = {
+                count: 1,
+                poster_path: movie.poster_path,
+                title: movie.title,
+                release_date: movie.release_date
+            };
+
+            try {
+                stats = await DailyGameStats.create({
+                    date: today,
+                    cellStats: emptyCellStats,
+                    totalCompletedGames: 0
+                });
+            } catch (err) {
+                // Handle duplicate key error if another concurrent request created it first
+                if (err.code === 11000) {
+                    stats = await DailyGameStats.findOneAndUpdate(
+                        { date: today },
+                        updateDoc,
+                        { new: true }
+                    );
+                } else {
+                    throw err;
                 }
             }
         }
 
-        // Increment counts
-        stats.cellStats[row][col].total = (stats.cellStats[row][col].total || 0) + 1;
-
-        const movieId = movie.id.toString();
-
-        let entry = stats.cellStats[row][col].answers[movieId];
-
-        // Handle initialization
-        if (!entry || typeof entry === 'number') {
-            const currentCount = typeof entry === 'number' ? entry : 0;
-            entry = {
-                count: currentCount,
-                poster_path: movie.poster_path, // Could be null, but stats should save it
-                title: movie.title,
-                release_date: movie.release_date
-            };
-        } else {
-            // Guarantee existing stats get updated with title & release date if previously missing
-            entry.title = entry.title || movie.title;
-            entry.release_date = entry.release_date || movie.release_date;
-        }
-
-        entry.count++;
-        stats.cellStats[row][col].answers[movieId] = entry;
-
-        // Mark as modified for Mixed type
-        stats.markModified('cellStats');
-
-        await stats.save();
         res.json({
             success: true,
             cellStat: stats.cellStats[row][col]
@@ -144,37 +149,52 @@ router.post('/complete', async (req, res) => {
         return res.json({ success: true, ignored: true });
     }
 
-    try {
-        let stats = await DailyGameStats.findOne({ date: today });
-        if (!stats) {
-            stats = new DailyGameStats({ date: today, totalCompletedGames: 0, cellStats: [] });
-        }
+    let batchUpdate = {
+        $inc: { totalCompletedGames: 1 }
+    };
 
-        // Initialize grid if empty (though stats usually exist by now)
-        if (!Array.isArray(stats.cellStats)) stats.cellStats = [];
-        for (let r = 0; r < 3; r++) {
-            if (!stats.cellStats[r]) stats.cellStats[r] = [];
-            for (let c = 0; c < 3; c++) {
-                if (!stats.cellStats[r][c]) {
-                    stats.cellStats[r][c] = { total: 0, completionCount: 0, answers: {} };
+    if (Array.isArray(solvedCells) && solvedCells.length > 0) {
+        solvedCells.forEach(({ row, col }) => {
+            batchUpdate.$inc[`cellStats.${row}.${col}.completionCount`] = 1;
+        });
+    }
+
+    try {
+        let stats = await DailyGameStats.findOneAndUpdate(
+            { date: today },
+            batchUpdate,
+            { new: true }
+        );
+
+        if (!stats) {
+            // Highly unlikely to complete a game before any guesses are logged, but handle safely
+            const emptyCellStats = Array(3).fill(null).map(() =>
+                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0, answers: {} }))
+            );
+            if (Array.isArray(solvedCells)) {
+                solvedCells.forEach(({ row, col }) => {
+                    emptyCellStats[row][col].completionCount = 1;
+                });
+            }
+
+            try {
+                stats = await DailyGameStats.create({
+                    date: today,
+                    cellStats: emptyCellStats,
+                    totalCompletedGames: 1
+                });
+            } catch (err) {
+                if (err.code === 11000) {
+                    stats = await DailyGameStats.findOneAndUpdate(
+                        { date: today },
+                        batchUpdate,
+                        { new: true }
+                    );
+                } else {
+                    throw err;
                 }
             }
         }
-
-        // Increment total completed games
-        stats.totalCompletedGames = (stats.totalCompletedGames || 0) + 1;
-
-        // Increment completionCount for solved cells
-        if (Array.isArray(solvedCells)) {
-            solvedCells.forEach(({ row, col }) => {
-                if (stats.cellStats[row] && stats.cellStats[row][col]) {
-                    stats.cellStats[row][col].completionCount = (stats.cellStats[row][col].completionCount || 0) + 1;
-                }
-            });
-        }
-
-        stats.markModified('cellStats');
-        await stats.save();
 
         res.json({ success: true, totalCompletedGames: stats.totalCompletedGames });
     } catch (e) {

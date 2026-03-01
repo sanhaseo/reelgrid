@@ -302,11 +302,13 @@ export class GameComponent implements OnInit {
                 this.gridRarity[row][col] = this.calculateRarity(percent);
                 this.saveGameState(); // Save rarity badge
               }
+              this.checkWinCondition(); // Defer win check until stats save completes
             },
-            error: (e) => console.error('Stats submit failed', e)
+            error: (e) => {
+              console.error('Stats submit failed', e);
+              this.checkWinCondition(); // Still check win even if stats fail
+            }
           });
-
-          this.checkWinCondition();
         } else {
           this.incorrectCell = { row, col };
           setTimeout(() => this.incorrectCell = null, 500);
