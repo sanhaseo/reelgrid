@@ -192,6 +192,19 @@
     font-weight: normal;
 }
 
+/* Frequency View Styles */
+.summary-cell.frequency-cell {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.frequency-value {
+    font-size: 1.3rem;
+    /* font-weight: bold; */
+    color: var(--text-main);
+}
+
 
 /* Simple Results Grid */
 .simple-results-container {

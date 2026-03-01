@@ -75,9 +75,8 @@
                         </app-summary-board>
 
                         <ng-template #frequencyCell let-data>
-                            <div class="summary-cell"
-                                style="justify-content: center; align-items: center; display: flex;">
-                                <div style="font-size: 1.3rem; font-weight: bold; color: #fff;">
+                            <div class="summary-cell frequency-cell">
+                                <div class="frequency-value">
                                     {{ (data?.percent || 0) | number:'1.1-1' }}%
                                 </div>
                             </div>
