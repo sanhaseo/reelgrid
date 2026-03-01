@@ -169,8 +169,8 @@
 }
 
 footer {
-    margin-top: 2rem;
-    padding-bottom: 2rem;
+    margin-top: 1rem;
+    padding-bottom: 1rem;
     text-align: right;
 }
 
@@ -205,6 +205,8 @@ footer {
 
 .app-header .logo {
     margin: 0;
+    font-size: 1.8rem;
+    margin-left: 0.5rem;
 }
 
 .icon-btn {
