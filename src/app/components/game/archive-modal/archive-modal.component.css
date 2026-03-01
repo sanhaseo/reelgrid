@@ -5,7 +5,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--bg-overlay);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,14 +13,14 @@
 }
 
 .modal-content {
-    background: #181818;
-    color: #fff;
+    background: var(--bg-modal);
+    color: var(--text-main);
     padding: 1rem;
     border-radius: 8px;
     width: 90%;
     max-width: 400px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
+    border: 1px solid var(--border-main);
 }
 
 .modal-header {
@@ -28,7 +28,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-main);
     padding-bottom: 0.5rem;
 }
 
@@ -40,79 +40,23 @@
 .close-btn {
     background: none;
     border: none;
-    color: #aaa;
+    color: var(--text-subtle);
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
 }
 
 .close-btn:hover {
-    color: #fff;
+    color: var(--text-main);
 }
 
 .modal-body {
     font-size: 1rem;
     line-height: 1.5;
-    color: #ddd;
+    color: var(--text-muted);
 }
 
-/* Modal Shared Styles */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-}
 
-.modal-content {
-    background: #181818;
-    color: #fff;
-    padding: 1rem;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    border-bottom: 1px solid #333;
-    padding-bottom: 0.5rem;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 1.25rem;
-}
-
-.close-btn {
-    background: none;
-    border: none;
-    color: #aaa;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.close-btn:hover {
-    color: #fff;
-}
-
-.modal-body {
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #ddd;
-}
 
 /* Calendar UI overrides */
 .archive-modal {
@@ -134,9 +78,9 @@
 }
 
 .nav-btn {
-    background: #333;
+    background: var(--bg-button);
     border: none;
-    color: white;
+    color: var(--text-main);
     padding: 0.5rem 1rem;
     cursor: pointer;
     border-radius: 4px;
@@ -144,7 +88,7 @@
 }
 
 .nav-btn:hover {
-    background: #444;
+    background: var(--bg-button-hover);
 }
 
 .calendar-header {
@@ -153,7 +97,7 @@
     text-align: center;
     margin-bottom: 0.5rem;
     font-weight: bold;
-    color: #888;
+    color: var(--text-subtle);
 }
 
 .calendar-grid {
@@ -164,8 +108,8 @@
 
 .calendar-day {
     aspect-ratio: 1;
-    background: #252525;
-    border: 1px solid #333;
+    background: var(--bg-button);
+    border: 1px solid var(--border-subtle);
     border-radius: 6px;
     display: flex;
     flex-direction: column;
@@ -183,34 +127,34 @@
 .calendar-day.unavailable {
     opacity: 0.5;
     cursor: not-allowed;
-    background: #1e1e1e;
+    background: var(--bg-panel);
 }
 
 .calendar-day.available {
     cursor: pointer;
-    background: #2a2a2a;
-    border-color: #444;
+    background: var(--bg-button);
+    border-color: var(--border-subtle);
     transition: all 0.2s ease;
 }
 
 .calendar-day.available:hover {
-    background: #3a3a3a;
-    border-color: #666;
+    background: var(--bg-button-hover);
+    border-color: var(--border-main);
 }
 
 .calendar-day.active-date {
-    border-color: #e50914;
-    background: rgba(229, 9, 20, 0.1);
+    border-color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 10%, transparent);
 }
 
 .calendar-day.active-date .day-num {
-    color: #e50914;
+    color: var(--primary-color);
     font-weight: bold;
 }
 
 .day-num {
     font-size: 1.1rem;
-    color: #ccc;
+    color: var(--text-muted);
 }
 
 .day-progress {

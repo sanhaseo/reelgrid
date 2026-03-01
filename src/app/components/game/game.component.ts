@@ -44,6 +44,9 @@ export class GameComponent implements OnInit {
 
   showAboutModal = false;
 
+  themes = ['dark', 'light', 'ocean'];
+  currentTheme = 'dark';
+
   @ViewChild('summarySection') summarySection!: ElementRef;
 
   // Store rarity info for filled cells: "Common", "Rare", etc.
@@ -80,7 +83,24 @@ export class GameComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.initTheme();
     this.loadBoard(); // Loads today's board by default
+  }
+
+  initTheme(): void {
+    const savedTheme = localStorage.getItem('user-theme');
+    if (savedTheme && this.themes.includes(savedTheme)) {
+      this.currentTheme = savedTheme;
+    }
+    document.documentElement.setAttribute('data-theme', this.currentTheme);
+  }
+
+  cycleTheme(): void {
+    const currentIndex = this.themes.indexOf(this.currentTheme);
+    const nextIndex = (currentIndex + 1) % this.themes.length;
+    this.currentTheme = this.themes[nextIndex];
+    document.documentElement.setAttribute('data-theme', this.currentTheme);
+    localStorage.setItem('user-theme', this.currentTheme);
   }
 
   loadBoard(date?: string): void {

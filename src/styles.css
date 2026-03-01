@@ -8,6 +8,71 @@
   --grid-gap: 1rem;
   --font-family: 'Inter', sans-serif;
   --transition-speed: 0.3s;
+
+  /* Additional UI Variables (Dark Theme - Default) */
+  --bg-main: #141414;
+  --bg-panel: #181818;
+  --bg-modal: #181818;
+  --bg-overlay: rgba(0, 0, 0, 0.7);
+  --bg-button: #333333;
+  --bg-button-hover: #444444;
+  --bg-cell-empty: #1f1f1f;
+  --bg-cell-hover: rgba(255, 255, 255, 0.05);
+
+  --text-main: #ffffff;
+  --text-muted: #dddddd;
+  --text-subtle: #aaaaaa;
+
+  --border-main: #333333;
+  --border-subtle: #444444;
+}
+
+[data-theme="light"] {
+  --primary-color: #e50914;
+  --secondary-color: #e5e5e5;
+  --background-color: #f5f5f1;
+  --text-color: #141414;
+  --card-bg: #ffffff;
+
+  --bg-main: #f5f5f1;
+  --bg-panel: #ffffff;
+  --bg-modal: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  --bg-button: #e5e5e5;
+  --bg-button-hover: #d4d4d4;
+  --bg-cell-empty: #f0f0f0;
+  --bg-cell-hover: rgba(0, 0, 0, 0.05);
+
+  --text-main: #141414;
+  --text-muted: #333333;
+  --text-subtle: #666666;
+
+  --border-main: #cccccc;
+  --border-subtle: #bbbbbb;
+}
+
+[data-theme="ocean"] {
+  --primary-color: #0077b6;
+  --secondary-color: #023e8a;
+  --background-color: #03045e;
+  --text-color: #caf0f8;
+  --card-bg: #0077b6;
+
+  --bg-main: #03045e;
+  --bg-panel: #023e8a;
+  --bg-modal: #023e8a;
+  --bg-overlay: rgba(3, 4, 94, 0.8);
+  --bg-button: #0096c7;
+  --bg-button-hover: #48cae4;
+  --bg-cell-empty: #0077b6;
+  --bg-cell-hover: rgba(255, 255, 255, 0.1);
+
+  --text-main: #ffffff;
+  --text-muted: #caf0f8;
+  --text-subtle: #90e0ef;
+
+  --border-main: #00b4d8;
+  --border-subtle: #48cae4;
 }
 
 body {

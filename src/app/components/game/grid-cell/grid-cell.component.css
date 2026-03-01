@@ -1,5 +1,5 @@
 .grid-cell {
-    background-color: #2a2a2a;
+    background-color: var(--bg-button);
     border-radius: 8px;
     cursor: pointer;
     overflow: hidden;
@@ -10,7 +10,7 @@
 }
 
 .grid-cell:hover {
-    background-color: #333;
+    background-color: var(--bg-button-hover);
 }
 
 .grid-cell.correct {
@@ -39,7 +39,7 @@
 }
 
 .grid-cell.selected {
-    background-color: #444;
+    background-color: var(--border-subtle);
     z-index: 10;
 }
 
@@ -114,7 +114,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(229, 9, 20, 0.5);
+    background-color: color-mix(in srgb, var(--primary-color) 50%, transparent);
     z-index: 5;
     pointer-events: none;
     animation: flashRedOpacity 0.5s ease-in-out;

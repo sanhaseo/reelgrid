@@ -24,14 +24,14 @@
 }
 
 .stat-controls label {
-    color: #aaa;
+    color: var(--text-subtle);
     font-size: 0.9rem;
 }
 
 .stat-controls select {
-    background-color: #1f1f1f;
-    color: white;
-    border: 1px solid #444;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    border: 1px solid var(--border-subtle);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     font-size: 1rem;
@@ -41,7 +41,7 @@
 
 .stat-controls select:focus {
     outline: none;
-    border-color: #e50914;
+    border-color: var(--primary-color);
 }
 
 /* Summary Content Styling */
@@ -59,7 +59,7 @@
 .accordion-section {
     margin-bottom: 1rem;
     border-radius: 8px;
-    background-color: #1f1f1f;
+    background-color: var(--bg-panel);
     overflow: hidden;
 }
 
@@ -68,24 +68,24 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1.5rem;
-    background-color: #2a2a2a;
+    background-color: var(--bg-button);
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .accordion-header:hover {
-    background-color: #333;
+    background-color: var(--bg-button-hover);
 }
 
 .accordion-title {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .accordion-icon {
     font-size: 1rem;
-    color: #aaa;
+    color: var(--text-subtle);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -112,7 +112,7 @@
 
 
 .summary-cell {
-    background-color: #2a2a2a;
+    background-color: var(--bg-button);
     padding: 0.5rem;
     border-radius: 8px;
     font-size: 0.9rem;
@@ -149,7 +149,7 @@
 
 .stat-movie {
     /* font-weight: bold; */
-    color: #fff;
+    color: var(--text-main);
     font-size: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
@@ -157,14 +157,14 @@
 }
 
 .stat-movie.placeholder {
-    color: #555;
+    color: var(--text-muted);
     font-weight: normal;
     font-style: italic;
 }
 
 .stat-pct-pill {
     font-size: 0.75rem;
-    color: #aaa;
+    color: var(--text-subtle);
 }
 
 /* Answers View Styles (Modal Refactor) */
@@ -178,17 +178,17 @@
 }
 
 .summary-cell.clickable-cell:hover {
-    background-color: #333;
+    background-color: var(--bg-button-hover);
 }
 
 .show-answers-text {
     font-size: 1rem;
-    color: #fff;
+    color: var(--text-main);
     /* font-weight: bold; */
 }
 
 .show-answers-text .count {
-    color: #fff;
+    color: var(--text-main);
     font-weight: normal;
 }
 
@@ -206,7 +206,7 @@
     flex-direction: column;
     gap: 8px;
     /* Spacing between rows */
-    background-color: #1a1a1a;
+    background-color: var(--bg-panel);
     /* Dark background card */
     padding: 12px;
     border-radius: 8px;
@@ -236,8 +236,8 @@
 
 /* Prettier Share Button */
 .share-btn {
-    background: linear-gradient(135deg, #e50914 0%, #b00710 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--primary-color) 0%, color-mix(in srgb, var(--primary-color) 80%, black) 100%);
+    color: #ffffff;
     border: none;
     padding: 0.75rem 2rem;
     font-size: 1rem;
@@ -246,7 +246,7 @@
     /* Pill shape */
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 15px rgba(229, 9, 20, 0.3);
+    box-shadow: 0 4px 15px color-mix(in srgb, var(--primary-color) 30%, transparent);
     text-transform: uppercase;
     letter-spacing: 1px;
     display: flex;
@@ -257,12 +257,12 @@
 }
 
 .share-btn:hover {
-    background: linear-gradient(135deg, #f40612 0%, #e50914 100%);
-    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.5);
+    background: linear-gradient(135deg, color-mix(in srgb, var(--primary-color) 90%, white) 0%, var(--primary-color) 100%);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--primary-color) 50%, transparent);
 }
 
 .next-game-timer {
-    color: #888;
+    color: var(--text-subtle);
     font-size: 0.95rem;
     margin-top: -0.2rem;
     text-align: center;
@@ -274,9 +274,9 @@
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.95);
+    background: color-mix(in srgb, var(--card-bg) 95%, transparent);
     backdrop-filter: blur(5px);
-    color: #141414;
+    color: var(--text-main);
     padding: 0.75rem 1.5rem;
     border-radius: 50px;
     font-size: 0.9rem;

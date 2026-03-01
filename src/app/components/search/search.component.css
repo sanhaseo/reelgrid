@@ -4,7 +4,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--bg-overlay);
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -31,11 +31,11 @@
 input {
     width: 100%;
     padding: 0.8rem;
-    background-color: #000;
+    background-color: var(--bg-main);
     border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid var(--border-main);
     border-radius: 0;
-    color: white;
+    color: var(--text-main);
     font-size: 1rem;
     outline: none;
 }
@@ -59,7 +59,7 @@ input:focus {
 }
 
 .result-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--bg-cell-hover);
 }
 
 .result-poster {
@@ -72,15 +72,15 @@ input:focus {
 }
 
 .no-poster {
-    background-color: #333;
-    color: #888;
+    background-color: var(--bg-button);
+    color: var(--text-subtle);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 0.7rem;
     text-align: center;
     line-height: 1.2;
-    border: 1px solid #444;
+    border: 1px solid var(--border-subtle);
 }
 
 .result-info {
@@ -109,8 +109,8 @@ input:focus {
 }
 
 .guess-btn {
-    background-color: #e50914;
-    color: white;
+    background-color: var(--primary-color);
+    color: var(--text-main);
     border: none;
     padding: 0.5rem 1rem;
     border-radius: 4px;
@@ -122,7 +122,7 @@ input:focus {
 }
 
 .guess-btn:hover {
-    background-color: #f6121d;
+    filter: brightness(1.1);
     transform: scale(1.03);
 }
 
@@ -131,13 +131,13 @@ input:focus {
 }
 
 .result-item.used {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--bg-overlay);
     opacity: 0.5;
     pointer-events: none;
 }
 
 .guess-btn:disabled {
-    background-color: #555;
+    background-color: var(--bg-button-hover);
     cursor: not-allowed;
     transform: none;
 }

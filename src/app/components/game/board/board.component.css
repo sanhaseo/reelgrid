@@ -47,7 +47,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #1f1f1f;
+    background-color: var(--bg-cell-empty);
     border-radius: 8px;
     padding: 6px;
     /* Reduced padding for mobile safety */
@@ -61,7 +61,7 @@
 
 .criteria-label {
     font-size: 0.9rem;
-    color: #fff;
+    color: var(--text-main);
     /* font-weight: bold; */
     word-break: break-word;
     line-height: 1.2;
@@ -75,7 +75,7 @@
 
 .criteria-type {
     font-size: 0.7rem;
-    color: #aaa;
+    color: var(--text-subtle);
     margin-top: 4px;
     text-transform: uppercase;
 }
@@ -91,5 +91,5 @@
 }
 
 .clickable-header:hover {
-    background-color: #2f2f2f;
+    background-color: var(--bg-button-hover);
 }

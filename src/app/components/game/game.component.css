@@ -41,16 +41,16 @@
 
 .action-btn {
     padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
-    border: 1px solid #555;
+    background-color: var(--bg-button);
+    color: var(--text-main);
+    border: 1px solid var(--border-subtle);
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.85rem;
 }
 
 .action-btn:hover {
-    background-color: #444;
+    background-color: var(--bg-button-hover);
 }
 
 .action-btn:disabled {
@@ -72,7 +72,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
+    background: var(--bg-overlay);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -80,14 +80,14 @@
 }
 
 .modal-content {
-    background: #181818;
-    color: #fff;
+    background: var(--bg-modal);
+    color: var(--text-main);
     padding: 1rem;
     border-radius: 8px;
     width: 90%;
     max-width: 400px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
+    border: 1px solid var(--border-main);
 }
 
 .modal-header {
@@ -95,7 +95,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--border-main);
     padding-bottom: 0.5rem;
 }
 
@@ -107,20 +107,20 @@
 .close-btn {
     background: none;
     border: none;
-    color: #aaa;
+    color: var(--text-subtle);
     font-size: 2rem;
     cursor: pointer;
     line-height: 1;
 }
 
 .close-btn:hover {
-    color: #fff;
+    color: var(--text-main);
 }
 
 .modal-body {
     font-size: 1rem;
     line-height: 1.5;
-    color: #ddd;
+    color: var(--text-muted);
 }
 
 .criteria-image {
@@ -135,7 +135,7 @@
 
 .example-note {
     margin-top: 1rem;
-    color: #888;
+    color: var(--text-subtle);
     font-style: italic;
 }
 
@@ -146,7 +146,7 @@
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    color: #ccc;
+    color: var(--text-muted);
     height: 300px;
     /* Min height to prevent shift */
 }
@@ -156,7 +156,7 @@
     height: 40px;
     border: 4px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    border-top-color: #e50914;
+    border-top-color: var(--primary-color);
     /* Netflix Red or Brand Color */
     animation: spin 1s ease-in-out infinite;
     margin-bottom: 1rem;
@@ -176,7 +176,7 @@ footer {
 
 .attribution {
     font-size: 0.75rem;
-    color: #666;
+    color: var(--text-subtle);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,7 +209,7 @@ footer {
 
 .icon-btn {
     background: transparent;
-    color: #ccc;
+    color: var(--text-muted);
     border: none;
     padding: 0.5rem;
     border-radius: 50%;
@@ -221,6 +221,6 @@ footer {
 }
 
 .icon-btn:hover {
-    background: #333;
-    color: #fff;
+    background: var(--bg-button);
+    color: var(--text-main);
 }
