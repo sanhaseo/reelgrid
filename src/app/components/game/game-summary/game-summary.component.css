@@ -79,7 +79,7 @@
 
 .accordion-title {
     font-size: 1.2rem;
-    font-weight: bold;
+    /* font-weight: bold; */
     color: var(--text-main);
 }
 
@@ -255,12 +255,12 @@
     padding: 0.75rem 2rem;
     font-size: 1rem;
     font-weight: 700;
-    border-radius: 50px;
+    border-radius: 20px;
     /* Pill shape */
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     box-shadow: 0 4px 15px color-mix(in srgb, var(--primary-color) 30%, transparent);
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 1px;
     display: flex;
     align-items: center;

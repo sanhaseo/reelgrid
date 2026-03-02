@@ -6,7 +6,7 @@
     <div class="status-stats">
         <div class="stat-box">
             <span class="stat-value">{{ guessesLeft }}</span>
-            <span class="stat-label">GUESSES LEFT</span>
+            <span class="stat-label">Guesses Left</span>
         </div>
     </div>
 
@@ -14,7 +14,7 @@
         <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">
             Give Up
         </button>
-        <button (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn">
+        <button (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn" *ngIf="false">
             {{ isRegenerating ? 'Regenerating...' : 'Regenerate Daily Board' }}
         </button>
     </div>
