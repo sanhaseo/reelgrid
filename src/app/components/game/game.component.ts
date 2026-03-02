@@ -333,6 +333,8 @@ export class GameComponent implements OnInit {
     const allFilled = this.grid.every(row => row.every(cell => cell !== null));
     if (allFilled) {
       this.finishGame('win');
+    } else if (this.guessesLeft <= 0 && !this.gameOver) {
+      this.finishGame('loss');
     }
   }
 
