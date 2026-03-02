@@ -192,6 +192,46 @@ export const CRITERIA_POOLS = {
     ],
     "actor": [
         {
+            "id": "2219",
+            "label": "Tobey Maguire",
+            "value": "Tobey Maguire",
+            "tmdbId": 2219,
+            "type": "actor",
+            "image": "https://image.tmdb.org/t/p/w185/s6PwSvq6gC7PGEjIku69tPbvR8M.jpg"
+        },
+        {
+            "id": "7399",
+            "label": "Ben Stiller",
+            "value": "Ben Stiller",
+            "tmdbId": 7399,
+            "type": "actor",
+            "image": "https://image.tmdb.org/t/p/w185/scgpxhI05JpdNXXfmpK6z0rPOWN.jpg"
+        },
+        {
+            "id": "1397778",
+            "label": "Anya Taylor-Joy",
+            "value": "Anya Taylor-Joy",
+            "tmdbId": 1397778,
+            "type": "actor",
+            "image": "https://image.tmdb.org/t/p/w185/qYNofOjlRke2MlJVihmJmEdQI4v.jpg"
+        },
+        {
+            "id": "3416",
+            "label": "Demi Moore",
+            "value": "Demi Moore",
+            "tmdbId": 3416,
+            "type": "actor",
+            "image": "https://image.tmdb.org/t/p/w185/wApParZYBDi4yxekjfxjKEifJYh.jpg"
+        },
+        {
+            "id": "69597",
+            "label": "Drew Barrymore",
+            "value": "Drew Barrymore",
+            "tmdbId": 69597,
+            "type": "actor",
+            "image": "https://image.tmdb.org/t/p/w185/9xMu2GLC5otUcC11sEWC5aEAERQ.jpg"
+        },
+        {
             "id": "287",
             "label": "Brad Pitt",
             "value": "Brad Pitt",
