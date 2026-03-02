@@ -26,3 +26,17 @@
         </div>
     </ng-container>
 </div>
+
+<div class="modal-overlay" *ngIf="showCriteriaModal" (click)="closeCriteriaModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h2>{{ selectedCriteria?.label }}</h2>
+            <button class="close-btn" (click)="closeCriteriaModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <img *ngIf="selectedCriteria?.image" [src]="selectedCriteria?.image" [alt]="selectedCriteria?.label"
+                class="criteria-image">
+            <p>{{ selectedCriteria ? getCriteriaDescription(selectedCriteria) : '' }}</p>
+        </div>
+    </div>
+</div>

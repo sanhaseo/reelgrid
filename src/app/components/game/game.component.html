@@ -21,8 +21,7 @@
   <ng-container *ngIf="!isLoading">
     <div class="game-content-row">
       <app-board [rowCriteria]="rowCriteria" [colCriteria]="colCriteria" [gridData]="grid"
-        [cellTemplate]="gameCellTemplate" (criteriaClick)="openCriteriaInfo($event)"
-        (cellClick)="onCellClick($event.row, $event.col)">
+        [cellTemplate]="gameCellTemplate" (cellClick)="onCellClick($event.row, $event.col)">
       </app-board>
 
       <ng-template #gameCellTemplate let-cell let-i="row" let-j="col">
@@ -59,19 +58,7 @@
   (close)="closeSearch()">
 </app-search>
 
-<div class="modal-overlay" *ngIf="showCriteriaModal" (click)="closeCriteriaModal()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    <div class="modal-header">
-      <h2>{{ selectedCriteria?.label }}</h2>
-      <button class="close-btn" (click)="closeCriteriaModal()">&times;</button>
-    </div>
-    <div class="modal-body">
-      <img *ngIf="selectedCriteria?.image" [src]="selectedCriteria?.image" [alt]="selectedCriteria?.label"
-        class="criteria-image">
-      <p>{{ selectedCriteria ? getCriteriaDescription(selectedCriteria) : '' }}</p>
-    </div>
-  </div>
-</div>
+
 
 <app-archive-modal [show]="showArchiveModal" [archiveDates]="archiveDates" [activeBoardDate]="activeBoardDate"
   (close)="closeArchiveModal()" (dateSelected)="loadBoard($event)">
