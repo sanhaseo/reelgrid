@@ -32,10 +32,9 @@
     background-color: var(--bg-main);
     color: var(--text-main);
     border: 1px solid var(--border-subtle);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    border-radius: 8px;
     font-size: 1rem;
-    font-weight: bold;
     cursor: pointer;
 }
 

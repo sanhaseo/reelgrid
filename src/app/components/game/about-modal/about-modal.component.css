@@ -35,11 +35,12 @@
 
 .modal-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
     border-bottom: 1px solid var(--border-main);
     padding-bottom: 0.5rem;
+    position: relative;
 }
 
 .modal-header h2 {
@@ -48,6 +49,8 @@
 }
 
 .close-btn {
+    position: absolute;
+    right: 0;
     background: none;
     border: none;
     color: var(--text-subtle);

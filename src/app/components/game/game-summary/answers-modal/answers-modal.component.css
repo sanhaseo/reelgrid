@@ -36,6 +36,7 @@
 .modal-header h2 {
     margin: 0;
     font-size: 1.2rem;
+    font-weight: normal;
     text-align: left;
     color: var(--text-main);
 }
