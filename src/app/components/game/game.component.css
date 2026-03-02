@@ -35,6 +35,20 @@
        but centering the panel container is a good start */
 }
 
+@media (max-width: 480px) {
+    .game-container {
+        width: 100%;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .side-panel {
+        max-width: none;
+        width: 100%;
+    }
+}
+
 .side-panel {
     min-width: 220px;
 }
