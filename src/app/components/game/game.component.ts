@@ -57,8 +57,6 @@ export class GameComponent implements OnInit {
     [null, null, null]
   ];
 
-
-
   constructor(private movieService: MovieService) { }
 
   getUsedMovieIds(): number[] {
@@ -248,7 +246,7 @@ export class GameComponent implements OnInit {
 
   onGiveUp(): void {
     if (this.gameOver) return;
-    this.finishGame('give-up');
+    this.finishGame();
   }
 
   onCellClick(row: number, col: number): void {
@@ -313,7 +311,7 @@ export class GameComponent implements OnInit {
           setTimeout(() => this.incorrectCell = null, 500);
 
           if (this.guessesLeft <= 0 && !this.gameOver) {
-            this.finishGame('loss');
+            this.finishGame();
           } else {
             this.saveGameState();
           }
@@ -331,9 +329,9 @@ export class GameComponent implements OnInit {
   checkWinCondition(): void {
     const allFilled = this.grid.every(row => row.every(cell => cell !== null));
     if (allFilled) {
-      this.finishGame('win');
+      this.finishGame();
     } else if (this.guessesLeft <= 0 && !this.gameOver) {
-      this.finishGame('loss');
+      this.finishGame();
     }
   }
 
@@ -348,7 +346,7 @@ export class GameComponent implements OnInit {
     });
   }
 
-  finishGame(result: 'win' | 'loss' | 'give-up'): void {
+  finishGame(): void {
     this.gameOver = true;
     this.saveGameState();
 
@@ -372,6 +370,4 @@ export class GameComponent implements OnInit {
   calculateRarity(percent: number): RarityInfo {
     return calculateRarity(percent);
   }
-
-
 }
