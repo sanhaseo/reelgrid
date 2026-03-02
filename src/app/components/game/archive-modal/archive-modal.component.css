@@ -94,6 +94,7 @@
 .calendar-header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
+    gap: 0.5rem;
     text-align: center;
     margin-bottom: 0.5rem;
     font-weight: bold;
@@ -188,6 +189,28 @@
 }
 
 @media (max-width: 480px) {
+    .archive-modal {
+        width: 98%;
+        padding: 0.5rem;
+    }
+
+    .calendar-header {
+        gap: 0.2rem;
+        font-size: 0.85rem;
+    }
+
+    .calendar-grid {
+        gap: 0.2rem;
+    }
+
+    .calendar-day {
+        padding: 0.1rem;
+    }
+
+    .nav-btn {
+        padding: 0.4rem 0.6rem;
+    }
+
     .status-text {
         display: none;
     }
@@ -197,7 +220,7 @@
     }
 
     .day-num {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .day-progress {
