@@ -12,6 +12,12 @@
     z-index: 1000;
 }
 
+@media (max-width: 480px) {
+    .modal-overlay {
+        padding-top: 60px;
+    }
+}
+
 .modal-content {
     background-color: var(--card-bg);
     width: 90%;
@@ -21,8 +27,6 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-
 
 .search-input-wrapper {
     padding: 0rem;
