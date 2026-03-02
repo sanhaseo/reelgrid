@@ -50,13 +50,6 @@ export const CRITERIA_POOLS = {
             "type": "director"
         },
         {
-            "id": "3223",
-            "label": "Robert Zemeckis",
-            "value": "Robert Zemeckis",
-            "tmdbId": 3223,
-            "type": "director"
-        },
-        {
             "id": "7467",
             "label": "David Fincher",
             "value": "David Fincher",
@@ -2764,14 +2757,6 @@ export const CRITERIA_POOLS = {
     ],
     "runtime": [
         {
-            "id": "runtime_lt_90",
-            "label": "Runtime < 90 Minutes",
-            "value": {
-                "max": 90
-            },
-            "type": "runtime"
-        },
-        {
             "id": "runtime_gt_150",
             "label": "Runtime > 2.5 Hours",
             "value": {
@@ -2900,6 +2885,21 @@ export const CRITERIA_POOLS = {
         }
     ],
     "keyword": [
+        {
+            "id": "9663",
+            "label": "Sequel",
+            "value": 9663
+        },
+        {
+            "id": "2343",
+            "label": "Magic",
+            "value": 2343
+        },
+        {
+            "id": "9882",
+            "label": "Space",
+            "value": 9882
+        },
         {
             "id": "818",
             "label": "Based on Novel",
