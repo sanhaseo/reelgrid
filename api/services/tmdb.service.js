@@ -79,6 +79,9 @@ async function checkIntersection(rowCrit, colCrit) {
                     if (criteria.idValue === 'word_count') {
                         return cleanTitle.split(/\s+/).length === criteria.value;
                     }
+                    if (criteria.idValue === 'word_count_min') {
+                        return cleanTitle.split(/\s+/).length >= criteria.value;
+                    }
                     return false;
                 });
             });

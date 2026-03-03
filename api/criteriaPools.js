@@ -2962,6 +2962,20 @@ export const CRITERIA_POOLS = {
             "value": 3,
             "type": "title",
             "idValue": "word_count"
+        },
+        {
+            "id": "four_word",
+            "label": "Four-Word Title",
+            "value": 4,
+            "type": "title",
+            "idValue": "word_count"
+        },
+        {
+            "id": "five_plus_word",
+            "label": "Five+ Word Title",
+            "value": 5,
+            "type": "title",
+            "idValue": "word_count_min"
         }
     ]
 };

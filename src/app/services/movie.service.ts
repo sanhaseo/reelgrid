@@ -205,8 +205,11 @@ export class MovieService {
           return criteria.value.some((prefix: string) => cleanTitle.toUpperCase().startsWith(prefix.toUpperCase()));
         }
 
-        if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word') {
+        if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word' || criteria.id === 'four_word') {
           return cleanTitle.split(/\s+/).length === (criteria.value as number);
+        }
+        if (criteria.id === 'five_plus_word') {
+          return cleanTitle.split(/\s+/).length >= (criteria.value as number);
         }
         return false;
 
