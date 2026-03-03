@@ -147,9 +147,18 @@ export class GameComponent implements OnInit {
   saveGameState(): void {
     if (!this.activeBoardDate) return;
 
+    // Only save essential movie details to prevent exceeding localStorage limits
+    const minifiedGrid = this.grid.map(row =>
+      row.map(cell => cell ? {
+        id: cell.id,
+        title: cell.title,
+        poster_path: cell.poster_path
+      } : null)
+    );
+
     const state = {
       date: this.activeBoardDate,
-      grid: this.grid,
+      grid: minifiedGrid,
       gridRarity: this.gridRarity,
       guessesLeft: this.guessesLeft,
       gameOver: this.gameOver
