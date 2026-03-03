@@ -120,8 +120,9 @@ async function generateBoard() {
 
         for (let r = 0; r < 3; r++) {
             for (let c = 0; c < 3; c++) {
-                const matches = await checkIntersection(rowCriteria[r], colCriteria[c]);
-                if (!matches || matches.length <= 1) { // Ensure at least 2 potential answers for solvability
+                const minMatchesRequired = 2;
+                const matches = await checkIntersection(rowCriteria[r], colCriteria[c], minMatchesRequired);
+                if (!matches || matches.length < minMatchesRequired) { // Ensure at least 2 potential answers for solvability
                     validBoard = false;
                     break;
                 }

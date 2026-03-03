@@ -5,7 +5,7 @@ const getHeaders = () => ({
     'accept': 'application/json'
 });
 
-async function checkIntersection(rowCrit, colCrit) {
+async function checkIntersection(rowCrit, colCrit, minMatches = 1) {
     const headers = getHeaders();
     // Add vote_count.gte=50 to filter out obscure movies (proxy for popularity threshold)
     let url = `${TMDB_BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&vote_count.gte=50&page=1`;
@@ -95,8 +95,8 @@ async function checkIntersection(rowCrit, colCrit) {
 
                 validMatches.push(...filtered);
 
-                // Stop early if we have enough matches to consider the intersection solvable (at least 2)
-                if (validMatches.length >= 2) break;
+                // Stop early if we have enough matches to consider the intersection solvable (at least minMatches)
+                if (validMatches.length >= minMatches) break;
 
                 // Stop if we've reached the last available page from TMDB
                 if (page >= data.total_pages) break;
@@ -104,13 +104,13 @@ async function checkIntersection(rowCrit, colCrit) {
                 page++;
             }
 
-            return validMatches.length > 0 ? validMatches : null;
+            return validMatches.length >= minMatches ? validMatches : null;
         }
 
         // Default behavior for criteria that are filtered natively by TMDB
         const res = await fetch(url, { headers });
         const data = await res.json();
-        return data.total_results > 0 ? data.results : null;
+        return data.total_results >= minMatches ? data.results : null;
 
     } catch (e) {
         console.error('Validation Error', e);
