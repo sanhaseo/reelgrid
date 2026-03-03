@@ -63,33 +63,55 @@ async function checkIntersection(rowCrit, colCrit) {
     if (params.others.length) url += `&${params.others.join('&')}`;
 
     try {
-        const res = await fetch(url, { headers });
-        const data = await res.json();
-        let results = data.total_results > 0 ? data.results : null;
+        if (postProcessing.length > 0) {
+            let validMatches = [];
+            let page = 1;
+            const MAX_PAGES = 5;
 
-        if (results && postProcessing.length > 0) {
-            results = results.filter(movie => {
-                return postProcessing.every(criteria => {
-                    const cleanTitle = movie.title ? movie.title.trim() : '';
+            while (page <= MAX_PAGES) {
+                const pageUrl = url.replace('page=1', `page=${page}`);
+                const res = await fetch(pageUrl, { headers });
+                const data = await res.json();
 
-                    if (criteria.idValue === 'starts_with') {
-                        const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
-                        return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
-                    }
-                    if (criteria.idValue === 'word_count') {
-                        return cleanTitle.split(/\s+/).length === criteria.value;
-                    }
-                    if (criteria.idValue === 'word_count_min') {
-                        return cleanTitle.split(/\s+/).length >= criteria.value;
-                    }
-                    return false;
+                if (!data.results || data.results.length === 0) break;
+
+                const filtered = data.results.filter(movie => {
+                    return postProcessing.every(criteria => {
+                        const cleanTitle = movie.title ? movie.title.trim() : '';
+
+                        if (criteria.idValue === 'starts_with') {
+                            const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
+                            return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
+                        }
+                        if (criteria.idValue === 'word_count') {
+                            return cleanTitle.split(/\s+/).length === criteria.value;
+                        }
+                        if (criteria.idValue === 'word_count_min') {
+                            return cleanTitle.split(/\s+/).length >= criteria.value;
+                        }
+                        return false;
+                    });
                 });
-            });
-            // If filtering leaves no results, return null
-            if (results.length === 0) return null;
+
+                validMatches.push(...filtered);
+
+                // Stop early if we have enough matches to consider the intersection solvable (at least 2)
+                if (validMatches.length >= 2) break;
+
+                // Stop if we've reached the last available page from TMDB
+                if (page >= data.total_pages) break;
+
+                page++;
+            }
+
+            return validMatches.length > 0 ? validMatches : null;
         }
 
-        return results;
+        // Default behavior for criteria that are filtered natively by TMDB
+        const res = await fetch(url, { headers });
+        const data = await res.json();
+        return data.total_results > 0 ? data.results : null;
+
     } catch (e) {
         console.error('Validation Error', e);
         return null;
