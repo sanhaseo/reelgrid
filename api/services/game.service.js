@@ -33,83 +33,90 @@ const TYPE_DECK = [
     'rating'
 ];
 
+function getShuffledTypes() {
+    const randomFive = [...TYPE_DECK].sort(() => 0.5 - Math.random()).slice(0, 5);
+    return ['actor', ...randomFive].sort(() => 0.5 - Math.random());
+}
+
+function getRandomCriteria(type, usedIds) {
+    let candidate = null;
+
+    if (type === 'title') {
+        let retries = 0;
+        while (retries < 10) {
+            const r = Math.random();
+            if (r < 0.16) {
+                candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
+            } else if (r < 0.33) {
+                candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
+            } else if (r < 0.5) {
+                candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
+            } else if (r < 0.66) {
+                candidate = CRITERIA_POOLS.title.find(t => t.id === 'four_word');
+            } else if (r < 0.83) {
+                candidate = CRITERIA_POOLS.title.find(t => t.id === 'five_plus_word');
+            } else {
+                candidate = generateDynamicTitleCriteria();
+            }
+
+            if (candidate && !usedIds.has(candidate.id)) break;
+            candidate = null;
+            retries++;
+        }
+        if (!candidate) candidate = generateDynamicTitleCriteria();
+    } else {
+        const pool = CRITERIA_POOLS[type];
+        if (!pool || pool.length === 0) return null;
+
+        let retries = 0;
+        while (retries < 10) {
+            const item = pool[Math.floor(Math.random() * pool.length)];
+            if (!usedIds.has(item.id)) {
+                candidate = item;
+                break;
+            }
+            retries++;
+        }
+    }
+
+    return candidate ? { ...candidate, type } : null;
+}
+
+function selectBoardCriteria(shuffledTypes) {
+    let selected = [];
+    const usedIds = new Set();
+
+    for (const type of shuffledTypes) {
+        const criteria = getRandomCriteria(type, usedIds);
+        if (criteria) {
+            selected.push(criteria);
+            usedIds.add(criteria.id);
+        }
+    }
+    return selected;
+}
+
+async function validateBoardIntersections(rowCriteria, colCriteria) {
+    const minMatchesRequired = 2;
+    for (let r = 0; r < 3; r++) {
+        for (let c = 0; c < 3; c++) {
+            const matches = await checkIntersection(rowCriteria[r], colCriteria[c], minMatchesRequired);
+            if (!matches || matches.length < minMatchesRequired) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 async function generateBoard() {
     let attempts = 0;
     while (attempts < 500) {
         attempts++;
         console.log(`Attempt ${attempts}`);
 
-        // 1. Pick 5 types from the deck
-        const randomFive = [...TYPE_DECK].sort(() => 0.5 - Math.random()).slice(0, 5);
-        // Combine guaranteed actor with random 5, then shuffle position
-        const shuffledTypes = ['actor', ...randomFive].sort(() => 0.5 - Math.random());
-
-        let selected = [];
-        const usedIds = new Set();
-
-        for (const type of shuffledTypes) {
-            let candidate;
-
-            // Handle Dynamic/Special types
-            if (type === 'title') {
-                // Retry loop for unique title criteria
-                let retries = 0;
-                while (retries < 10) {
-                    const r = Math.random();
-                    if (r < 0.16) {
-                        // 1/6 chance: One Word (Static)
-                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
-                    } else if (r < 0.33) {
-                        // 1/6 chance: Two Words (Static)
-                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
-                    } else if (r < 0.5) {
-                        // 1/6 chance: Three Words (Static)
-                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
-                    } else if (r < 0.66) {
-                        // 1/6 chance: Four Words (Static)
-                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'four_word');
-                    } else if (r < 0.83) {
-                        // 1/6 chance: Five+ Words (Static)
-                        candidate = CRITERIA_POOLS.title.find(t => t.id === 'five_plus_word');
-                    } else {
-                        // 1/6 chance: Starts With (Dynamic)
-                        candidate = generateDynamicTitleCriteria();
-                    }
-
-                    if (candidate && !usedIds.has(candidate.id)) {
-                        break;
-                    }
-                    candidate = null;
-                    retries++;
-                }
-
-                // Fallback: If we couldn't find a unique one (e.g. static ones used), force a random dynamic one
-                if (!candidate) candidate = generateDynamicTitleCriteria();
-            } else {
-                // Direct map: type in TYPE_DECK matches keys in CRITERIA_POOLS
-                const pool = CRITERIA_POOLS[type];
-
-                if (!pool || pool.length === 0) continue;
-
-                // Try to find a unique candidate
-                let retries = 0;
-                while (retries < 10) {
-                    const item = pool[Math.floor(Math.random() * pool.length)];
-                    if (!usedIds.has(item.id)) {
-                        candidate = item;
-                        break;
-                    }
-                    retries++;
-                }
-            }
-
-            if (candidate) {
-                // Clone and ensure type is set
-                const criteria = { ...candidate, type };
-                selected.push(criteria);
-                usedIds.add(criteria.id);
-            }
-        }
+        const shuffledTypes = getShuffledTypes();
+        const selected = selectBoardCriteria(shuffledTypes);
 
         if (selected.length < 6) continue;
 
@@ -125,19 +132,7 @@ async function generateBoard() {
             continue;
         }
 
-        let validBoard = true;
-
-        for (let r = 0; r < 3; r++) {
-            for (let c = 0; c < 3; c++) {
-                const minMatchesRequired = 2;
-                const matches = await checkIntersection(rowCriteria[r], colCriteria[c], minMatchesRequired);
-                if (!matches || matches.length < minMatchesRequired) { // Ensure at least 2 potential answers for solvability
-                    validBoard = false;
-                    break;
-                }
-            }
-            if (!validBoard) break;
-        }
+        const validBoard = await validateBoardIntersections(rowCriteria, colCriteria);
 
         if (validBoard) {
             console.log('Generated valid board in ' + attempts + ' attempts');
