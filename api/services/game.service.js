@@ -23,13 +23,13 @@ function generateDynamicTitleCriteria() {
 // Weighted Type Deck configuration
 const TYPE_DECK = [
     'actor', 'actor', 'actor', // 3x Actor
-    'director', 'director',    // 2x Director
     'genre', 'genre',          // 2x Genre
     'title', 'title',          // 2x Title
-    'company',
+    'director',
+    // 'company',
     'keyword',
     'year',
-    'runtime',
+    // 'runtime',
     'rating'
 ];
 
@@ -97,7 +97,7 @@ function selectBoardCriteria(shuffledTypes) {
 }
 
 async function validateBoardIntersections(rowCriteria, colCriteria) {
-    const minMatchesRequired = 2;
+    const minMatchesRequired = 3;
     for (let r = 0; r < 3; r++) {
         for (let c = 0; c < 3; c++) {
             const matches = await checkIntersection(rowCriteria[r], colCriteria[c], minMatchesRequired);
