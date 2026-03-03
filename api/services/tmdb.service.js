@@ -5,9 +5,7 @@ const getHeaders = () => ({
     'accept': 'application/json'
 });
 
-async function checkIntersection(rowCrit, colCrit, minMatches = 1) {
-    const headers = getHeaders();
-    // Add vote_count.gte=50 to filter out obscure movies (proxy for popularity threshold)
+function buildTmdbUrlAndParams(rowCrit, colCrit) {
     let url = `${TMDB_BASE_URL}/discover/movie?include_adult=false&include_video=false&language=en-US&sort_by=popularity.desc&vote_count.gte=50&page=1`;
 
     const params = {
@@ -62,49 +60,62 @@ async function checkIntersection(rowCrit, colCrit, minMatches = 1) {
     if (params.with_keywords.length) url += `&with_keywords=${params.with_keywords.join(',')}`;
     if (params.others.length) url += `&${params.others.join('&')}`;
 
+    return { url, postProcessing };
+}
+
+function filterMovieByTitle(movie, criteria) {
+    const cleanTitle = movie.title ? movie.title.trim() : '';
+
+    if (criteria.idValue === 'starts_with') {
+        const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
+        return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
+    }
+    if (criteria.idValue === 'word_count') {
+        return cleanTitle.split(/\s+/).length === criteria.value;
+    }
+    if (criteria.idValue === 'word_count_min') {
+        return cleanTitle.split(/\s+/).length >= criteria.value;
+    }
+    return false;
+}
+
+async function fetchWithPostProcessing(url, headers, postProcessing, minMatches) {
+    let validMatches = [];
+    let page = 1;
+    const MAX_PAGES = 5;
+
+    while (page <= MAX_PAGES) {
+        const pageUrl = url.replace('page=1', `page=${page}`);
+        const res = await fetch(pageUrl, { headers });
+        const data = await res.json();
+
+        if (!data.results || data.results.length === 0) break;
+
+        const filtered = data.results.filter(movie => {
+            return postProcessing.every(criteria => filterMovieByTitle(movie, criteria));
+        });
+
+        validMatches.push(...filtered);
+
+        // Stop early if we have enough matches to consider the intersection solvable (at least minMatches)
+        if (validMatches.length >= minMatches) break;
+
+        // Stop if we've reached the last available page from TMDB
+        if (page >= data.total_pages) break;
+
+        page++;
+    }
+
+    return validMatches.length >= minMatches ? validMatches : null;
+}
+
+async function checkIntersection(rowCrit, colCrit, minMatches = 1) {
+    const headers = getHeaders();
     try {
+        const { url, postProcessing } = buildTmdbUrlAndParams(rowCrit, colCrit);
+
         if (postProcessing.length > 0) {
-            let validMatches = [];
-            let page = 1;
-            const MAX_PAGES = 5;
-
-            while (page <= MAX_PAGES) {
-                const pageUrl = url.replace('page=1', `page=${page}`);
-                const res = await fetch(pageUrl, { headers });
-                const data = await res.json();
-
-                if (!data.results || data.results.length === 0) break;
-
-                const filtered = data.results.filter(movie => {
-                    return postProcessing.every(criteria => {
-                        const cleanTitle = movie.title ? movie.title.trim() : '';
-
-                        if (criteria.idValue === 'starts_with') {
-                            const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
-                            return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
-                        }
-                        if (criteria.idValue === 'word_count') {
-                            return cleanTitle.split(/\s+/).length === criteria.value;
-                        }
-                        if (criteria.idValue === 'word_count_min') {
-                            return cleanTitle.split(/\s+/).length >= criteria.value;
-                        }
-                        return false;
-                    });
-                });
-
-                validMatches.push(...filtered);
-
-                // Stop early if we have enough matches to consider the intersection solvable (at least minMatches)
-                if (validMatches.length >= minMatches) break;
-
-                // Stop if we've reached the last available page from TMDB
-                if (page >= data.total_pages) break;
-
-                page++;
-            }
-
-            return validMatches.length >= minMatches ? validMatches : null;
+            return await fetchWithPostProcessing(url, headers, postProcessing, minMatches);
         }
 
         // Default behavior for criteria that are filtered natively by TMDB
