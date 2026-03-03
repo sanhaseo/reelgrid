@@ -116,6 +116,15 @@ async function generateBoard() {
         const rowCriteria = selected.slice(0, 3);
         const colCriteria = selected.slice(3, 6);
 
+        // Prevent having a title critera in both rows and cols
+        const hasRowTitle = rowCriteria.some(c => c.type === 'title');
+        const hasColTitle = colCriteria.some(c => c.type === 'title');
+
+        if (hasRowTitle && hasColTitle) {
+            console.log('Skipping board: title criteria found in both row and column');
+            continue;
+        }
+
         let validBoard = true;
 
         for (let r = 0; r < 3; r++) {
