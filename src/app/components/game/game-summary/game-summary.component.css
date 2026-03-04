@@ -123,48 +123,6 @@
     align-items: center;
 }
 
-.stat-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 0.8rem;
-}
-
-.stat-item.hidden {
-    display: none;
-}
-
-.stat-label {
-    font-size: 0.75rem;
-    margin-bottom: 2px;
-}
-
-.stat-label.popular {
-    color: #ffe234;
-}
-
-.stat-label.rare {
-    color: #7fdefe;
-}
-
-.stat-movie {
-    /* font-weight: bold; */
-    color: var(--text-main);
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.stat-movie.placeholder {
-    color: var(--text-muted);
-    font-weight: normal;
-    font-style: italic;
-}
-
-.stat-pct-pill {
-    font-size: 0.75rem;
-    color: var(--text-subtle);
-}
 
 /* Answers View Styles (Modal Refactor) */
 .summary-cell.clickable-cell {

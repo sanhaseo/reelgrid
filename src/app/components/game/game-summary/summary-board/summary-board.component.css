@@ -6,12 +6,7 @@
 
 /* Grid layout logic moved to BoardComponent */
 
-.summary-cell-wrapper {
-    /* Match main grid cell size roughly */
-    background-color: var(--bg-cell-empty);
-    border-radius: 8px;
-    overflow: hidden;
-}
+
 
 /* Content wrapper to ensure background match */
 .summary-cell-content {
