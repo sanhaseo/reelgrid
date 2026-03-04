@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, isDevMode } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -16,6 +16,8 @@ export class GameStatusComponent {
 
   @Output() giveUp = new EventEmitter<void>();
   @Output() regenerate = new EventEmitter<void>();
+
+  isDevelopment = isDevMode();
 
   onGiveUp(): void {
     this.giveUp.emit();
