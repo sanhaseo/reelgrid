@@ -157,8 +157,8 @@
 }
 
 .criteria-image {
-    width: 100px;
-    height: 150px;
+    width: 120px;
+    height: 180px;
     object-fit: cover;
     border-radius: 8px;
     float: left;
