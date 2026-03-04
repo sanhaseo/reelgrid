@@ -53,24 +53,6 @@
     min-width: 220px;
 }
 
-.action-btn {
-    padding: 0.5rem 1rem;
-    background-color: var(--bg-button);
-    color: var(--text-main);
-    border: 1px solid var(--border-subtle);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85rem;
-}
-
-.action-btn:hover {
-    background-color: var(--bg-button-hover);
-}
-
-.action-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
 
 /* Game Summary Container */
 .game-summary-container {
