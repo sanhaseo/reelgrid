@@ -42,28 +42,42 @@ function getRandomCriteria(type, usedIds) {
     let candidate = null;
 
     if (type === 'title') {
+        let candidateCategory = '';
         let retries = 0;
         while (retries < 10) {
             const r = Math.random();
             if (r < 0.16) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
+                candidateCategory = 'title_word_count';
             } else if (r < 0.33) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
+                candidateCategory = 'title_word_count';
             } else if (r < 0.5) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
+                candidateCategory = 'title_word_count';
             } else if (r < 0.66) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'four_word');
+                candidateCategory = 'title_word_count';
             } else if (r < 0.83) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'five_plus_word');
+                candidateCategory = 'title_word_count';
             } else {
                 candidate = generateDynamicTitleCriteria();
+                candidateCategory = 'title_starts_with';
             }
 
-            if (candidate && !usedIds.has(candidate.id)) break;
+            if (candidate && !usedIds.has(candidate.id) && !usedIds.has(candidateCategory)) {
+                candidate.categoryId = candidateCategory;
+                break;
+            }
             candidate = null;
+            candidateCategory = '';
             retries++;
         }
-        if (!candidate) candidate = generateDynamicTitleCriteria();
+        if (!candidate) {
+            candidate = generateDynamicTitleCriteria();
+            candidate.categoryId = 'title_starts_with';
+        }
     } else {
         const pool = CRITERIA_POOLS[type];
         if (!pool || pool.length === 0) return null;
@@ -91,6 +105,7 @@ function selectBoardCriteria(shuffledTypes) {
         if (criteria) {
             selected.push(criteria);
             usedIds.add(criteria.id);
+            if (criteria.categoryId) usedIds.add(criteria.categoryId);
         }
     }
     return selected;
