@@ -13,7 +13,7 @@ function generateDynamicTitleCriteria() {
     chars.sort();
     return {
         id: `starts_with_${chars.join('')}`,
-        label: `Starts with ${chars.join(', ')}`,
+        label: `Starts with ${chars.slice(0, -1).join(', ')}, or ${chars[chars.length - 1]}`,
         value: chars, // Array of letters
         type: 'title',
         idValue: 'starts_with'
@@ -30,7 +30,7 @@ const TYPE_DECK = [
     'keyword',
     'year',
     // 'runtime',
-    'rating'
+    // 'rating'
 ];
 
 function getShuffledTypes() {

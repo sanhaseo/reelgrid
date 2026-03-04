@@ -67,8 +67,13 @@ function filterMovieByTitle(movie, criteria) {
     const cleanTitle = movie.title ? movie.title.trim() : '';
 
     if (criteria.idValue === 'starts_with') {
+        let titleForStartsWith = cleanTitle.toUpperCase();
+        if (titleForStartsWith.startsWith('A ')) titleForStartsWith = titleForStartsWith.substring(2).trim();
+        else if (titleForStartsWith.startsWith('AN ')) titleForStartsWith = titleForStartsWith.substring(3).trim();
+        else if (titleForStartsWith.startsWith('THE ')) titleForStartsWith = titleForStartsWith.substring(4).trim();
+
         const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
-        return prefixes.some(p => cleanTitle.toUpperCase().startsWith(p.toUpperCase()));
+        return prefixes.some(p => titleForStartsWith.startsWith(p.toUpperCase()));
     }
     if (criteria.idValue === 'word_count') {
         return cleanTitle.split(/\s+/).length === criteria.value;

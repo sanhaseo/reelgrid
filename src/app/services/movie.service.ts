@@ -202,7 +202,12 @@ export class MovieService {
 
         if (Array.isArray(criteria.value)) {
           // Dynamic "Starts with..."
-          return criteria.value.some((prefix: string) => cleanTitle.toUpperCase().startsWith(prefix.toUpperCase()));
+          let titleForStartsWith = cleanTitle.toUpperCase();
+          if (titleForStartsWith.startsWith('A ')) titleForStartsWith = titleForStartsWith.substring(2).trim();
+          else if (titleForStartsWith.startsWith('AN ')) titleForStartsWith = titleForStartsWith.substring(3).trim();
+          else if (titleForStartsWith.startsWith('THE ')) titleForStartsWith = titleForStartsWith.substring(4).trim();
+
+          return criteria.value.some((prefix: string) => titleForStartsWith.startsWith(prefix.toUpperCase()));
         }
 
         if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word' || criteria.id === 'four_word') {
