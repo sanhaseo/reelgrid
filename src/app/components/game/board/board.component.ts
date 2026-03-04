@@ -37,7 +37,12 @@ export class BoardComponent {
 
     getCriteriaDescription(c: Criteria): string {
         switch (c.type) {
+            case 'genre':
+                return `Must belong to the ${c.label} genre.`;
             case 'title':
+                if (Array.isArray(c.value)) {
+                    return 'Title must start with the specified letters (articles are ignored).';
+                }
                 return 'Based on the word count of the title.';
             case 'actor':
                 return `The movie must feature ${c.label} in the cast.`;
