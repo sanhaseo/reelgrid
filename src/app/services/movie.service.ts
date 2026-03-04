@@ -43,11 +43,7 @@ export interface Criteria {
   image?: string;
 }
 
-export interface GameState {
-  grid: (Movie | null)[][];
-  rowCriteria: Criteria[];
-  colCriteria: Criteria[];
-}
+
 
 @Injectable({
   providedIn: 'root'
