@@ -131,6 +131,14 @@ footer {
     margin: 0;
     font-size: 1.8rem;
     margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.favicon-logo {
+    width: 24px;
+    height: 24px;
 }
 
 .icon-btn {

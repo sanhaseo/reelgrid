@@ -11,5 +11,5 @@ import { GameComponent } from './components/game/game.component';
   styleUrl: './app.component.css' // Angular 17 default
 })
 export class AppComponent {
-  title = 'CineGrid';
+  title = 'ReelGrid';
 }

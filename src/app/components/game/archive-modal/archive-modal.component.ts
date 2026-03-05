@@ -93,7 +93,7 @@ export class ArchiveModalComponent implements OnChanges {
 
       if (isAvailable) {
         // Check local storage for progress
-        const saved = localStorage.getItem(`cinegrid_state_v1_${dateStr}`);
+        const saved = localStorage.getItem(`reelgrid_state_v1_${dateStr}`);
         if (saved) {
           try {
             const state = JSON.parse(saved);

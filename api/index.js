@@ -23,7 +23,7 @@ app.use('/api/game', gameRoutes);
 
 // Serve Static Files (Frontend) - Local Dev Only
 // In production, Vercel will handle this.
-const frontendPath = path.join(__dirname, '../frontend/dist/cine-grid-app/browser');
+const frontendPath = path.join(__dirname, '../dist/reelgrid-app/browser');
 app.use(express.static(frontendPath));
 
 // Fallback for SPA routing

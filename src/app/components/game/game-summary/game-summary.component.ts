@@ -306,7 +306,7 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
     }
 
     const today = new Date().toLocaleDateString();
-    const shareText = `CineGrid ${today}\n\n${emojiGrid}\nScore: ${correctCount}/${totalCells}\nhttps://example.com`;
+    const shareText = `ReelGrid ${today}\n\n${emojiGrid}\nScore: ${correctCount}/${totalCells}\nhttps://example.com`;
 
     navigator.clipboard.writeText(shareText).then(() => {
       // Show temporary toast or feedback

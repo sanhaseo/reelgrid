@@ -126,7 +126,7 @@ async function validateBoardIntersections(rowCriteria, colCriteria) {
 
 async function generateBoard() {
     let attempts = 0;
-    while (attempts < 500) {
+    while (attempts < 1000) {
         attempts++;
         console.log(`Attempt ${attempts}`);
 

@@ -163,16 +163,16 @@ export class GameComponent implements OnInit {
       guessesLeft: this.guessesLeft,
       gameOver: this.gameOver
     };
-    localStorage.setItem(`cinegrid_state_v1_${this.activeBoardDate}`, JSON.stringify(state));
+    localStorage.setItem(`reelgrid_state_v1_${this.activeBoardDate}`, JSON.stringify(state));
   }
 
   loadGameState(): void {
     if (!this.activeBoardDate) return;
 
     // Clean up generic state variable from previous versions
-    localStorage.removeItem('cinegrid_state_v1');
+    localStorage.removeItem('reelgrid_state_v1');
 
-    const saved = localStorage.getItem(`cinegrid_state_v1_${this.activeBoardDate}`);
+    const saved = localStorage.getItem(`reelgrid_state_v1_${this.activeBoardDate}`);
     if (saved) {
       try {
         const state = JSON.parse(saved);
@@ -188,7 +188,7 @@ export class GameComponent implements OnInit {
         }
       } catch (e) {
         console.error('Failed to parse saved state', e);
-        localStorage.removeItem(`cinegrid_state_v1_${this.activeBoardDate}`);
+        localStorage.removeItem(`reelgrid_state_v1_${this.activeBoardDate}`);
       }
     }
   }
@@ -238,7 +238,7 @@ export class GameComponent implements OnInit {
           [null, null, null]
         ];
         // Clear old local storage so they start fresh on the new board
-        localStorage.removeItem('cinegrid_state_v1');
+        localStorage.removeItem('reelgrid_state_v1');
         this.saveGameState();
       },
       error: (err) => {

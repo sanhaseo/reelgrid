@@ -1,6 +1,6 @@
-# CineGrid
+# ReelGrid
 
-Welcome to CineGrid! Test your movie knowledge by filling the grid. 
+Welcome to ReelGrid! Test your movie knowledge by filling the grid. 
 
 ## How to Play
 
