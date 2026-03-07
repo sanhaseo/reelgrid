@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const DailyGame = require('../models/DailyGame');
 const DailyGameStats = require('../models/DailyGameStats');
+const GuessStat = require('../models/GuessStat');
 const { generateBoard } = require('../services/game.service');
 const { getMovieDetailsFromTMDB } = require('../services/validation.service');
 const { validateGuess } = require('../../shared/validation');
@@ -108,38 +109,20 @@ router.post('/stats', async (req, res) => {
         }
 
         // 3. Proceed with updating stats
-        const updateDoc = {
-            $inc: {
-                [`cellStats.${row}.${col}.total`]: 1,
-                [`cellStats.${row}.${col}.answers.${movieIdStr}.count`]: 1
-            },
-            $set: {
-                [`cellStats.${row}.${col}.answers.${movieIdStr}.poster_path`]: fullMovie.poster_path,
-                [`cellStats.${row}.${col}.answers.${movieIdStr}.title`]: fullMovie.title,
-                [`cellStats.${row}.${col}.answers.${movieIdStr}.release_date`]: fullMovie.release_date
-            }
-        };
-
         let stats = await DailyGameStats.findOneAndUpdate(
             { date: today },
-            updateDoc,
+            { $inc: { [`cellStats.${row}.${col}.total`]: 1 } },
             { new: true }
         );
 
         if (!stats) {
             // Document doesn't exist yet for this date. Initialize grid safely.
             const emptyCellStats = Array(3).fill(null).map(() =>
-                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0, answers: {} }))
+                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0 }))
             );
 
             // Apply this guess's stats locally
             emptyCellStats[row][col].total = 1;
-            emptyCellStats[row][col].answers[movieIdStr] = {
-                count: 1,
-                poster_path: fullMovie.poster_path,
-                title: fullMovie.title,
-                release_date: fullMovie.release_date
-            };
 
             try {
                 stats = await DailyGameStats.create({
@@ -152,7 +135,7 @@ router.post('/stats', async (req, res) => {
                 if (err.code === 11000) {
                     stats = await DailyGameStats.findOneAndUpdate(
                         { date: today },
-                        updateDoc,
+                        { $inc: { [`cellStats.${row}.${col}.total`]: 1 } },
                         { new: true }
                     );
                 } else {
@@ -161,9 +144,35 @@ router.post('/stats', async (req, res) => {
             }
         }
 
+        // Upsert into GuessStat collection
+        const guessStat = await GuessStat.findOneAndUpdate(
+            { date: today, row, col, movieId: movieIdStr },
+            {
+                $inc: { count: 1 },
+                $set: {
+                    movieDetails: {
+                        title: fullMovie.title,
+                        poster_path: fullMovie.poster_path,
+                        release_date: fullMovie.release_date
+                    }
+                }
+            },
+            { new: true, upsert: true }
+        );
+
         res.json({
             success: true,
-            cellStat: stats.cellStats[row][col]
+            cellStat: {
+                total: stats.cellStats[row][col].total,
+                answers: {
+                    [movieIdStr]: {
+                        count: guessStat.count,
+                        poster_path: fullMovie.poster_path,
+                        title: fullMovie.title,
+                        release_date: fullMovie.release_date
+                    }
+                }
+            }
         });
     } catch (e) {
         console.error('Stats Error', e);
@@ -201,7 +210,7 @@ router.post('/complete', async (req, res) => {
         if (!stats) {
             // Highly unlikely to complete a game before any guesses are logged, but handle safely
             const emptyCellStats = Array(3).fill(null).map(() =>
-                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0, answers: {} }))
+                Array(3).fill(null).map(() => ({ total: 0, completionCount: 0 }))
             );
             if (Array.isArray(solvedCells)) {
                 solvedCells.forEach(({ row, col }) => {
@@ -240,11 +249,53 @@ router.get('/stats', async (req, res) => {
     const today = req.query.date || new Date().toISOString().split('T')[0];
     try {
         const stats = await DailyGameStats.findOne({ date: today });
+        const cellStats = stats ? stats.cellStats : [];
+
+        if (stats) {
+            // Retrieve top 100 answers for each cell to display in the UI summary using an aggregation pipeline
+            const topGuesses = await GuessStat.aggregate([
+                { $match: { date: today } },
+                { $sort: { count: -1 } },
+                {
+                    $group: {
+                        _id: { row: "$row", col: "$col" },
+                        guesses: { $push: "$$ROOT" }
+                    }
+                },
+                {
+                    $project: {
+                        guesses: { $slice: ["$guesses", 100] }
+                    }
+                }
+            ]);
+
+            // Reassemble the dictionary shape the frontend expects
+            for (let r = 0; r < 3; r++) {
+                for (let c = 0; c < 3; c++) {
+                    if (!cellStats[r][c].answers) cellStats[r][c].answers = {};
+                }
+            }
+
+            topGuesses.forEach(group => {
+                const row = group._id.row;
+                const col = group._id.col;
+                group.guesses.forEach(guess => {
+                    cellStats[row][col].answers[guess.movieId] = {
+                        count: guess.count,
+                        poster_path: guess.movieDetails.poster_path,
+                        title: guess.movieDetails.title,
+                        release_date: guess.movieDetails.release_date
+                    };
+                });
+            });
+        }
+
         res.json({
-            cellStats: stats ? stats.cellStats : [],
+            cellStats: cellStats,
             totalCompletedGames: stats ? (stats.totalCompletedGames || 0) : 0
         });
     } catch (e) {
+        console.error('Fetch Stats Error', e);
         res.status(500).json({ error: 'Failed to fetch stats' });
     }
 });
