@@ -1,49 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, map, catchError } from 'rxjs';
+import { Movie as SharedMovie, Criteria as SharedCriteria } from '@shared/types';
+import { mapTMDBToMovie } from '@shared/validation';
 
-export interface Movie {
-  id: number;
-  title: string;
-  poster_path: string;
-  release_date: string;
-  genres: number[];
-  runtime?: number;
-  revenue?: number;
-  certification?: string;
-  cast?: string[];
-  crew?: { job: string, name: string }[];
-  director?: string;
-  collection?: string;
-  keywords?: number[];
-  production_companies?: number[];
-  credits?: any; // To store raw credits response
-  count?: number;
-}
-
-export type CriteriaType =
-  | 'genre'
-  | 'actor'
-  | 'year'
-  | 'director'
-  | 'box_office'
-  | 'runtime'
-  | 'rating'
-  | 'company' // Production Company (bonus) or Franchise
-  | 'collection'
-  | 'keyword'
-  | 'title';
-
-export interface Criteria {
-  id: string;
-  type: CriteriaType;
-  label: string;
-  value: any;
-  tmdbId?: number;
-  image?: string;
-}
-
-
+export interface Movie extends SharedMovie { }
+export interface Criteria extends SharedCriteria { }
 
 @Injectable({
   providedIn: 'root'
@@ -68,8 +30,8 @@ export class MovieService {
     });
   }
 
-  submitGuessStats(row: number, col: number, movie: Partial<Movie>, date?: string): Observable<any> {
-    return this.http.post('/api/game/stats', { row, col, movie, date });
+  submitGuessStats(row: number, col: number, movieId: number, date?: string): Observable<any> {
+    return this.http.post('/api/game/stats', { row, col, movieId, date });
   }
 
   completeGame(attempts: number, solvedCells: { row: number, col: number }[], date?: string): Observable<any> {
@@ -105,42 +67,7 @@ export class MovieService {
     const url = `/api/tmdb/movie/${id}`;
     return this.http.get<any>(url).pipe(
       map(data => {
-        const director = data.credits.crew?.find((c: any) => c.job === 'Director')?.name || '';
-        const cast = data.credits.cast?.map((c: any) => c.name) || [];
-        // Map significant crew
-        const crew = data.credits.crew?.map((c: any) => ({ job: c.job, name: c.name })) || [];
-
-        // Extract US Certification
-        let certification = '';
-        const usRelease = data.release_dates?.results?.find((r: any) => r.iso_3166_1 === 'US');
-        if (usRelease) {
-          // Try to find theatrical release first (type 3), then others
-          const certEntry = usRelease.release_dates.find((d: any) => d.certification) || usRelease.release_dates[0];
-          certification = certEntry ? certEntry.certification : '';
-        }
-
-        const keywords = data.keywords?.keywords?.map((k: any) => k.id) || [];
-        const production_companies = data.production_companies?.map((c: any) => c.id) || [];
-
-        const movieObj = {
-          id: data.id,
-          title: data.title,
-          poster_path: data.poster_path ? `https://image.tmdb.org/t/p/w500${data.poster_path}` : '',
-          release_date: data.release_date,
-          genres: data.genres.map((g: any) => g.id),
-          runtime: data.runtime,
-          revenue: data.revenue,
-          certification,
-          director,
-          cast,
-          crew,
-          collection: data.belongs_to_collection?.name,
-          keywords,
-          production_companies,
-          credits: data.credits
-        } as Movie;
-
-        return movieObj;
+        return mapTMDBToMovie(data);
       }),
       catchError((err) => {
         console.error('getMovieDetails ERROR:', err);
@@ -149,74 +76,6 @@ export class MovieService {
     );
   }
 
-  validateGuess(movie: Movie, rowCriterium: Criteria, colCriterium: Criteria): boolean {
-    const rowMatch = this.checkCriteria(movie, rowCriterium);
-    const colMatch = this.checkCriteria(movie, colCriterium);
-    return rowMatch && colMatch;
-  }
-
-  private checkCriteria(movie: Movie, criteria: Criteria): boolean {
-    switch (criteria.type) {
-      case 'director':
-        return movie.director === criteria.value;
-
-      case 'actor':
-        return movie.cast?.includes(criteria.value) ?? false;
-
-      case 'genre':
-        return movie.genres.includes(criteria.value as number);
-
-      case 'year':
-        if (!movie.release_date) return false;
-        const year = parseInt(movie.release_date.split('-')[0]);
-        if (typeof criteria.value === 'string' && criteria.value.includes('-')) {
-          const [start, end] = criteria.value.split('-').map(Number);
-          return year >= start && year <= end;
-        }
-        return year === criteria.value;
-
-      case 'runtime':
-        if (!movie.runtime) return false;
-        if (criteria.value.min) return movie.runtime >= criteria.value.min;
-        if (criteria.value.max) return movie.runtime <= criteria.value.max;
-        return false;
-
-      case 'rating':
-        return movie.certification === criteria.value;
-
-      case 'collection': // Franchise
-        return !!movie.collection && movie.collection.includes(criteria.value);
-
-      case 'keyword': // Source material etc
-        return movie.keywords?.includes(criteria.value) ?? false;
-
-      case 'company':
-        return movie.production_companies?.includes(criteria.tmdbId || criteria.value) ?? false;
-
-      case 'title':
-        const cleanTitle = movie.title ? movie.title.trim() : '';
-
-        if (Array.isArray(criteria.value)) {
-          // Dynamic "Starts with..."
-          let titleForStartsWith = cleanTitle.toUpperCase();
-          if (titleForStartsWith.startsWith('A ')) titleForStartsWith = titleForStartsWith.substring(2).trim();
-          else if (titleForStartsWith.startsWith('AN ')) titleForStartsWith = titleForStartsWith.substring(3).trim();
-          else if (titleForStartsWith.startsWith('THE ')) titleForStartsWith = titleForStartsWith.substring(4).trim();
-
-          return criteria.value.some((prefix: string) => titleForStartsWith.startsWith(prefix.toUpperCase()));
-        }
-
-        if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word' || criteria.id === 'four_word') {
-          return cleanTitle.split(/\s+/).length === (criteria.value as number);
-        }
-        if (criteria.id === 'five_plus_word') {
-          return cleanTitle.split(/\s+/).length >= (criteria.value as number);
-        }
-        return false;
-
-      default:
-        return false;
-    }
-  }
+  // The validateGuess and checkCriteria logic has been moved to shared/validation.ts
 
 }

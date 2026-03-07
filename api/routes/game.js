@@ -3,6 +3,8 @@ const router = express.Router();
 const DailyGame = require('../models/DailyGame');
 const DailyGameStats = require('../models/DailyGameStats');
 const { generateBoard } = require('../services/game.service');
+const { getMovieDetailsFromTMDB } = require('../services/validation.service');
+const { validateGuess } = require('../../shared/validation');
 
 // Get Available Archive Dates
 router.get('/archive', async (req, res) => {
@@ -67,27 +69,57 @@ router.get('/setup', async (req, res) => {
 
 // Submit Game Stat (Increment count for a guess)
 router.post('/stats', async (req, res) => {
-    const { row, col, movie, date } = req.body;
-    if (!movie || !movie.id) {
+    const { row, col, movieId, date } = req.body;
+
+    // 1. Strict Input Validation (Prevent NoSQL Injection)
+    const validIndexes = [0, 1, 2];
+    if (!validIndexes.includes(row) || !validIndexes.includes(col)) {
+        return res.status(400).json({ error: 'Invalid row or col index' });
+    }
+
+    if (!movieId) {
         return res.status(400).json({ error: 'Invalid movie data' });
     }
+
     const today = date || new Date().toISOString().split('T')[0];
-
-    const movieId = movie.id.toString();
-
-    const updateDoc = {
-        $inc: {
-            [`cellStats.${row}.${col}.total`]: 1,
-            [`cellStats.${row}.${col}.answers.${movieId}.count`]: 1
-        },
-        $set: {
-            [`cellStats.${row}.${col}.answers.${movieId}.poster_path`]: movie.poster_path, // Could be null, but stats should save it
-            [`cellStats.${row}.${col}.answers.${movieId}.title`]: movie.title,
-            [`cellStats.${row}.${col}.answers.${movieId}.release_date`]: movie.release_date
-        }
-    };
+    const movieIdStr = movieId.toString();
 
     try {
+        // 2. Server-side Guess Validation
+        // Fetch the day's criteria
+        const dailyGame = await DailyGame.findOne({ date: today });
+        if (!dailyGame) {
+            return res.status(404).json({ error: 'Game board not found for this date' });
+        }
+
+        const rowCriterium = dailyGame.rowCriteria[row];
+        const colCriterium = dailyGame.colCriteria[col];
+
+        // Fetch full movie details from TMDB
+        const fullMovie = await getMovieDetailsFromTMDB(movieIdStr);
+        if (!fullMovie) {
+            return res.status(404).json({ error: 'Movie not found in TMDB' });
+        }
+
+        // Validate
+        const isValid = validateGuess(fullMovie, rowCriterium, colCriterium);
+        if (!isValid) {
+            return res.status(400).json({ error: 'Incorrect movie guess' });
+        }
+
+        // 3. Proceed with updating stats
+        const updateDoc = {
+            $inc: {
+                [`cellStats.${row}.${col}.total`]: 1,
+                [`cellStats.${row}.${col}.answers.${movieIdStr}.count`]: 1
+            },
+            $set: {
+                [`cellStats.${row}.${col}.answers.${movieIdStr}.poster_path`]: fullMovie.poster_path,
+                [`cellStats.${row}.${col}.answers.${movieIdStr}.title`]: fullMovie.title,
+                [`cellStats.${row}.${col}.answers.${movieIdStr}.release_date`]: fullMovie.release_date
+            }
+        };
+
         let stats = await DailyGameStats.findOneAndUpdate(
             { date: today },
             updateDoc,
@@ -102,11 +134,11 @@ router.post('/stats', async (req, res) => {
 
             // Apply this guess's stats locally
             emptyCellStats[row][col].total = 1;
-            emptyCellStats[row][col].answers[movieId] = {
+            emptyCellStats[row][col].answers[movieIdStr] = {
                 count: 1,
-                poster_path: movie.poster_path,
-                title: movie.title,
-                release_date: movie.release_date
+                poster_path: fullMovie.poster_path,
+                title: fullMovie.title,
+                release_date: fullMovie.release_date
             };
 
             try {

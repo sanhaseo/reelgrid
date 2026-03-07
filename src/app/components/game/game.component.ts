@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
+import { validateGuess } from '@shared/validation';
 import { SearchComponent } from '../search/search.component';
 import { GridCellComponent } from './grid-cell/grid-cell.component';
 import { BoardComponent } from './board/board.component';
@@ -283,7 +284,7 @@ export class GameComponent implements OnInit {
         // Decrement guesses left on every attempt
         this.guessesLeft--;
 
-        if (this.movieService.validateGuess(fullMovie, rowCrit, colCrit)) {
+        if (validateGuess(fullMovie, rowCrit, colCrit)) {
           this.grid[row][col] = fullMovie;
           confetti({
             particleCount: 20,
@@ -293,13 +294,7 @@ export class GameComponent implements OnInit {
           this.saveGameState(); // Save early so grid updates
 
           // Submit stats asynchronously (only send necessary data)
-          const statsPayload = {
-            id: fullMovie.id,
-            poster_path: fullMovie.poster_path,
-            title: fullMovie.title,
-            release_date: fullMovie.release_date
-          };
-          this.movieService.submitGuessStats(row, col, statsPayload, this.activeBoardDate).subscribe({
+          this.movieService.submitGuessStats(row, col, fullMovie.id, this.activeBoardDate).subscribe({
             next: (res: any) => {
               if (res.success && res.cellStat) {
                 const total = res.cellStat.total - 1;
