@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { validateGuess } from '@shared/validation';
 import { SearchComponent } from '../search/search.component';
@@ -16,7 +16,7 @@ import confetti from 'canvas-confetti';
 @Component({
   selector: 'app-game',
   standalone: true,
-  imports: [CommonModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent, ArchiveModalComponent, AboutModalComponent],
+  imports: [CommonModule, RouterModule, SearchComponent, GridCellComponent, GameSummaryComponent, GameStatusComponent, BoardComponent, ArchiveModalComponent, AboutModalComponent],
   templateUrl: './game.component.html',
   styleUrl: './game.component.css'
 })
