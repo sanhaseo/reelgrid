@@ -3,9 +3,9 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
-const connectDB = require('./config/db');
-const tmdbRoutes = require('./routes/tmdb');
-const gameRoutes = require('./routes/game');
+const connectDB = require('../backend/config/db');
+const tmdbRoutes = require('../backend/routes/tmdb');
+const gameRoutes = require('../backend/routes/game');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,7 +17,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 // Routes
-const { generalLimiter } = require('./middleware/rateLimiter');
+const { generalLimiter } = require('../backend/middleware/rateLimiter');
 
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, Vercel, etc)
 // see https://expressjs.com/en/guide/behind-proxies.html
