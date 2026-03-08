@@ -4,7 +4,7 @@
     align-items: stretch;
     /* padding: 2rem; */
     max-width: 800px;
-    width: fit-content;
+    width: 100%;
     margin: 0 auto;
 }
 
