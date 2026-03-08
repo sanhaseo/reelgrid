@@ -3,6 +3,7 @@ const router = express.Router();
 const DailyGame = require('../models/DailyGame');
 const DailyGameStats = require('../models/DailyGameStats');
 const GuessStat = require('../models/GuessStat');
+const { statsSubmitLimiter } = require('../middleware/rateLimiter');
 const { generateBoard } = require('../services/game.service');
 const { getMovieDetailsFromTMDB } = require('../services/validation.service');
 const { validateGuess } = require('../../shared/validation');
@@ -69,7 +70,7 @@ router.get('/setup', async (req, res) => {
 });
 
 // Submit Game Stat (Increment count for a guess)
-router.post('/stats', async (req, res) => {
+router.post('/stats', statsSubmitLimiter, async (req, res) => {
     const { row, col, movieId, date } = req.body;
 
     // 1. Strict Input Validation (Prevent NoSQL Injection)
@@ -181,7 +182,7 @@ router.post('/stats', async (req, res) => {
 });
 
 // Submit Game Completion
-router.post('/complete', async (req, res) => {
+router.post('/complete', statsSubmitLimiter, async (req, res) => {
     const { attempts, solvedCells, date } = req.body; // solvedCells: [{row, col}, ...]
     const today = date || new Date().toISOString().split('T')[0];
 

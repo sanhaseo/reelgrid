@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const { TMDB_BASE_URL, getHeaders } = require('../services/tmdb.service');
+const { tmdbSearchLimiter } = require('../middleware/rateLimiter');
 const cache = require('../utils/cache');
 
 // Proxy: Search Movies
-router.get('/search', async (req, res) => {
+router.get('/search', tmdbSearchLimiter, async (req, res) => {
     const { query } = req.query;
     if (!query) return res.json({ results: [] });
 

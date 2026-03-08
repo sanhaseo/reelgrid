@@ -16,8 +16,16 @@ connectDB();
 // Middleware
 app.use(cors());
 app.use(express.json());
-
 // Routes
+const { generalLimiter } = require('./middleware/rateLimiter');
+
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, Vercel, etc)
+// see https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', 1);
+
+// Apply general rate limiting to all /api routes
+app.use('/api', generalLimiter);
+
 app.use('/api/tmdb', tmdbRoutes);
 app.use('/api/game', gameRoutes);
 
