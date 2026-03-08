@@ -309,22 +309,32 @@ router.get('/regenerate', async (req, res) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    const today = new Date().toISOString().split('T')[0];
+    // Determine the target date for the generated board
+    let targetDateObj = new Date();
+
+    // If the cron job runs at 23:55 UTC, we must generate the board for "tomorrow" 
+    // so it is ready at exactly midnight.
+    if (targetDateObj.getUTCHours() === 23) {
+        targetDateObj.setUTCDate(targetDateObj.getUTCDate() + 1);
+    }
+
+    const targetDateStr = targetDateObj.toISOString().split('T')[0];
+
     try {
-        await DailyGame.deleteOne({ date: today });
-        await DailyGameStats.deleteOne({ date: today }); // Reset stats for the new board
+        await DailyGame.deleteOne({ date: targetDateStr });
+        await DailyGameStats.deleteOne({ date: targetDateStr }); // Reset stats for the new board
         const board = await generateBoard();
         if (!board) return res.status(500).json({ error: 'Failed' });
 
         const dailyGame = new DailyGame({
-            date: today,
+            date: targetDateStr,
             rowCriteria: board.rowCriteria,
             colCriteria: board.colCriteria
         });
         await dailyGame.save();
 
         res.json({
-            date: today,
+            date: targetDateStr,
             rowCriteria: board.rowCriteria,
             colCriteria: board.colCriteria
         });
