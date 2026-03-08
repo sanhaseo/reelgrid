@@ -103,13 +103,14 @@ export class GameComponent implements OnInit {
   }
 
   loadBoard(date?: string): void {
+    const targetDate = date || this.getCurrentGameDate();
     this.isLoading = true;
     this.summaryStats = null;
-    this.movieService.getGameSetup(date).subscribe({
+    this.movieService.getGameSetup(targetDate).subscribe({
       next: (setup) => {
         this.rowCriteria = setup.rowCriteria;
         this.colCriteria = setup.colCriteria;
-        this.activeBoardDate = setup.date || this.getCurrentGameDate();
+        this.activeBoardDate = setup.date || targetDate;
         this.boardDate = this.formatDate(this.activeBoardDate);
         this.isLoading = false;
 
@@ -142,7 +143,11 @@ export class GameComponent implements OnInit {
   }
 
   getCurrentGameDate(): string {
-    return new Date().toISOString().split('T')[0];
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   saveGameState(): void {

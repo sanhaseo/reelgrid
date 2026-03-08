@@ -37,8 +37,14 @@ router.get('/setup', async (req, res) => {
             });
         }
 
-        // If a past date was requested but not found, return an error
-        if (requestedDate !== today) {
+        // Calculate tomorrow relative to UTC
+        let tomorrowObj = new Date();
+        tomorrowObj.setUTCDate(tomorrowObj.getUTCDate() + 1);
+        const tomorrow = tomorrowObj.toISOString().split('T')[0];
+
+        // If a past date was requested but it doesn't exist, return an error.
+        // We only allow lazy-generation if the requested date is Today or Tomorrow (for early timezones).
+        if (requestedDate !== today && requestedDate !== tomorrow) {
             return res.status(404).json({ error: 'Archived game not found' });
         }
 
@@ -309,14 +315,10 @@ router.get('/regenerate', async (req, res) => {
         return res.status(401).json({ error: 'Unauthorized' });
     }
 
-    // Determine the target date for the generated board
+    // Always generate the board for "Tomorrow" since the cron job 
+    // runs 16 hours ahead of the UTC midnight rollover.
     let targetDateObj = new Date();
-
-    // If the cron job runs at 23:55 UTC, we must generate the board for "tomorrow" 
-    // so it is ready at exactly midnight.
-    if (targetDateObj.getUTCHours() === 23) {
-        targetDateObj.setUTCDate(targetDateObj.getUTCDate() + 1);
-    }
+    targetDateObj.setUTCDate(targetDateObj.getUTCDate() + 1);
 
     const targetDateStr = targetDateObj.toISOString().split('T')[0];
 
