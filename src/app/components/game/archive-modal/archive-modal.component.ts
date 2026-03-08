@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 interface CalendarDay {
   dateStr: string;
@@ -30,6 +31,8 @@ export class ArchiveModalComponent implements OnChanges {
   currentYear = 0;
   calendarDays: CalendarDay[] = [];
   weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  constructor(private router: Router) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['show'] && this.show) {
@@ -139,7 +142,8 @@ export class ArchiveModalComponent implements OnChanges {
 
   onDateSelect(day: CalendarDay): void {
     if (day.isAvailable && !day.isPadding) {
-      this.dateSelected.emit(day.dateStr);
+      this.router.navigate(['/', day.dateStr]);
+      this.close.emit();
     }
   }
 }

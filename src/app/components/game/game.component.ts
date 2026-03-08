@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Movie, Criteria, MovieService } from '../../services/movie.service';
 import { validateGuess } from '@shared/validation';
 import { SearchComponent } from '../search/search.component';
@@ -58,7 +59,11 @@ export class GameComponent implements OnInit {
     [null, null, null]
   ];
 
-  constructor(private movieService: MovieService) { }
+  constructor(
+    private movieService: MovieService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) { }
 
   getUsedMovieIds(): number[] {
     const ids: number[] = [];
@@ -83,7 +88,23 @@ export class GameComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTheme();
-    this.loadBoard(); // Loads today's board by default
+
+    // Listen to URL parameter changes indefinitely
+    this.route.paramMap.subscribe(params => {
+      const urlDate = params.get('date');
+
+      if (urlDate) {
+        // Validate date string (YYYY-MM-DD). If invalid, bounce to root
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(urlDate)) {
+          this.router.navigate(['/']);
+          return;
+        }
+        this.loadBoard(urlDate);
+      } else {
+        // No date attached to URL, gracefully fallback to local physical clock
+        this.loadBoard(this.getCurrentGameDate());
+      }
+    });
   }
 
   initTheme(): void {
