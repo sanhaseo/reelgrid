@@ -99,6 +99,13 @@ export class GameComponent implements OnInit {
           this.router.navigate(['/']);
           return;
         }
+
+        // Prevent fast-forwarding to future boards via URL parameter
+        if (urlDate > this.getCurrentGameDate()) {
+          this.router.navigate(['/']);
+          return;
+        }
+
         this.loadBoard(urlDate);
       } else {
         // No date attached to URL, gracefully fallback to local physical clock
@@ -222,7 +229,9 @@ export class GameComponent implements OnInit {
 
   openArchiveModal(): void {
     this.movieService.getArchiveDates().subscribe(res => {
-      this.archiveDates = res.availableDates;
+      const todayStr = this.getCurrentGameDate();
+      // Filter out any pre-generated boards from 'tomorrow'
+      this.archiveDates = res.availableDates.filter(date => date <= todayStr);
       this.showArchiveModal = true;
     });
   }
