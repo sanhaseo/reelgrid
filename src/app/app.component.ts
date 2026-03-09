@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
+import { SeoService } from './services/seo.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,8 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'ReelGrid';
+
+  constructor(private seoService: SeoService) {
+    this.seoService.init();
+  }
 }
