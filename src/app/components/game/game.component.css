@@ -113,6 +113,13 @@ footer {
     text-decoration: underline;
 }
 
+.link-separator {
+    color: var(--text-color);
+    opacity: 0.5;
+    margin: 0 8px;
+    font-size: 0.75rem;
+}
+
 .attribution {
     font-size: 0.75rem;
     color: var(--text-subtle);
