@@ -41,8 +41,8 @@ export class GameSummaryComponent implements OnInit, OnDestroy {
 
   private updateTimer(): void {
     const now = new Date();
-    // Midnight UTC of next day
-    const nextGame = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, 0, 0, 0));
+    // Midnight Local time of next day
+    const nextGame = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
     const diff = nextGame.getTime() - now.getTime();
 
     if (diff <= 0) {
