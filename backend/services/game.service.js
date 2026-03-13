@@ -40,7 +40,7 @@ const TYPE_DECK = [
     'actor', 'actor', 'actor', // 3x Actor
     'genre', 'genre',          // 2x Genre
     'title', 'title',          // 2x Title
-    'director',
+    // 'director',
     // 'company',
     'keyword',
     'year',
