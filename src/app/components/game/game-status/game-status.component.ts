@@ -18,9 +18,19 @@ export class GameStatusComponent {
   @Output() regenerate = new EventEmitter<void>();
 
   isDevelopment = isDevMode();
+  showConfirmModal = false;
 
   onGiveUp(): void {
+    this.showConfirmModal = true;
+  }
+
+  confirmGiveUp(): void {
+    this.showConfirmModal = false;
     this.giveUp.emit();
+  }
+
+  cancelGiveUp(): void {
+    this.showConfirmModal = false;
   }
 
   onRegenerate(): void {

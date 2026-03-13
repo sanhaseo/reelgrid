@@ -19,3 +19,15 @@
         </button>
     </div>
 </div>
+
+<!-- Give Up Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showConfirmModal" (click)="cancelGiveUp()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <h2>Give Up?</h2>
+        <p>Are you sure you want to give up and see the answers?</p>
+        <div class="modal-actions">
+            <button class="action-btn danger" (click)="confirmGiveUp()">Yes, Give Up</button>
+            <button class="action-btn secondary" (click)="cancelGiveUp()">Cancel</button>
+        </div>
+    </div>
+</div>
