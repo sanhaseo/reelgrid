@@ -75,6 +75,12 @@ function filterMovieByTitle(movie, criteria) {
         const prefixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
         return prefixes.some(p => titleForStartsWith.startsWith(p.toUpperCase()));
     }
+    if (criteria.idValue === 'ends_with') {
+        // Strip trailing non-alphanumeric characters (like !, ?, etc.) for a fair endsWith check
+        let titleForEndsWith = cleanTitle.toUpperCase().replace(/[^A-Z0-9]+$/, '');
+        const suffixes = Array.isArray(criteria.value) ? criteria.value : criteria.value.split(',').map(s => s.trim());
+        return suffixes.some(s => titleForEndsWith.endsWith(s.toUpperCase()));
+    }
     if (criteria.idValue === 'word_count') {
         return cleanTitle.split(/\s+/).length === criteria.value;
     }

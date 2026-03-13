@@ -1,22 +1,37 @@
 const { CRITERIA_POOLS } = require('../criteriaPools');
 const { checkIntersection } = require('./tmdb.service');
 
-// Helper to generate dynamic title criteria
-function generateDynamicTitleCriteria() {
+function getRandomLetters(size = 5) {
     const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const size = 5;
     let chars = [];
     while (chars.length < size) {
         const char = alphabet[Math.floor(Math.random() * alphabet.length)];
         if (!chars.includes(char)) chars.push(char);
     }
     chars.sort();
+    return chars;
+}
+
+// Helper to generate dynamic title criteria
+function generateDynamicTitleCriteria() {
+    const chars = getRandomLetters();
     return {
         id: `starts_with_${chars.join('')}`,
         label: `Starts with ${chars.slice(0, -1).join(', ')}, or ${chars[chars.length - 1]}`,
         value: chars, // Array of letters
         type: 'title',
         idValue: 'starts_with'
+    };
+}
+
+function generateDynamicTitleEndsWithCriteria() {
+    const chars = getRandomLetters();
+    return {
+        id: `ends_with_${chars.join('')}`,
+        label: `Ends with ${chars.slice(0, -1).join(', ')}, or ${chars[chars.length - 1]}`,
+        value: chars, // Array of letters
+        type: 'title',
+        idValue: 'ends_with'
     };
 }
 
@@ -46,24 +61,27 @@ function getRandomCriteria(type, usedIds) {
         let retries = 0;
         while (retries < 10) {
             const r = Math.random();
-            if (r < 0.16) {
+            if (r < 0.14) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.33) {
+            } else if (r < 0.28) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.5) {
+            } else if (r < 0.42) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.66) {
+            } else if (r < 0.57) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'four_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.83) {
+            } else if (r < 0.71) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'five_plus_word');
                 candidateCategory = 'title_word_count';
-            } else {
+            } else if (r < 0.85) {
                 candidate = generateDynamicTitleCriteria();
                 candidateCategory = 'title_starts_with';
+            } else {
+                candidate = generateDynamicTitleEndsWithCriteria();
+                candidateCategory = 'title_ends_with';
             }
 
             if (candidate && !usedIds.has(candidate.id) && !usedIds.has(candidateCategory)) {
@@ -75,8 +93,13 @@ function getRandomCriteria(type, usedIds) {
             retries++;
         }
         if (!candidate) {
-            candidate = generateDynamicTitleCriteria();
-            candidate.categoryId = 'title_starts_with';
+            if (Math.random() < 0.5) {
+                candidate = generateDynamicTitleCriteria();
+                candidate.categoryId = 'title_starts_with';
+            } else {
+                candidate = generateDynamicTitleEndsWithCriteria();
+                candidate.categoryId = 'title_ends_with';
+            }
         }
     } else {
         const pool = CRITERIA_POOLS[type];
