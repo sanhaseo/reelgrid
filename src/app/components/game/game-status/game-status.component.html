@@ -11,7 +11,7 @@
     </div>
 
     <div class="status-actions">
-        <button (click)="onGiveUp()" [disabled]="gameOver" class="action-btn">
+        <button (click)="onGiveUp()" [disabled]="gameOver || guessesLeft === 10" class="action-btn">
             Give Up
         </button>
         <button *ngIf="isDevelopment" (click)="onRegenerate()" [disabled]="isRegenerating" class="action-btn">

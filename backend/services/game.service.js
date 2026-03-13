@@ -38,8 +38,8 @@ function generateDynamicTitleEndsWithCriteria() {
 // Weighted Type Deck configuration
 const TYPE_DECK = [
     'actor', 'actor', 'actor', // 3x Actor
+    'title', 'title', 'title', // 3x Title
     'genre', 'genre',          // 2x Genre
-    'title', 'title',          // 2x Title
     // 'director',
     // 'company',
     'keyword',
