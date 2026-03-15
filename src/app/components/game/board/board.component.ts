@@ -38,33 +38,33 @@ export class BoardComponent {
     getCriteriaDescription(c: Criteria): string {
         switch (c.type) {
             case 'genre':
-                return `Must belong to the ${c.label} genre.`;
+                return `The movie must be officially categorized under the ${c.label} genre on TMDB.`;
             case 'title':
                 if (Array.isArray(c.value)) {
                     if (c.idValue === 'ends_with' || (c.id && c.id.startsWith('ends_with'))) {
-                        return 'Title must end with the specified letters (ignoring punctuation).';
+                        return 'The movie title must end with one of the specified letters. Trailing punctuation is ignored.';
                     }
-                    return 'Title must start with the specified letters (articles are ignored).';
+                    return 'The movie title must start with one of the specified letters. Leading articles like "A", "An", or "The" are ignored.';
                 }
-                return 'Based on the word count of the title.';
+                return `The movie title must meet the word count requirement: ${c.label}.`;
             case 'actor':
-                return `The movie must feature ${c.label} in the cast.`;
+                return `The movie must feature ${c.label} as a credited actor in the cast.`;
             case 'director':
-                return `The movie must be directed by ${c.label}.`;
+                return `The movie must be directed by the specified filmmaker: ${c.label}.`;
             case 'company':
-                return `Produced by ${c.label}.`;
+                return `The movie must be produced by the specified production company: ${c.label}.`;
             case 'box_office':
-                return 'Worldwide box office revenue > threshold.';
+                return 'The movie\'s worldwide box office revenue must exceed the specified threshold.';
             case 'year':
-                return 'Primary release date within the decade.';
+                return 'The movie\'s primary theatrical release year must fall within the specified period.';
             case 'rating':
-                return `US Certification Rating (MPAA) is ${c.value}.`;
+                return `The movie must have an official US Certification (MPAA rating) of ${c.value}.`;
             case 'runtime':
-                return 'Total runtime including credits.';
+                return 'The movie\'s total runtime, including credits, must fall within the specified length.';
             case 'keyword':
-                return `Must include the keyword (or belongs to franchise): ${c.label}.`;
+                return `The movie must be associated with the specific keyword, theme, or franchise: ${c.label}.`;
             default:
-                return 'Standard criteria.';
+                return 'The movie must meet the standard requirement for this category.';
         }
     }
 
