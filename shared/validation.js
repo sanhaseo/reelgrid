@@ -60,10 +60,10 @@ function checkCriteria(movie, criteria) {
                 return criteria.value.some((prefix) => titleForStartsWith.startsWith(prefix.toUpperCase()));
             }
 
-            if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word' || criteria.id === 'four_word') {
+            if (criteria.id === 'one_word' || criteria.id === 'two_word' || criteria.id === 'three_word') {
                 return cleanTitle.split(/\s+/).length === criteria.value;
             }
-            if (criteria.id === 'five_plus_word') {
+            if (criteria.id === 'four_word' || criteria.id === 'five_plus_word') {
                 return cleanTitle.split(/\s+/).length >= criteria.value;
             }
             return false;

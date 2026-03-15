@@ -61,22 +61,19 @@ function getRandomCriteria(type, usedIds) {
         let retries = 0;
         while (retries < 10) {
             const r = Math.random();
-            if (r < 0.14) {
+            if (r < 0.16) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'one_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.28) {
+            } else if (r < 0.33) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'two_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.42) {
+            } else if (r < 0.50) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'three_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.57) {
+            } else if (r < 0.67) {
                 candidate = CRITERIA_POOLS.title.find(t => t.id === 'four_word');
                 candidateCategory = 'title_word_count';
-            } else if (r < 0.71) {
-                candidate = CRITERIA_POOLS.title.find(t => t.id === 'five_plus_word');
-                candidateCategory = 'title_word_count';
-            } else if (r < 0.85) {
+            } else if (r < 0.83) {
                 candidate = generateDynamicTitleCriteria();
                 candidateCategory = 'title_starts_with';
             } else {
