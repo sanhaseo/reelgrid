@@ -41,6 +41,9 @@ export class BoardComponent {
                 return `Must belong to the ${c.label} genre.`;
             case 'title':
                 if (Array.isArray(c.value)) {
+                    if (c.idValue === 'ends_with' || (c.id && c.id.startsWith('ends_with'))) {
+                        return 'Title must end with the specified letters (ignoring punctuation).';
+                    }
                     return 'Title must start with the specified letters (articles are ignored).';
                 }
                 return 'Based on the word count of the title.';

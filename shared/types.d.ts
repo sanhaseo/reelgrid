@@ -35,6 +35,7 @@ export interface Criteria {
     type: CriteriaType;
     label: string;
     value: any;
+    idValue?: string;
     tmdbId?: number;
     image?: string;
 }
