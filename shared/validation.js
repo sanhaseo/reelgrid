@@ -46,6 +46,11 @@ function checkCriteria(movie, criteria) {
             const cleanTitle = movie.title ? movie.title.trim() : '';
 
             if (Array.isArray(criteria.value)) {
+                if (criteria.idValue === 'ends_with' || (criteria.id && criteria.id.startsWith('ends_with'))) {
+                    const titleForEndsWith = cleanTitle.toUpperCase().replace(/[^A-Z0-9]+$/, '');
+                    return criteria.value.some((suffix) => titleForEndsWith.endsWith(suffix.toUpperCase()));
+                }
+
                 // Dynamic "Starts with..."
                 let titleForStartsWith = cleanTitle.toUpperCase();
                 if (titleForStartsWith.startsWith('A ')) titleForStartsWith = titleForStartsWith.substring(2).trim();
