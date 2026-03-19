@@ -489,12 +489,12 @@ export const CRITERIA_POOLS = {
             "image": "https://image.tmdb.org/t/p/w185/trzgptffGvAlAT6MEu01fz47cLW.jpg"
         },
         {
-            "id": "3895",
+            "id": "38673",
             "label": "Channing Tatum",
             "value": "Channing Tatum",
-            "tmdbId": 3895,
+            "tmdbId": 38673,
             "type": "actor",
-            "image": "https://image.tmdb.org/t/p/w185/bVZRMlpjTAO2pJK6v90buFgVbSW.jpg"
+            "image": "https://image.tmdb.org/t/p/w185/4TpgnS6l8YUXSne9Av9nda6mjxY.jpg"
         },
         {
             "id": "10980",
